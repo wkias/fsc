@@ -1,0 +1,30 @@
+{
+    "version": "0.2.1",
+    "configurations": [
+      {
+        "name": "Debug J-Link",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "E:\\fsc\\Prj\\IAR\\Exe\\vcan_Kinetis.out",
+        "stopAtEntry": true,
+        "cwd": "${workspaceRoot}",
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "miDebuggerPath": "arm-none-eabi-gdb.exe",
+        "debugServerPath": "JLinkGDBServerCL.exe",
+        "debugServerArgs": "-if swd -singlerun -strict -endian little -speed auto -port 3333 -device MK60DN512Zxxx10 -vd -strict -halt",
+        "serverStarted": "Connected\\ to\\ target",
+        "serverLaunchTimeout": 5000,
+        "filterStderr": false,
+        "filterStdout": true,
+        "setupCommands": [
+          {"text": "target remote localhost:3333"},
+          {"text": "monitor flash breakpoints = 1"},
+          {"text": "monitor flash download = 1"},
+          {"text": "monitor reset"},
+          {"text": "load vcan_Kinetis.out"},
+          {"text": "monitor reset"}
+        ]
+      }
+    ]
+  }

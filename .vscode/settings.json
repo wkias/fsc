@@ -4,5 +4,6 @@
         "limits": "c",
         "*.tcc": "c",
         "type_traits": "c"
-    }
+    },
+    "iar.enabled": true,
 }
