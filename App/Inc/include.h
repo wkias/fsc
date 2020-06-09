@@ -47,4 +47,6 @@
 #include "servo.h"
 #include "carport.h"
 #include "display.h"
+#include "queue.h"
+#include "settings.h"
 #endif //__INCLUDE_H__
