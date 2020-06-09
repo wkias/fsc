@@ -1,18 +1,3 @@
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- *     
- *    
- *    
- *     技术讨论：山外论坛 http://www.vcan123.com
- *
- *     除注明出处外，以下所有内容版权均属山东师范大学所有，未经允许，不得用于商业用途，
- *     修改内容时必须保留山外科技的版权声明。
- *
- * @file       main.c
- * @brief      山东师范大学
- * @author     摄像头一队   开车开派队
- * @version     V2.4
- * @date       2018-06-25
- */
 
 #include "common.h"
 #include "include.h"
@@ -26,7 +11,7 @@ void changeinit3();
 
 void main(void)
 {
-  LCD_Init();
+  LCD_init();
   led_init(LED0);
   led_init(LED1);
   led_init(LED2);
@@ -56,7 +41,7 @@ void main(void)
 
   //测速模块初始化：正交解码、LPTMR_脉冲计数
   ftm_quad_init(FTM2); //A10和A11
-  
+
   //串口初始化
   uart_init(UART4, 115200);
 
@@ -77,11 +62,11 @@ void main(void)
     LCD_P6x8Str(20, 3, "init3");
   }
 
-  AD_Init();
+  adcs_init();
   while (1)
   {
     gpio_init(PTB22, GPO, 0);
-    ad_sampling();
+    adc_sampling();
     servo();
     carport();
   }
