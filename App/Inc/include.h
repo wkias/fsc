@@ -46,4 +46,5 @@
 #include "motor.h"
 #include "servo.h"
 #include "carport.h"
+#include "display.h"
 #endif //__INCLUDE_H__

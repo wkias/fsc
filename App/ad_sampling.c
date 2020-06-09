@@ -84,14 +84,10 @@ void ad_sampling()
   Dis_num(96, 2, AD_val_6); //right
 
   ad_fDirectionError[0] = (float)(AD_val_3 - AD_val_1) / (AD_val_3 + AD_val_1); //水平电感的差比和作为偏差 最边上的2个
-                                                                                                //ad_fDirectionError[0] = (ad_fDirectionError[0]>= 1? 1:ad_fDirectionError[0]);	//偏差限幅
   ad_fDirectionError[1] = (float)(AD_val_4 - AD_val_2) / (AD_val_4 + AD_val_2);
 
-  ad_fD[2] = ad_fDirectionError[0] * 20; //40,25,36
-  ad_fD[3] = ad_fDirectionError[1] * 20;
-
-  servo();
-  carport();
+  ad_fD[1] = ad_fDirectionError[0] * 20; //40,25,36
+  ad_fD[2] = ad_fDirectionError[1] * 20;
 
   Dis_num(150, 4, bin_youhuandaoflag);
   Dis_num(150, 6, bin_zuohuandaoflag);

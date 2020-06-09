@@ -3,7 +3,8 @@
         "*.sql": "sql",
         "limits": "c",
         "*.tcc": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "VCAN_LED.C": "cpp"
     },
     "iar.enabled": true,
 }

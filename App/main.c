@@ -17,70 +17,61 @@
 #include "common.h"
 #include "include.h"
 
-extern int16 TurnPWMOUT;                                                    //PWM输出值
-uint8 Time_Cnt1 = 0, Time_Cnt2 = 0, Time_10MS_flag = 0, Time_60MS_flag = 0; //定时器标志
-
-//float Turn_P_L=0.03,Turn_P_R=0.03,Turn_D_L=100,Turn_D_R=100,K_error = 1.30;  /*********舵机PD参数**************/
-float Turn_P_L = 0.035, Turn_P_R = 0.035, Turn_D_L = 90, Turn_D_R = 90, K_error = 1.28;
-uint16 SuDu_low = 290;
-uint16 SuDu_high = 350;
-float Motor_P = 10, Motor_I = 0, Motor_D = 0; /***********电机PID参数************/
 void PIT1_IRQHandler(void);
 void PIT2_IRQHandler(void);
 
-void changeinit2();
 void changeinit1();
-
+void changeinit2();
 void changeinit3();
 
 void main(void)
 {
   LCD_Init();
-  /*****配置中断优先级******/
-  led_init(LED0); //LED初始化
+  led_init(LED0);
   led_init(LED1);
   led_init(LED2);
   led_init(LED3);
   led(LED1, LED_ON);
   led(LED2, LED_ON);
-  /*****1ms定时器的初始化*******/
   //测速
-  pit_init_ms(PIT1, 5);                              //初始化PIT0，定时时间为： 5ms
-  set_vector_handler(PIT1_VECTORn, PIT1_IRQHandler); //设置PIT1的中断服务函数为 PIT1_IRQHandler
-  enable_irq(PIT1_IRQn);                             //使能PIT1中断
+  pit_init_ms(PIT1, 5);//PIT1，5ms
+  set_vector_handler(PIT1_VECTORn, PIT1_IRQHandler);
+  enable_irq(PIT1_IRQn);
 
   //speed_pid
   pit_init_ms(PIT2, 10);                             //初始化PIT2，定时时间为： 30ms
   set_vector_handler(PIT2_VECTORn, PIT2_IRQHandler); //设置PIT2的中断服务函数为 PIT2_IRQHandler
   enable_irq(PIT2_IRQn);                             //使能PIT2中断
 
-  /******舵机和电机初始化*******/
-  ftm_pwm_init(FTM1, FTM_CH0, 300, 4800); //PTA8
-  ftm_pwm_init(FTM0, FTM_CH2, 10000, 0);  //正转 PTA5
-  ftm_pwm_init(FTM0, FTM_CH3, 10000, 0);  //反转 PTA6
+  //舵机和电机初始化
+  ftm_pwm_init(FTM1, FTM_CH0, 300, 4800); //PTA8舵机
+  ftm_pwm_init(FTM0, FTM_CH2, 10000, 0);  //正转 PTA5 电机
+  ftm_pwm_init(FTM0, FTM_CH3, 10000, 0);  //反转 PTA6 电机
   led(LED2, LED_OFF);
-  /*****播码开关接口*******/
+  //播码开关接口
   gpio_init(PTC1, GPI, 0);
   gpio_init(PTC2, GPI, 0);
   gpio_init(PTC3, GPI, 0);
   gpio_init(PTC4, GPI, 0);
 
-  /****测速模块初始化：正交解码、LPTMR_脉冲计数*******/
+  //测速模块初始化：正交解码、LPTMR_脉冲计数
   ftm_quad_init(FTM2); //A10和A11
-  /******串口初始化******/
+  
+  //串口初始化
   uart_init(UART4, 115200);
-  /*************速度选择*************/
-  if (gpio_get(PTC2) == 0)
+
+  //速度选择
+  if (gpio_get(PTC2) == 1)
   {
     changeinit2();
     LCD_P6x8Str(20, 3, "init2");
   }
-  if (gpio_get(PTC1) == 0)
+  if (gpio_get(PTC1) == 1)
   {
     changeinit1();
     LCD_P6x8Str(20, 3, "init1");
   }
-  if (gpio_get(PTC4) == 0)
+  if (gpio_get(PTC4) == 1)
   {
     changeinit3();
     LCD_P6x8Str(20, 3, "init3");
@@ -91,6 +82,7 @@ void main(void)
   {
     gpio_init(PTB22, GPO, 0);
     ad_sampling();
+    servo();
     carport();
   }
 }

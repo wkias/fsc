@@ -1,4 +1,4 @@
- /*!
+/*!
   *     COPYRIGHT NOTICE
   *     Copyright (c) 2014,山外科技
   *     All rights reserved.
@@ -22,11 +22,10 @@
 #include "MK60_gpio.h"
 #include "VCAN_LED.H"
 
-
 /*
  * 定义LED 编号对应的管脚
  */
-PTXn_e LED_PTxn[LED_MAX] = {PTD15,PTC0,PTE26,PTA17};//{PTB20,PTB21,PTB22,PTB23}
+PTXn_e LED_PTxn[LED_MAX] = {PTD15, PTC0, PTE26, PTA17}; //{PTB20,PTB21,PTB22,PTB23}
 /*{PTD15,PTC0,PTE26,PTA17}为龙邱核心板上LED，{PTB20,PTB21,PTB22,PTB23}为山外核心板上LED*/
 
 /*!
@@ -35,24 +34,21 @@ PTXn_e LED_PTxn[LED_MAX] = {PTD15,PTC0,PTE26,PTA17};//{PTB20,PTB21,PTB22,PTB23}
  *  @since      v5.0
  *  Sample usage:       led_init (LED0);    //初始化 LED0
  */
-void    led_init(LED_e ledn)
+void led_init(LED_e ledn)
 {
-    if(ledn < LED_MAX)
+    if (ledn < LED_MAX)
     {
-        gpio_init(LED_PTxn[ledn],GPO,LED_OFF);
+        gpio_init(LED_PTxn[ledn], GPO, LED_OFF);
     }
     else
     {
         ledn = LED_MAX;
-        while(ledn--)
+        while (ledn--)
         {
-            gpio_init(LED_PTxn[ledn],GPO,LED_OFF);
+            gpio_init(LED_PTxn[ledn], GPO, LED_OFF);
         }
-
     }
 }
-
-
 
 /*!
  *  @brief      设置LED灯亮灭
@@ -61,18 +57,18 @@ void    led_init(LED_e ledn)
  *  @since      v5.2
  *  Sample usage:       led (LED0,LED_ON);    //点亮 LED0
  */
-void    led(LED_e ledn,LED_status status)
+void led(LED_e ledn, LED_status status)
 {
-    if(ledn < LED_MAX)
+    if (ledn < LED_MAX)
     {
-        gpio_set(LED_PTxn[ledn],status);
+        gpio_set(LED_PTxn[ledn], status);
     }
     else
     {
         ledn = LED_MAX;
-        while(ledn--)
+        while (ledn--)
         {
-            gpio_set(LED_PTxn[ledn],status);
+            gpio_set(LED_PTxn[ledn], status);
         }
     }
 }
@@ -85,14 +81,14 @@ void    led(LED_e ledn,LED_status status)
  */
 void led_turn(LED_e ledn)
 {
-    if(ledn < LED_MAX)
+    if (ledn < LED_MAX)
     {
         gpio_turn(LED_PTxn[ledn]);
     }
     else
     {
         ledn = LED_MAX;
-        while(ledn--)
+        while (ledn--)
         {
             gpio_turn(LED_PTxn[ledn]);
         }

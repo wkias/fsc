@@ -177,7 +177,7 @@ void servo()
     }
     else
     {
-        midpoint_error = (0.3 * ad_fD[3] + 0.7 * ad_fD[2]);                                                                                                                 //计算误差     中线误差
+        midpoint_error = (0.3 * ad_fD[1] + 0.7 * ad_fD[2]);                                                                                                                 //计算误差     中线误差
         if (midpoint_error < 0)                                                                                                                                             //you
             ad_Turn_PWMOUT_TOTAL = duoji_center + (ad_Turn_P_R * midpoint_error * midpoint_error + 10) * midpoint_error + ad_Turn_D_R * (midpoint_error - lastpoint_error); //在一个值左右变化，防止左右摆动幅度大
                                                                                                                                                                             //ad_Turn_PWMOUT_TOTAL = duoji_center+(80)*midpoint_error;
