@@ -7131,7 +7131,13 @@
                 <name>$PROJ_DIR$\..\..\App\Inc\PORT_cfg.h</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\App\Inc\queue.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\..\App\Inc\servo.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\App\Inc\settings.h</name>
             </file>
         </group>
         <file>
@@ -7151,6 +7157,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\App\motor.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\App\queue.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\App\servo.c</name>
