@@ -42,7 +42,7 @@
 #include "Vcan_touch.h" //触摸驱动
 
 #include "VCAN_computer.h" //多功能调试助手
-#include "ad_sampling.h"
+#include "adc_sampling.h"
 #include "motor.h"
 #include "servo.h"
 #include "carport.h"

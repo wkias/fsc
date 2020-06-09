@@ -7110,7 +7110,7 @@
         <group>
             <name>inc</name>
             <file>
-                <name>$PROJ_DIR$\..\..\App\Inc\ad_sampling.h</name>
+                <name>$PROJ_DIR$\..\..\App\Inc\adc_sampling.h</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\App\Inc\carport.h</name>
@@ -7138,7 +7138,7 @@
             </file>
         </group>
         <file>
-            <name>$PROJ_DIR$\..\..\App\ad_sampling.c</name>
+            <name>$PROJ_DIR$\..\..\App\adc_sampling.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\App\carport.c</name>
