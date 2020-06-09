@@ -4,5 +4,5 @@
 
 Prj/IAR/Debug
 Prj/IAR/Release
-.vscode
-三个文件夹需加入.gitignore
+<!-- .vscode -->
+需加入.gitignore
