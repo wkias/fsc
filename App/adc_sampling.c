@@ -1,4 +1,3 @@
-#include "common.h"
 #include "include.h"
 
 int adc_val[6] = {0};
@@ -26,13 +25,13 @@ void adc_sampling()
   int max = 0;
   int min = 0;
   int ad_sum = 0;
+  static int sampling_f = ADC_SAMPLING_FREQ;
 
-  led(LED1, LED_OFF);
   for (int i = 0; i < 6; i++)
   {
     max = adc_once(adc[i], ADC_10bit);
     min = adc_once(adc[i], ADC_10bit);
-    for (int j = 0; j < 50; j++)
+    for (int j = 0; j < sampling_f; j++)
     {
       adc_val[i] = adc_once(adc[i], ADC_10bit);
       if (adc_val[i] > max)
