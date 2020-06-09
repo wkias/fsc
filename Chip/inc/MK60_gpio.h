@@ -23,7 +23,6 @@
  */
 typedef enum GPIO_CFG
 {
-    //这里的值不能改！！！
     GPI         = 0,                                //定义管脚输入方向      GPIOx_PDDRn里，0表示输入，1表示输出
     GPO         = 1,                                //定义管脚输出方向
 } GPIO_CFG;
@@ -34,8 +33,6 @@ typedef enum GPIO_CFG
 extern  GPIO_MemMapPtr      GPIOX[PTX_MAX];
 #define GPIOX_BASE(PTxn)    GPIOX[PTX(PTxn)]       //GPIO模块的地址
 
-
-/****************************外部使用****************************/
 
 extern void    gpio_init  (PTXn_e, GPIO_CFG, uint8 data);    //初始化gpio
 extern void    gpio_ddr   (PTXn_e, GPIO_CFG);                //设置引脚数据方向

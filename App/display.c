@@ -1,5 +1,5 @@
 #include  "common.h"
-#include "lcd.h"
+#include "display.h"
 #include "MK60_gpio.h"
 
 
