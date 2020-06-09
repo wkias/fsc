@@ -13,12 +13,15 @@ uint32 servo_out;          //舵机实际输出（期望输出融合误差）
 
 void servo()
 {
-    float servo_errors[2] = {0}; //本次误差，上次误差
+    float servo_errors[2] = {0}; //本次中线误差，上次中线误差
     static float servo_param[3] = {SERVO_PID_PARAMENTER_P,
                                    SERVO_PID_PARAMENTER_I,
                                    SERVO_PID_PARAMENTER_D};
 
-    servo_errors[0] = (0.3 * adc_errors[1] + 0.7 * adc_errors[2]); //计算误差
+    //TO-DO
+    //确定舵机偏转幅度
+
+    servo_errors[0] = adc_errors[1] + adc_errors[2];
     if (servo_errors[0] < 0)
         servo_out = SERVO_BASE_POINT +
                     (SERVO_PID_PARAMENTER_P * servo_errors[0] * servo_errors[0] + 10) * servo_errors[0] +
@@ -37,5 +40,4 @@ void servo()
 
     ftm_pwm_duty(FTM1, FTM_CH0, servo_out);
     expected_servo_out = servo_out;
-}
 }
