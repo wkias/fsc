@@ -3,10 +3,6 @@
 Queue init_queue()
 {
     Queue *q = (Queue *)malloc(sizeof(Queue));
-    if (q == NULL)
-    {
-        return;
-    }
     q->rear = q->front = 0;
     return *q;
 }
