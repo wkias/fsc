@@ -6292,9 +6292,6 @@
                 <name>$PROJ_DIR$\..\..\App\Inc\include.h</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\App\Inc\kalman_filter.h</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\App\Inc\MK60_conf.h</name>
             </file>
             <file>
@@ -6315,9 +6312,6 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\App\display.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\App\kalman_filter.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\App\main.c</name>

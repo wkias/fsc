@@ -28,7 +28,7 @@ void adc_sampling()
   int ad_sum = 0;
 
   led(LED1, LED_OFF);
-  for (int i = 0; i < 6; i++) //Left-Min
+  for (int i = 0; i < 6; i++)
   {
     max = adc_once(adc[i], ADC_10bit);
     min = adc_once(adc[i], ADC_10bit);
@@ -62,16 +62,4 @@ void adc_sampling()
   adc_errors[1] = (adc_val[2] - adc_val[0]) / (adc_val[2] + adc_val[0]) * 20;
   adc_errors[2] = (adc_val[3] - adc_val[1]) / (adc_val[3] + adc_val[1]) * 20;
 
-  Dis_num(150, 4, bin_youhuandaoflag);
-  Dis_num(150, 6, bin_zuohuandaoflag);
-}
-
-void PIT3_IRQHandler(void)
-{
-  gpio_init(PTB22, GPO, 1);
-  sin_youhuandaoflag = 0;
-  sin_zuohuandaoflag = 0;
-  bin_zuohuandaoflag = 0;
-  bin_youhuandaoflag = 0;
-  PIT_Flag_Clear(PIT3);
 }
