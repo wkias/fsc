@@ -1,13 +1,13 @@
 #include "include.h"
 
 int line_speed;
-uint16 ex_speed;
-uint16 RightMotorPulse = 0; //目标速度、右电机测速
-float ad_Speed_P = 1, ad_Speed_I = 3, ad_Speed_D = 0; //10,0.8,0//70,10,0//6   //1,3,0
-
+uint16 expected_motor_out; //期望速度
+uint16 motor_pulse = 0;    //电机观测速度
+float motor_param_P = 1, motor_param_I = 3, motor_param_D = 0;
 
 int16 ftm_quad_values[3] = {0};
-void PIT1_IRQHandler(void){
+void PIT1_IRQHandler(void)
+{
   int8 i;
   int val;
   gpio_init(PTB22, GPO, 0);
@@ -19,7 +19,7 @@ void PIT1_IRQHandler(void){
     ftm_quad_values[i] = ftm_quad_values[i + 1];
   }
   ftm_quad_values[2] = val;
-  RightMotorPulse = (int)(ftm_quad_values[2] * 0.5 + ftm_quad_values[1] * 0.3 + ftm_quad_values[0] * 0.2); //权值滤波
+  motor_pulse = (int)(ftm_quad_values[2] * 0.5 + ftm_quad_values[1] * 0.3 + ftm_quad_values[0] * 0.2); //权值滤波
 
   ftm_quad_clean(FTM2);
   PIT_Flag_Clear(PIT1); //清中断标志位
@@ -34,64 +34,28 @@ void PIT2_IRQHandler()
 
 void motor()
 {
-  unsigned int static ad_speed_out;  //输出实际速度
-  signed int static ad_speed_error;  //速度误差
-  signed int static ad_last_error_1; //上次偏差
-  signed int static ad_last_error_2; //上上次偏差
+  unsigned int static motor_out[2];  //输出速度,上次输出速度
+  signed int static motor_errors[3]; //本次速度偏差，上次偏差，前次偏差
 
-  ad_speed_error = ex_speed - RightMotorPulse;
+  //速度误差
+  motor_errors[0] = expected_motor_out - motor_pulse;
+  
+  motor_out[1] = motor_out[0];
+  motor_out[0] = motor_param_P * (motor_errors[0] - motor_errors[1]) + motor_param_I * motor_errors[0] +
+                 motor_param_D * (motor_errors[0] - 2 * motor_errors[1] + motor_errors[2]); //二次差分，相当于给导数求导
 
-  if (ad_speed_out > 2000)
-    ad_speed_out = 2000;
-  if (ad_speed_out < 0)
-    ad_speed_out = 0;
-
-  if (gpio_get(PTC3) == 0)
+  //输出速度阈值
+  if (motor_out[0] > 2000)
   {
-    carport_flag = 1;
+    motor_out[0] = 2000;
+  }
+  if (motor_out[0] < 0)
+  {
+    motor_out[0] = 0;
   }
 
-  if (bin_youhuandaoflag > 0 || bin_zuohuandaoflag > 0)
-  {
-    ex_speed = 1100; //750
-  }
+  motor_errors[2] = motor_errors[1];
+  motor_errors[1] = motor_errors[0];
 
-  if (sin_youhuandaoflag > 0 || sin_zuohuandaoflag > 0)
-  {
-    ex_speed = 850; //750
-  }
-
-  if ((line_speed == 1))
-  {
-    ex_speed = 800;
-  }
-
-  if (bin_youhuandaoflag == 0 && bin_zuohuandaoflag == 0 && sin_youhuandaoflag == 0 && sin_zuohuandaoflag == 0)
-  {
-
-    if ((speed_djout >= 4850 && speed_djout <= 5050))
-    {
-      ex_speed = zhidao1; //900,1000
-    }
-    else if ((speed_djout > 4750 && speed_djout < 4850) || (speed_djout < 5150 && speed_djout > 5050))
-    {
-      ex_speed = zhidao2; //800
-    }
-    else if ((speed_djout < 4750 && speed_djout > 4650) || (speed_djout < 5350 && speed_djout > 5150))
-    {
-      ex_speed = wangdao1; //750
-    }
-    else if (speed_djout <= 4650 || speed_djout >= 5350)
-    {
-      ex_speed = wangdao2; //700
-    }
-  }
-
-  ad_speed_out = ad_Speed_P * (ad_speed_error - ad_last_error_1) + ad_Speed_I * ad_speed_error +
-                 ad_Speed_D * (ad_speed_error - 2 * ad_last_error_1 + ad_last_error_2); //二次差分，相当于给导数求导
-
-  ad_last_error_2 = ad_last_error_1;
-  ad_last_error_1 = ad_speed_error;
-
-  ftm_pwm_init(FTM0, FTM_CH2, 10000, ad_speed_out);
+  ftm_pwm_duty(FTM0, FTM_CH2, motor_out[0]);
 }
