@@ -1,7 +1,8 @@
 #include "include.h"
 
-int adc_val[6] = {0};
-int adc_errors[3][3]; //三行三列矩阵
+double adc_val[6] = {0};
+double adc_errors[3];
+int sampling_f = ADC_SAMPLING_FREQ + 2;
 ADCn_Ch_e port_adc[6] = {
     ADC0_SE17, //PTE24   1
     ADC1_SE5a, //PTE1    2
@@ -21,10 +22,9 @@ void adcs_init()
 
 void adc_sampling()
 {
-  int max = 0;
-  int min = 0;
-  int ad_sum = 0;
-  static int sampling_f = ADC_SAMPLING_FREQ;
+  double max = 0;
+  double min = 0;
+  double ad_sum = 0;
 
   for (int i = 0; i < 6; i++)
   {
@@ -39,20 +39,12 @@ void adc_sampling()
     }
     ad_sum -= max;
     ad_sum -= min;
-    adc_val[i] = ad_sum / 48;
+    adc_val[i] = (float)ad_sum / ADC_SAMPLING_FREQ / 10;
     ad_sum = 0;
-    Dis_num(COLUMN_1, i, adc_val[i]);
   }
 
-  for (int i = 2; i > -1; i--)
-  {
-    for (int j = 0; j < 2; j++)
-    {
-      adc_errors[i][j] = adc_errors[i - 1][j];
-    }
-  }
-  //水平电感的差比和作为偏差
-  adc_errors[0][0] = (adc_val[0] - adc_val[5]) / (adc_val[0] + adc_val[5]) * 20;
-  adc_errors[0][1] = (adc_val[1] - adc_val[4]) / (adc_val[1] + adc_val[4]) * 20;
-  adc_errors[0][2] = (adc_val[2] - adc_val[3]) / (adc_val[2] + adc_val[3]) * 20;
+  //水平电感的和比差作为偏差
+  adc_errors[0] = (adc_val[0] + adc_val[5]) / (adc_val[0] - adc_val[5]);
+  adc_errors[1] = (adc_val[1] + adc_val[4]) / (adc_val[1] - adc_val[4]);
+  adc_errors[2] = (adc_val[2] + adc_val[3]) / (adc_val[2] - adc_val[3]);
 }

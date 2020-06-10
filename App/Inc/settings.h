@@ -2,6 +2,9 @@
 #define ENABLE_PARAM_SWITCHER 1
 #define ENABLE_LED 0
 
+//打印-延时
+#define PRINT_DELAY 100
+
 //灯光效果
 #define LED_CARPORT LED0
 #define LED_SAMPLING LED1
@@ -32,9 +35,9 @@
 #define ADC_SAMPLING_PRECISION ADC_16bit
 
 //编码器-权值滤波-权值
-#define CODER_FILTER_WIGHT_0 0.5 //最近观测值
-#define CODER_FILTER_WIGHT_1 0.3 //上次观测值
-#define CODER_FILTER_WIGHT_2 0.2 //前次观测值
+#define ENCODER_FILTER_WIGHT_0 0.5 //最近观测值
+#define ENCODER_FILTER_WIGHT_1 0.3 //上次观测值
+#define ENCODER_FILTER_WIGHT_2 0.2 //前次观测值
 
 //电机-PID
 #define MOTOR_PID_PARAMENTER_P 1
@@ -53,13 +56,15 @@
 #define SERVO_PID_PARAMENTER_P 0.3
 #define SERVO_PID_PARAMENTER_I 0.3
 #define SERVO_PID_PARAMENTER_D 1.2
-//舵机-偏转-占空比//3900—4700—5500
+//舵机-偏转-占空比//4150—4950—5800
 #define SERVO_BASE_POINT 4950                    //基点
 #define SERVO_LEFT_LIMIT SERVO_BASE_POINT - 850  //左极限
 #define SERVO_RIGHT_LIMIT SERVO_BASE_POINT + 850 //右极限
 //舵机-电机-输出参数比例
 #define PARAMENTER_SERVO_MOTOR_RATIO 2.5
 
+//引脚定义-定时器-打印
+#define PORT_PIT_PRINT PIT2
 //引脚定义-干簧管
 #define PORT_REED_SWITCHER_1 PTA6
 //引脚定义-拨码开关
@@ -72,7 +77,7 @@
 //引脚定义-舵机
 #define PORT_SERVO FTM1
 //引脚定义-编码器
-#define PORT_CODER FTM2
+#define PORT_ENCODER FTM2
 //引脚定义-电感，仅展示用，毋改，不然报错
 // ADCn_Ch_e port_adc[6] = {
 //     ADC0_SE17, //PTE24   1

@@ -2,9 +2,16 @@
 
 void print()
 {
-  Dis_num(COLUMN_2, 0, adc_errors[0][0]);
-  Dis_num(COLUMN_2, 1, adc_errors[0][1]);
-  Dis_num(COLUMN_2, 2, adc_errors[0][2]);
+  PIT_Flag_Clear(PIT0);
+
+  for (int i = 0; i < 6; i++)
+  {
+    Dis_num(COLUMN_1, i, adc_val[i]);
+  }
+
+  Dis_num(COLUMN_2, 0, adc_errors[0]);
+  Dis_num(COLUMN_2, 1, adc_errors[1]);
+  Dis_num(COLUMN_2, 2, adc_errors[2]);
 
   Dis_num(COLUMN_3, 0, servo_errors[0]);
   Dis_num(COLUMN_3, 1, servo_correct);
@@ -39,18 +46,30 @@ void main(void)
   ftm_pwm_init(PORT_MOTOR, FTM_CH3, 10000, 0);              //反转 PTA6 电机
 
   //测速模块初始化：正交解码、LPTMR_脉冲计数
-  ftm_quad_init(PORT_CODER); //A10和A11
+  ftm_quad_init(PORT_ENCODER); //A10和A11
 
-  //车库检查
+  //中断优先级
+  NVIC_SetPriorityGrouping(4);
+  NVIC_SetPriority(PORTA_IRQn, 0);
+  NVIC_SetPriority(PIT2_IRQn, 1);
+  NVIC_SetPriority(PIT1_IRQn, 1);
+  NVIC_SetPriority(PIT0_IRQn, 0);
+
+  //车库检查-中断
   set_vector_handler(PORTA_VECTORn, carport);
-  enable_irq(PORTA_VECTORn);
+  enable_irq(PORTA_IRQn);
 
-  // 测速定时器
+  // 打印-定时器中断
+  pit_init_ms(PIT0, PRINT_DELAY);
+  set_vector_handler(PIT0_VECTORn, print);
+  enable_irq(PIT0_IRQn);
+
+  // 测速-定时器中断
   pit_init_ms(PIT1, 5);
-  set_vector_handler(PIT1_VECTORn, coder);
+  set_vector_handler(PIT1_VECTORn, encoder);
   enable_irq(PIT1_IRQn);
 
-  // 调速定时器
+  // 调速-定时器中断
   pit_init_ms(PIT2, 10);
   set_vector_handler(PIT2_VECTORn, motor);
   enable_irq(PIT2_IRQn);
@@ -65,29 +84,27 @@ void main(void)
   adcs_init();
   while (1)
   {
-#if ENABLE_LED
-    led(LED_CARPORT, LED_ON);
-#endif
-    carport();
-#if ENABLE_LED
 
+#if ENABLE_LED
     led(LED_CARPORT, LED_OFF);
     led(LED_SAMPLING, LED_ON);
 #endif
+
     adc_sampling();
+
 #if ENABLE_LED
     led(LED_SAMPLING, LED_OFF);
     led(LED_SERVO, LED_ON);
 #endif
-    servo();
-#if ENABLE_LED
 
+    servo();
+
+#if ENABLE_LED
     led(LED_SERVO, LED_OFF);
     led(LED_MOTOR, LED_ON);
-    // coder();
+    // encoder();
     // motor();
     led(LED_MOTOR, LED_OFF);
 #endif
-    print();
   }
 }
