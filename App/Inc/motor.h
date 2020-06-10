@@ -2,5 +2,5 @@
 
 extern uint16 expected_motor_out;
 
-void PIT1_IRQHandler();
+void coder();
 void motor();
