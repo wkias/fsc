@@ -1,43 +1,36 @@
 #include "include.h"
 
-int zhidao1;
-int zhidao2;
-int wangdao1;
-int wangdao2;
-
-int left_circuit_flag = 0;
-int right_circuit_flag = 0;
-
-uint32 expected_servo_out; //期望输出
-uint32 servo_out;          //舵机实际输出（期望输出融合误差）
+float64_t servo_out; //舵机PWM占空比
 
 void servo()
 {
-    float servo_errors[2] = {0}; //本次中线误差，上次中线误差
-    static float servo_param[3] = {SERVO_PID_PARAMENTER_P,
-                                   SERVO_PID_PARAMENTER_I,
-                                   SERVO_PID_PARAMENTER_D};
+    float64_t ratio = PARAMENTER_SERVO_MOTOR_RATIO;
+    float servo_errors[3] = {0}; //本次中线误差，上次中线误差，累计误差和
+    static float servo_pid_param[3] = {SERVO_PID_PARAMENTER_P,
+                                       SERVO_PID_PARAMENTER_I,
+                                       SERVO_PID_PARAMENTER_D};
+    static float servo_errors_wight[3] = {SERVO_ERRORS_WEIGHT_0,
+                                          SERVO_ERRORS_WEIGHT_1,
+                                          SERVO_ERRORS_WEIGHT_2};
+    float64_t servo_correct; //舵机误差增量修正值
 
-    //TO-DO
-    //确定舵机偏转幅度
+    servo_errors[0] = servo_errors_wight[0] * adc_errors[0][0] +
+                      servo_errors_wight[1] * adc_errors[0][1] +
+                      servo_errors_wight[2] * adc_errors[0][2];
+    //位置PID，中线误差修正
+    servo_correct = servo_pid_param[0] * servo_errors[0] +
+                    servo_pid_param[1] * servo_errors[2] +
+                    servo_pid_param[2] * (servo_errors[0] - servo_errors[1]);
+    servo_errors[1] = servo_errors[0];
+    servo_errors[2] += servo_errors[0];
+    servo_out = SERVO_BASE_POINT + servo_correct;
 
-    servo_errors[0] = adc_errors[1] + adc_errors[2];
-    if (servo_errors[0] < 0)
-        servo_out = SERVO_BASE_POINT +
-                    (SERVO_PID_PARAMENTER_P * servo_errors[0] * servo_errors[0] + 10) * servo_errors[0] +
-                    SERVO_PID_PARAMENTER_D * (servo_errors[0] - servo_errors[1]);
-    else if (servo_errors[0] >= 0)
-        servo_out = SERVO_BASE_POINT +
-                    (SERVO_PID_PARAMENTER_P * servo_errors[0] * servo_errors[0] + 10) * servo_errors[0] +
-                    SERVO_PID_PARAMENTER_D * (servo_errors[0] - servo_errors[1]);
-    servo_errors[1] = servo_errors[0]; //记录上次误差
-
-    //输出限幅
-    if (servo_out < SERVO_BASE_POINT - 850)
-        servo_out = SERVO_BASE_POINT - 850;
-    if (servo_out > SERVO_BASE_POINT + 850)
-        servo_out = SERVO_BASE_POINT + 850;
-
+    //限幅输出
+    servo_out = (servo_out > SERVO_LEFT_LIMIT) ? servo_out : SERVO_LEFT_LIMIT;
+    servo_out = (servo_out < SERVO_RIGHT_LIMIT) ? servo_out : SERVO_RIGHT_LIMIT;
     ftm_pwm_duty(FTM1, FTM_CH0, servo_out);
-    expected_servo_out = servo_out;
+
+    //根据舵机偏转幅度计算电机期望速度
+    servo_correct = (servo_correct > 0) ? servo_correct : -servo_correct;
+    expected_motor_out = MOTOR_VELOCITY_SUPERIOR_LIMIT - servo_correct * ratio;
 }

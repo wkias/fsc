@@ -1,22 +1,21 @@
 #include "include.h"
 
 int adc_val[6] = {0};
-int adc_errors[3];
-
-ADCn_Ch_e adc[6] = {
-    ADC1_SE4a, //PTE0   左电磁
-    ADC1_SE5a, //PTE1   最左电磁
-    ADC1_SE6a, //PTE2  右电磁
-    ADC1_SE7a, //PTE3  最右电磁
-    ADC0_SE17, //PTE24  左竖电磁
-    ADC0_SE18  //PTE25  右竖电磁
+int adc_errors[3][3]; //三行三列矩阵
+ADCn_Ch_e port_adc[6] = {
+    ADC0_SE17, //PTE24   1
+    ADC1_SE5a, //PTE1    2
+    ADC1_SE4a, //PTE0    3
+    ADC1_SE6a, //PTE2    4
+    ADC1_SE7a, //PTE3    5
+    ADC0_SE18  //PTE25   6
 };
 
 void adcs_init()
 {
   for (int i = 0; i < 6; i++)
   {
-    adc_init(adc[i]);
+    adc_init(port_adc[i]);
   }
 }
 
@@ -29,36 +28,31 @@ void adc_sampling()
 
   for (int i = 0; i < 6; i++)
   {
-    max = adc_once(adc[i], ADC_10bit);
-    min = adc_once(adc[i], ADC_10bit);
+    max = adc_once(port_adc[i], ADC_SAMPLING_PRECISION);
+    min = adc_once(port_adc[i], ADC_SAMPLING_PRECISION);
     for (int j = 0; j < sampling_f; j++)
     {
-      adc_val[i] = adc_once(adc[i], ADC_10bit);
-      if (adc_val[i] > max)
-      {
-        max = adc_val[i];
-      }
-      if (adc_val[i] < min)
-      {
-        min = adc_val[i];
-      }
+      adc_val[i] = adc_once(port_adc[i], ADC_SAMPLING_PRECISION);
+      max = (max > adc_val[i]) ? max : adc_val[i];
+      min = (min < adc_val[i]) ? min : adc_val[i];
       ad_sum += adc_val[i];
     }
     ad_sum -= max;
     ad_sum -= min;
     adc_val[i] = ad_sum / 48;
     ad_sum = 0;
+    Dis_num(1, i, adc_val[i]);
   }
 
-  Dis_num(96, 1, adc_val[2]); //right
-  Dis_num(32, 0, adc_val[1]); //left
-  Dis_num(96, 0, adc_val[0]); //left
-  Dis_num(32, 1, adc_val[3]); //right
-  Dis_num(32, 2, adc_val[4]); //left
-  Dis_num(96, 2, adc_val[5]); //right
-
-  //水平电感的差比和作为偏差 最边上的2个
-  adc_errors[1] = (adc_val[2] - adc_val[0]) / (adc_val[2] + adc_val[0]) * 20;
-  adc_errors[2] = (adc_val[3] - adc_val[1]) / (adc_val[3] + adc_val[1]) * 20;
-
+  for (int i = 2; i > -1; i--)
+  {
+    for (int j = 0; j < 2; j++)
+    {
+      adc_errors[i][j] = adc_errors[i - 1][j];
+    }
+  }
+  //水平电感的差比和作为偏差
+  adc_errors[0][0] = (adc_val[0] - adc_val[5]) / (adc_val[0] + adc_val[5]) * 20;
+  adc_errors[0][1] = (adc_val[1] - adc_val[4]) / (adc_val[1] + adc_val[4]) * 20;
+  adc_errors[0][2] = (adc_val[2] - adc_val[3]) / (adc_val[2] + adc_val[3]) * 20;
 }

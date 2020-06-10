@@ -48,5 +48,6 @@
 #include "carport.h"
 #include "display.h"
 #include "queue.h"
+#include "dynamic_param.h"
 #include "settings.h"
 #endif //__INCLUDE_H__

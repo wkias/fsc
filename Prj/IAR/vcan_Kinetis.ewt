@@ -7119,6 +7119,9 @@
                 <name>$PROJ_DIR$\..\..\App\Inc\display.h</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\App\Inc\dynamic_param.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\..\App\Inc\include.h</name>
             </file>
             <file>
@@ -7148,6 +7151,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\App\display.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\App\dynamic_param.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\App\main.c</name>
