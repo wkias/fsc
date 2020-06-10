@@ -8,5 +8,5 @@ extern uint32 motor_out;
 extern int32 motor_errors[3];
 extern float motor_param[3];
 
-void coder();
+void encoder();
 void motor();
