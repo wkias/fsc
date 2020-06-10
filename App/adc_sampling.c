@@ -41,7 +41,7 @@ void adc_sampling()
     ad_sum -= min;
     adc_val[i] = ad_sum / 48;
     ad_sum = 0;
-    Dis_num(1, i, adc_val[i]);
+    Dis_num(COLUMN_1, i, adc_val[i]);
   }
 
   for (int i = 2; i > -1; i--)

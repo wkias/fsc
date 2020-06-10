@@ -21,17 +21,17 @@ void param_switcher()
     if (gpio_get(PORT_SWITCHER_1) == 1)
     {
         config1();
-        LCD_P6x8Str(1, 0, "S1");
+        LCD_P6x8Str(COLUMN_1, 7, "S1");
     }
     if (gpio_get(PORT_SWITCHER_2) == 1)
     {
         config2();
-        LCD_P6x8Str(1, 0, "S2");
+        LCD_P6x8Str(COLUMN_1, 7, "S2");
     }
     if (gpio_get(PORT_SWITCHER_3) == 1)
     {
         config3();
-        LCD_P6x8Str(1, 0, "S3");
+        LCD_P6x8Str(COLUMN_1, 7, "S3");
     }
 }
 
