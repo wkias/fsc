@@ -1,5 +1,30 @@
 //是否使用参数切换开关
 #define ENABLE_PARAM_SWITCHER 1
+#define ENABLE_LED 0
+
+//灯光效果
+#define LED_CARPORT LED0
+#define LED_SAMPLING LED1
+#define LED_SERVO LED2
+#define LED_MOTOR LED3
+
+//显示位置
+#define COLUMN_WIDTH 30
+#define COLUMN_1 0
+#define COLUMN_2 COLUMN_1 + COLUMN_WIDTH * 1
+#define COLUMN_3 COLUMN_1 + COLUMN_WIDTH * 2
+#define COLUMN_4 COLUMN_1 + COLUMN_WIDTH * 3
+#define COLUMN_5 COLUMN_1 + COLUMN_WIDTH * 4
+#define COLUMN_6 COLUMN_1 + COLUMN_WIDTH * 4
+#define ROW_HIGHT 8
+#define ROW_1 1
+#define ROW_2 2
+#define ROW_3 3
+#define ROW_4 4
+#define ROW_5 5
+#define ROW_6 6
+#define ROW_7 7
+#define ROW_8 8
 
 //ADC-采样频数
 #define ADC_SAMPLING_FREQ 12
@@ -35,6 +60,8 @@
 //舵机-电机-输出参数比例
 #define PARAMENTER_SERVO_MOTOR_RATIO 2.5
 
+//引脚定义-干簧管
+#define PORT_REED_SWITCHER_1 PTA6
 //引脚定义-拨码开关
 #define PORT_SWITCHER_1 PTC1
 #define PORT_SWITCHER_2 PTC2
@@ -46,7 +73,7 @@
 #define PORT_SERVO FTM1
 //引脚定义-编码器
 #define PORT_CODER FTM2
-//引脚定义-电感
+//引脚定义-电感，仅展示用，毋改，不然报错
 // ADCn_Ch_e port_adc[6] = {
 //     ADC0_SE17, //PTE24   1
 //     ADC1_SE5a, //PTE1    2
@@ -56,7 +83,7 @@
 //     ADC0_SE18  //PTE25   6
 // };
 
-//不兼容，弃用
+//编译器提示不兼容，弃用
 // #define MAX(a, b) (a > b) ? a : b
 // #define MIN(a, b) (a < b) ? a : b
 // #define ABS(a) (a > 0) ? a : -a

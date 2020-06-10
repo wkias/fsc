@@ -1,9 +1,31 @@
 #include "include.h"
 
+void print()
+{
+  Dis_num(COLUMN_2, 0, adc_errors[0][0]);
+  Dis_num(COLUMN_2, 1, adc_errors[0][1]);
+  Dis_num(COLUMN_2, 2, adc_errors[0][2]);
+
+  Dis_num(COLUMN_3, 0, servo_errors[0]);
+  Dis_num(COLUMN_3, 1, servo_correct);
+  Dis_num(COLUMN_3, 2, servo_out);
+
+  Dis_num(COLUMN_4, 0, motor_errors[0]);
+  Dis_num(COLUMN_4, 1, expected_motor_out);
+  Dis_num(COLUMN_4, 2, motor_out);
+  Dis_num(COLUMN_4, 3, motor_pulse);
+}
+
 void main(void)
 {
   //屏幕
   LCD_Init();
+
+  //LED
+  led_init(LED0);
+  led_init(LED1);
+  led_init(LED2);
+  led_init(LED3);
 
   //播码开关接口
   gpio_init(PORT_SWITCHER_1, GPI, 0);
@@ -23,28 +45,49 @@ void main(void)
   set_vector_handler(PORTA_VECTORn, carport);
   enable_irq(PORTA_VECTORn);
 
-  //测速定时器
+  // 测速定时器
   pit_init_ms(PIT1, 5);
   set_vector_handler(PIT1_VECTORn, coder);
   enable_irq(PIT1_IRQn);
 
-  //调速定时器
+  // 调速定时器
   pit_init_ms(PIT2, 10);
   set_vector_handler(PIT2_VECTORn, motor);
   enable_irq(PIT2_IRQn);
 
   //串口初始化
-  uart_init(UART4, 115200);
+  // uart_init(UART4, 115200);
 
-  #if ENABLE_PARAM_SWITCHER
+#if ENABLE_PARAM_SWITCHER
   param_switcher();
-  #endif
+#endif
 
   adcs_init();
   while (1)
   {
+#if ENABLE_LED
+    led(LED_CARPORT, LED_ON);
+#endif
     carport();
+#if ENABLE_LED
+
+    led(LED_CARPORT, LED_OFF);
+    led(LED_SAMPLING, LED_ON);
+#endif
     adc_sampling();
+#if ENABLE_LED
+    led(LED_SAMPLING, LED_OFF);
+    led(LED_SERVO, LED_ON);
+#endif
     servo();
+#if ENABLE_LED
+
+    led(LED_SERVO, LED_OFF);
+    led(LED_MOTOR, LED_ON);
+    // coder();
+    // motor();
+    led(LED_MOTOR, LED_OFF);
+#endif
+    print();
   }
 }
