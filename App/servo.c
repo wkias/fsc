@@ -30,6 +30,7 @@ void servo()
 
     //根据舵机偏转幅度计算电机期望速度
     servo_correct = (servo_correct > 0) ? servo_correct : -servo_correct;
-    expected_motor_out = MOTOR_VELOCITY_SUPERIOR_LIMIT - servo_correct * ratio;
-    // ftm_pwm_duty(PORT_MOTOR, FTM_CH2, expected_motor_out);
+    expected_motor_out = MOTOR_VELOCITY_BASE_POINT - servo_correct * ratio;
+    // ftm_pwm_duty(PORT_MOTOR, FTM_CH0, expected_motor_out);
+    // ftm_pwm_init(FTM0, FTM_CH2, 10000, expected_motor_out);
 }

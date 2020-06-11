@@ -63,8 +63,6 @@
 //舵机-电机-输出参数比例
 #define PARAMENTER_SERVO_MOTOR_RATIO 2.5
 
-//引脚定义-定时器-打印
-#define PORT_PIT_PRINT PIT2
 //引脚定义-干簧管
 #define PORT_REED_SWITCHER_1 PTA6
 //引脚定义-拨码开关
