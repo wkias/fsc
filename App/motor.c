@@ -52,7 +52,9 @@ void motor()
   //限速输出
   motor_out = MAX(motor_out, MOTOR_VELOCITY_SUPERIOR_LIMIT);
   motor_out = MIN(motor_out, MOTOR_VELOCITY_INFERIOR_LIMIT);
-  // ftm_pwm_duty(PORT_MOTOR, FTM_CH2, expected_motor_out);
+  ftm_pwm_duty(PORT_MOTOR, FTM_CH0, motor_out);
+  // ftm_pwm_init(PORT_MOTOR, FTM_CH0, 10000, motor_out);
+
 
   motor_errors[2] = motor_errors[1];
   motor_errors[1] = motor_errors[0];
