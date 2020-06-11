@@ -5,7 +5,7 @@
 #define ENABLE_LED 0
 
 //打印-延时
-#define PRINT_DELAY 100
+#define PRINT_DELAY 1000
 
 //灯光效果
 #define LED_CARPORT LED0
