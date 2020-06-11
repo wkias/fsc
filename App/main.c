@@ -42,8 +42,8 @@ void main(void)
 
   //舵机和电机初始化
   ftm_pwm_init(PORT_SERVO, FTM_CH0, 300, SERVO_BASE_POINT); //PTA8舵机
-  ftm_pwm_init(PORT_MOTOR, FTM_CH0, 10000, 0);              //正转 PTA5 电机
-  ftm_pwm_init(PORT_MOTOR, FTM_CH1, 10000, 0);              //反转 PTA6 电机
+  ftm_pwm_init(PORT_MOTOR, FTM_CH2, 10000, 0);              //正转 PTA5 电机
+  ftm_pwm_init(PORT_MOTOR, FTM_CH3, 10000, 0);              //反转 PTA6 电机
 
   //测速模块初始化：正交解码、LPTMR_脉冲计数
   ftm_quad_init(PORT_ENCODER); //A10和A11
@@ -84,27 +84,9 @@ void main(void)
   adcs_init();
   while (1)
   {
-
-#if ENABLE_LED
-    led(LED_CARPORT, LED_OFF);
-    led(LED_SAMPLING, LED_ON);
-#endif
-
     adc_sampling();
-
-#if ENABLE_LED
-    led(LED_SAMPLING, LED_OFF);
-    led(LED_SERVO, LED_ON);
-#endif
-
     servo();
-
-#if ENABLE_LED
-    led(LED_SERVO, LED_OFF);
-    led(LED_MOTOR, LED_ON);
     // encoder();
     // motor();
-    led(LED_MOTOR, LED_OFF);
-#endif
   }
 }
