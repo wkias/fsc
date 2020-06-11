@@ -44,7 +44,7 @@ void adc_sampling()
   }
 
   //水平电感的和比差作为偏差
-  adc_errors[0] = (adc_val[0] + adc_val[5]) / (adc_val[0] - adc_val[5]);
-  adc_errors[1] = (adc_val[1] + adc_val[4]) / (adc_val[1] - adc_val[4]);
-  adc_errors[2] = (adc_val[2] + adc_val[3]) / (adc_val[2] - adc_val[3]);
+  adc_errors[0] = (adc_val[0] + adc_val[5]) / (adc_val[0] - adc_val[5]) * 100;
+  adc_errors[1] = (adc_val[1] + adc_val[4]) / (adc_val[1] - adc_val[4]) * 100;
+  adc_errors[2] = (adc_val[2] + adc_val[3]) / (adc_val[2] - adc_val[3]) * 100;
 }
