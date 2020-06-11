@@ -52,8 +52,8 @@ void main(void)
   NVIC_SetPriorityGrouping(4);
   NVIC_SetPriority(PORTA_IRQn, 0);
   NVIC_SetPriority(PIT2_IRQn, 1);
-  NVIC_SetPriority(PIT1_IRQn, 1);
-  NVIC_SetPriority(PIT0_IRQn, 0);
+  NVIC_SetPriority(PIT1_IRQn, 2);
+  NVIC_SetPriority(PIT0_IRQn, 3);
 
   //³µ¿â¼ì²é-ÖÐ¶Ï
   set_vector_handler(PORTA_VECTORn, carport);
