@@ -1,3 +1,5 @@
+#define led led(LED0,LED_ON)
+
 //是否使用参数切换开关
 #define ENABLE_PARAM_SWITCHER 1
 #define ENABLE_LED 0
