@@ -4,8 +4,8 @@
 #include "common.h"
 #include "include.h"
 
-extern double adc_val[6];
-extern double adc_errors[3];
+extern float64_t adc_val[6];
+extern float64_t adc_errors[3];
 
 void adcs_init();
 void adc_sampling();

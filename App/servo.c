@@ -8,7 +8,7 @@ float32_t servo_errors_wight[3] = {SERVO_ERRORS_WEIGHT_0,
                                    SERVO_ERRORS_WEIGHT_2};
 float64_t servo_errors[3] = {0}; //本次中线误差，上次中线误差，累计误差和
 float64_t servo_correct = 0; //舵机误差增量修正值
-float64_t servo_out; //舵机PWM占空比
+float64_t servo_out = 0; //舵机PWM占空比
 float32_t ratio = PARAMENTER_SERVO_MOTOR_RATIO;
 
 void servo()
@@ -16,6 +16,7 @@ void servo()
     servo_errors[0] = servo_errors_wight[0] * adc_errors[0] +
                       servo_errors_wight[1] * adc_errors[1] +
                       servo_errors_wight[2] * adc_errors[2];
+
     //位置PID，中线误差修正
     servo_correct = servo_pid_param[0] * servo_errors[0] +
                     // servo_pid_param[1] * servo_errors[2] + //I参数，不要了

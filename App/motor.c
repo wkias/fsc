@@ -12,7 +12,7 @@ float32_t motor_param[3] = {MOTOR_PID_PARAMENTER_P,
                             MOTOR_PID_PARAMENTER_D};
 float64_t expected_motor_out = 0; //期望速度
 float64_t motor_errors[3];        //本次速度偏差，上次偏差，前次偏差
-float64_t motor_out;              //输出速度
+float64_t motor_out = 0;              //输出速度
 
 //编码器测速
 void encoder(void)
@@ -44,10 +44,9 @@ void motor()
   motor_errors[0] = expected_motor_out - motor_pulse;
 
   // 增量PID，速度误差修正
-  motor_out = expected_motor_out +
-              motor_param[0] * (motor_errors[0] - motor_errors[1]) +
-              motor_param[1] * motor_errors[0] +
-              motor_param[2] * (motor_errors[0] - 2 * motor_errors[1] + motor_errors[2]); //二次差分，相当于给导数求导
+  motor_out += motor_param[0] * (motor_errors[0] - motor_errors[1]) +
+               motor_param[1] * motor_errors[0] +
+               motor_param[2] * (motor_errors[0] - 2 * motor_errors[1] + motor_errors[2]);
 
   //限速输出
   motor_out = (motor_out > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out;

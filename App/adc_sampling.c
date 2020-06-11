@@ -1,8 +1,8 @@
 #include "include.h"
 
-double adc_val[6] = {0};
-double adc_errors[3];
-int sampling_f = ADC_SAMPLING_FREQ + 2;
+float64_t adc_val[6] = {0};
+float64_t adc_errors[3];
+int32 sampling_f = ADC_SAMPLING_FREQ + 2;
 ADCn_Ch_e port_adc[6] = {
     ADC0_SE17, //PTE24   1
     ADC1_SE5a, //PTE1    2
@@ -14,7 +14,7 @@ ADCn_Ch_e port_adc[6] = {
 
 void adcs_init()
 {
-  for (int i = 0; i < 6; i++)
+  for (int8 i = 0; i < 6; i++)
   {
     adc_init(port_adc[i]);
   }
@@ -22,15 +22,15 @@ void adcs_init()
 
 void adc_sampling()
 {
-  double max = 0;
-  double min = 0;
-  double ad_sum = 0;
+  static float64_t max = 0;
+  static float64_t min = 0;
+  static float64_t ad_sum = 0;
 
-  for (int i = 0; i < 6; i++)
+  for (int8 i = 0; i < 6; i++)
   {
     max = adc_once(port_adc[i], ADC_SAMPLING_PRECISION);
     min = adc_once(port_adc[i], ADC_SAMPLING_PRECISION);
-    for (int j = 0; j < sampling_f; j++)
+    for (int8 j = 0; j < sampling_f; j++)
     {
       adc_val[i] = adc_once(port_adc[i], ADC_SAMPLING_PRECISION);
       max = (max > adc_val[i]) ? max : adc_val[i];
@@ -39,7 +39,7 @@ void adc_sampling()
     }
     ad_sum -= max;
     ad_sum -= min;
-    adc_val[i] = (float)ad_sum / ADC_SAMPLING_FREQ / 10;
+    adc_val[i] = ad_sum / ADC_SAMPLING_FREQ / 10;
     ad_sum = 0;
   }
 
