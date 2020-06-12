@@ -1,7 +1,9 @@
 #include "include.h"
 
-float64_t adc_val[6] = {0};
-float64_t adc_errors[3];
+float32_t adc_val[6] = {0};
+float32_t adc_bias[3];
+float32_t adc_slope = ADC_SAMPLING_PARAMETER_SLOPE;
+float32_t adc_height = ADC_SAMPLING_PARAMETER_HEIGHT;
 int32 sampling_f = ADC_SAMPLING_FREQ + 2;
 ADCn_Ch_e port_adc[6] = {
     ADC0_SE17, //PTE24   1
@@ -22,10 +24,11 @@ void adcs_init()
 
 void adc_sampling()
 {
-  static float64_t max = 0;
-  static float64_t min = 0;
-  static float64_t ad_sum = 0;
+  static float32_t max = 0;
+  static float32_t min = 0;
+  static float32_t ad_sum = 0;
 
+  //采样均值滤波
   for (int8 i = 0; i < 6; i++)
   {
     max = adc_once(port_adc[i], ADC_SAMPLING_PRECISION);
@@ -39,12 +42,21 @@ void adc_sampling()
     }
     ad_sum -= max;
     ad_sum -= min;
-    adc_val[i] = ad_sum / ADC_SAMPLING_FREQ / 10;
+    adc_val[i] = ad_sum / ADC_SAMPLING_FREQ;
+    adc_val[i] = (adc_val[i] - min) / (max - min) * 100; //归一化
     ad_sum = 0;
   }
 
-  //水平电感的和比差作为偏差
-  adc_errors[0] = (adc_val[0] + adc_val[5]) / (adc_val[0] - adc_val[5]) * 100;
-  adc_errors[1] = (adc_val[1] + adc_val[4]) / (adc_val[1] - adc_val[4]) * 100;
-  adc_errors[2] = (adc_val[2] + adc_val[3]) / (adc_val[2] - adc_val[3]) * 100;
+  //计算电感和中线的距离-cm
+  for (int8 i = 0; i < 6; i++)
+  {
+    //电感值和中线偏差非线性关系，差比和作偏差不稳定
+    arm_sqrt_f32((adc_slope * adc_height / adc_val[i]), adc_val + i);
+  }
+
+  //中线偏差-cm
+  adc_bias[0] = (adc_val[5] - adc_val[0]) / 2;//垂直电感
+  adc_bias[1] = (adc_val[4] - adc_val[1]) / 2;//水平电感-边缘
+  adc_bias[2] = (adc_val[3] - adc_val[2]) / 2;//水平电感-中间
+
 }
