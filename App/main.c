@@ -9,11 +9,11 @@ void print()
     Dis_num(COLUMN_1, i, adc_val[i]);
   }
 
-  Dis_num(COLUMN_2, 0, adc_errors[0]);
-  Dis_num(COLUMN_2, 1, adc_errors[1]);
-  Dis_num(COLUMN_2, 2, adc_errors[2]);
+  Dis_num(COLUMN_2, 0, adc_bias[0]);
+  Dis_num(COLUMN_2, 1, adc_bias[1]);
+  Dis_num(COLUMN_2, 2, adc_bias[2]);
 
-  Dis_num(COLUMN_3, 0, servo_errors[0]);
+  Dis_num(COLUMN_3, 0, servo_bias[0]);
   Dis_num(COLUMN_3, 1, servo_correct);
   Dis_num(COLUMN_3, 2, servo_out);
 

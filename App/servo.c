@@ -1,29 +1,31 @@
 #include "include.h"
 
-float32_t servo_pid_param[3] = {SERVO_PID_PARAMENTER_P,
-                                 SERVO_PID_PARAMENTER_I,
-                                 SERVO_PID_PARAMENTER_D};
-float32_t servo_errors_wight[3] = {SERVO_ERRORS_WEIGHT_0,
-                                   SERVO_ERRORS_WEIGHT_1,
-                                   SERVO_ERRORS_WEIGHT_2};
-float64_t servo_errors[3] = {0}; //本次中线误差，上次中线误差，累计误差和
-float64_t servo_correct = 0; //舵机误差增量修正值
-float64_t servo_out = 0; //舵机PWM占空比
+float32_t servo_pid_param[3] = {SERVO_PID_PARAMETER_P,
+                                SERVO_PID_PARAMETER_I,
+                                SERVO_PID_PARAMETER_D};
+float32_t servo_bias_wight[3] = {SERVO_ERRORS_WEIGHT_0,
+                                 SERVO_ERRORS_WEIGHT_1,
+                                 SERVO_ERRORS_WEIGHT_2};
+float32_t servo_bias[3] = {0}; //本次中线误差，上次中线误差，累计误差和
+float32_t servo_correct = 0;   //舵机误差增量修正值
+float32_t servo_angle = 0;     //舵机偏转角度
+float32_t servo_out = 0;       //舵机PWM占空比
 float32_t ratio = PARAMENTER_SERVO_MOTOR_RATIO;
+float32_t adc_bias_abs[3];
 
 void servo()
 {
-    servo_errors[0] = servo_errors_wight[0] * adc_errors[0] +
-                      servo_errors_wight[1] * adc_errors[1] +
-                      servo_errors_wight[2] * adc_errors[2];
+    //根据中线距离计算车轮转动角度，然后计算对应的占空比
+    servo_bias[0] = (adc_bias_abs[0] - adc_bias_abs[1] > 5) ? adc_bias[0] : (adc_bias[1] + adc_bias[2]) / 2;
+    servo_out = arctan(servo_bias[0] / ADC_SAMPLING_PARAMETER_FORWARD) / SERVO_ANGLE_LIMIT * SERVO_DUTY_INTERVAL_LIMIT + SERVO_BASE_POINT;
 
     //位置PID，中线误差修正
-    servo_correct = servo_pid_param[0] * servo_errors[0] +
-                    // servo_pid_param[1] * servo_errors[2] + //I参数，不要了
-                    servo_pid_param[2] * (servo_errors[0] - servo_errors[1]);
-    servo_errors[1] = servo_errors[0];
-    servo_errors[2] += servo_errors[0];
-    servo_out = SERVO_BASE_POINT + servo_correct;
+    servo_correct = servo_pid_param[0] * servo_bias[0] +
+                    // servo_pid_param[1] * servo_bias[2] + //I参数，不要了
+                    servo_pid_param[2] * (servo_bias[0] - servo_bias[1]);
+    servo_bias[1] = servo_bias[0];
+    servo_bias[2] += servo_bias[0];
+    // servo_out += servo_correct;
 
     //限幅输出
     servo_out = (servo_out > SERVO_LEFT_LIMIT) ? servo_out : SERVO_LEFT_LIMIT;
@@ -31,8 +33,40 @@ void servo()
     ftm_pwm_duty(PORT_SERVO, FTM_CH0, servo_out);
 
     //根据舵机偏转幅度计算电机期望速度
-    servo_correct = (servo_correct > 0) ? servo_correct : -servo_correct;
-    expected_motor_out = MOTOR_VELOCITY_BASE_POINT - servo_correct * ratio;
+    expected_motor_out = SERVO_BASE_POINT - servo_out;//期望输出暂时作中间变量
+    expected_motor_out = (expected_motor_out > 0) ? expected_motor_out : -expected_motor_out;
+    expected_motor_out = MOTOR_VELOCITY_SUPERIOR_LIMIT - expected_motor_out * ratio;
     expected_motor_out = (expected_motor_out > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : expected_motor_out;
     expected_motor_out = (expected_motor_out < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : expected_motor_out;
+}
+
+float64_t arctan(float64_t x)
+{
+    float64_t mult, sum, xx;
+    sum = 0;
+    if (x == 1)
+    {
+        return PI / 4;
+    }
+    if (x == -1)
+    {
+        return -PI / 4;
+    }
+
+    mult = ((x > 1 || x < -1) ? 1 / x : x);
+    xx = mult * mult;
+
+    for (int i = 1; i < 200; i += 2)
+    {
+        sum += mult * ((i + 1) % 4 == 0 ? -1 : 1) / i;
+        mult *= xx;
+    }
+    if (x > 1 || x < -1)
+    {
+        return PI / 2 - sum;
+    }
+    else
+    {
+        return sum;
+    }
 }
