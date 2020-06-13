@@ -77,7 +77,7 @@ void main(void)
   //´®¿Ú³õÊ¼»¯
   // uart_init(UART4, 115200);
 
-#if ENABLE_PARAM_SWITCHER
+#ifdef ENABLE_PARAM_SWITCHER
   param_switcher();
 #endif
 

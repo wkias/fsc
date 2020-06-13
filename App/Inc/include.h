@@ -51,4 +51,5 @@
 #include "queue.h"
 #include "dynamic_param.h"
 #include "settings.h"
+#include <math.h>
 #endif //__INCLUDE_H__

@@ -43,7 +43,7 @@ void motor()
   //速度误差
   motor_errors[0] = expected_motor_out - motor_pulse;
 
-  // 增量PID，速度误差修正
+  //增量PID，速度误差修正
   motor_out += motor_param[0] * (motor_errors[0] - motor_errors[1]) +
                motor_param[1] * motor_errors[0] +
                motor_param[2] * (motor_errors[0] - 2 * motor_errors[1] + motor_errors[2]);
@@ -51,7 +51,7 @@ void motor()
   //限速输出
   motor_out = (motor_out > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out;
   motor_out = (motor_out < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : motor_out;
-#if CONSTENT_VELOCITY
+#ifdef CONSTENT_VELOCITY
   ftm_pwm_duty(PORT_MOTOR, FTM_CH2, MOTOR_VELOCITY_BASE_POINT);
 #else
   ftm_pwm_duty(PORT_MOTOR, FTM_CH2, motor_out);
