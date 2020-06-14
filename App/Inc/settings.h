@@ -1,7 +1,7 @@
 //是否恒速
 #define CONSTENT_VELOCITY
 //是否使用参数切换开关
-// #define ENABLE_PARAM_SWITCHER
+#define ENABLE_PARAM_SWITCHER
 //是否打开LED
 #define ENABLE_LED 0
 // #define led led(LED0, LED_ON)
@@ -73,9 +73,9 @@
 #define SERVO_ERRORS_WEIGHT_1 0.3 //权值2，对应电感2、5差值
 #define SERVO_ERRORS_WEIGHT_2 0.2 //权值3，对应电感3、4差值
 //舵机-PID
-#define SERVO_PID_PARAMETER_P 14
+#define SERVO_PID_PARAMETER_P 18
 #define SERVO_PID_PARAMETER_I 0
-#define SERVO_PID_PARAMETER_D 0 //16
+#define SERVO_PID_PARAMETER_D 0
 //舵机-偏转-占空比//4150—4950—5800
 #define SERVO_BASE_POINT 4950                    //基点
 #define SERVO_DUTY_INTERVAL_LIMIT 850
