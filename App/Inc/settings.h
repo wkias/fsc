@@ -1,10 +1,14 @@
 //是否恒速
-// #define CONSTENT_VELOCITY
+#define CONSTENT_VELOCITY
 //是否使用参数切换开关
-#define ENABLE_PARAM_SWITCHER
+// #define ENABLE_PARAM_SWITCHER
 //是否打开LED
 #define ENABLE_LED 0
-#define led led(LED0, LED_ON)
+// #define led led(LED0, LED_ON)
+//
+#define FLASH_WRITE_PARAM 0
+//尽量用最后面的扇区，确保安全
+#define SECTOR_NO  (FLASH_SECTOR_NUM-1)
 
 // #define INDUCTOR_CENTER_DISTANCE
 
@@ -66,19 +70,19 @@
 #define SERVO_ANGLE_LIMIT 90
 //舵机-误差计算-权值
 #define SERVO_ERRORS_WEIGHT_0 0.5  //权值1，对应电感1、6差值
-#define SERVO_ERRORS_WEIGHT_1 0.35 //权值2，对应电感2、5差值
-#define SERVO_ERRORS_WEIGHT_2 0.15 //权值3，对应电感3、4差值
+#define SERVO_ERRORS_WEIGHT_1 0.3 //权值2，对应电感2、5差值
+#define SERVO_ERRORS_WEIGHT_2 0.2 //权值3，对应电感3、4差值
 //舵机-PID
-#define SERVO_PID_PARAMETER_P 10
-#define SERVO_PID_PARAMETER_I 0.3
-#define SERVO_PID_PARAMETER_D 10
+#define SERVO_PID_PARAMETER_P 14
+#define SERVO_PID_PARAMETER_I 0
+#define SERVO_PID_PARAMETER_D 0 //16
 //舵机-偏转-占空比//4150—4950—5800
 #define SERVO_BASE_POINT 4950                    //基点
 #define SERVO_DUTY_INTERVAL_LIMIT 850
 #define SERVO_LEFT_LIMIT SERVO_BASE_POINT - SERVO_DUTY_INTERVAL_LIMIT  //左极限
 #define SERVO_RIGHT_LIMIT SERVO_BASE_POINT + SERVO_DUTY_INTERVAL_LIMIT //右极限
 //舵机-电机-输出参数比例
-#define PARAMENTER_SERVO_MOTOR_RATIO 1.5
+#define PARAMENTER_SERVO_MOTOR_RATIO 0.2
 
 //引脚定义-干簧管
 #define PORT_REED_SWITCHER PTA7

@@ -39,7 +39,7 @@ void servo()
     //根据舵机偏转幅度计算电机期望速度
     expected_motor_out = SERVO_BASE_POINT - servo_out; //期望输出暂时作中间变量
     expected_motor_out = (expected_motor_out > 0) ? expected_motor_out : -expected_motor_out;
-    expected_motor_out = MOTOR_VELOCITY_SUPERIOR_LIMIT - expected_motor_out * ratio;
+    expected_motor_out = MOTOR_VELOCITY_BASE_POINT / 4 - expected_motor_out * ratio;
     expected_motor_out = (expected_motor_out > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : expected_motor_out;
     expected_motor_out = (expected_motor_out < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : expected_motor_out;
 }
