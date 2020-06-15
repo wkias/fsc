@@ -1,6 +1,6 @@
 "C:\Program Files (x86)\IAR Systems\Embedded Workbench\arm\bin\armproc.dll" 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench\arm\bin\armjlink2.dll" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench\arm\bin\armsim2.dll" 
 
 "E:\fsc\Prj\IAR\Debug\Exe\vcan_Kinetis.out" 
 
@@ -9,8 +9,6 @@
 --device_macro="C:\Program Files (x86)\IAR Systems\Embedded Workbench\arm\config\debugger\NXP\Kxx.dmac" 
 
 --device_macro="C:\Program Files (x86)\IAR Systems\Embedded Workbench\arm\config\debugger\NXP\Kxx_Trace.dmac" 
-
---flash_loader="C:\Program Files (x86)\IAR Systems\Embedded Workbench\arm\config\flashloader\NXP\FlashK60Dxxx128K.board" 
 
 
 

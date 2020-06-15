@@ -1,25 +1,19 @@
+//功能开关部分
 //是否恒速
 #define CONSTENT_VELOCITY
 //是否使用参数切换开关
 #define ENABLE_PARAM_SWITCHER
-//是否打开LED
-#define ENABLE_LED 0
-// #define led led(LED0, LED_ON)
-//
+//参数持久化
 #define FLASH_WRITE_PARAM 0
 //尽量用最后面的扇区，确保安全
 #define SECTOR_NO  (FLASH_SECTOR_NUM-1)
-
+//按模型解算位置
 // #define INDUCTOR_CENTER_DISTANCE
+//拟合多项式计算位置偏差
+// #define FIT_POLYNOME
 
 //打印-延时
 #define PRINT_DELAY 1000
-
-//灯光效果
-#define LED_CARPORT LED0
-#define LED_SAMPLING LED1
-#define LED_SERVO LED2
-#define LED_MOTOR LED3
 
 //显示位置
 #define COLUMN_WIDTH 30
@@ -40,7 +34,9 @@
 #define ROW_8 8
 
 //ADC-采样频数
-#define ADC_SAMPLING_FREQ 50
+#define ADC_SAMPLING_FREQ 20
+//ADC-样本丢弃数量
+#define ADC_SAMPLING_DEPRICATE 6
 //ADC-采样精度
 #define ADC_SAMPLING_PRECISION ADC_10bit
 //ADC-参数-磁感应强度关于水平距离的方程斜率
@@ -69,9 +65,9 @@
 //舵机-偏转角度极限
 #define SERVO_ANGLE_LIMIT 90
 //舵机-误差计算-权值
-#define SERVO_ERRORS_WEIGHT_0 0.5  //权值1，对应电感1、6差值
-#define SERVO_ERRORS_WEIGHT_1 0.3 //权值2，对应电感2、5差值
-#define SERVO_ERRORS_WEIGHT_2 0.2 //权值3，对应电感3、4差值
+#define SERVO_ERRORS_WEIGHT_0 0.5   //权值1，对应电感1、6差值
+#define SERVO_ERRORS_WEIGHT_1 0.3   //权值2，对应电感2、5差值
+#define SERVO_ERRORS_WEIGHT_2 0.2   //权值3，对应电感3、4差值
 //舵机-PID
 #define SERVO_PID_PARAMETER_P 18
 #define SERVO_PID_PARAMETER_I 0
@@ -107,7 +103,7 @@
 //     ADC0_SE18  //PTE25   6
 // };
 
-//编译器提示不兼容，弃用
+//编译器不兼容，弃用
 // #define MAX(a, b) (a > b) ? a : b
 // #define MIN(a, b) (a < b) ? a : b
 // #define ABS(a) (a > 0) ? a : -a
