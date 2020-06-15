@@ -4471,7 +4471,7 @@
                 <option>
                     <name>CCAllowList</name>
                     <version>1</version>
-                    <state>00000000</state>
+                    <state>11111110</state>
                 </option>
                 <option>
                     <name>CCDebugInfo</name>
@@ -4559,16 +4559,16 @@
                 </option>
                 <option>
                     <name>CCOptLevel</name>
-                    <state>0</state>
+                    <state>3</state>
                 </option>
                 <option>
                     <name>CCOptStrategy</name>
                     <version>0</version>
-                    <state>0</state>
+                    <state>2</state>
                 </option>
                 <option>
                     <name>CCOptLevelSlave</name>
-                    <state>0</state>
+                    <state>3</state>
                 </option>
                 <option>
                     <name>CompilerMisraRules98</name>
@@ -4627,7 +4627,7 @@
                 <option>
                     <name>CCOptStrategySlave</name>
                     <version>0</version>
-                    <state>0</state>
+                    <state>2</state>
                 </option>
                 <option>
                     <name>CCGuardCalls</name>
@@ -5113,7 +5113,7 @@
                 </option>
                 <option>
                     <name>IlinkOptInline</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>IlinkOptExceptionsAllow</name>
@@ -5129,7 +5129,7 @@
                 </option>
                 <option>
                     <name>IlinkOptMergeDuplSections</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>IlinkOptUseVfe</name>
@@ -6292,6 +6292,9 @@
                 <name>$PROJ_DIR$\..\..\App\Inc\dynamic_param.h</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\App\Inc\facility.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\..\App\Inc\include.h</name>
             </file>
             <file>
@@ -6302,9 +6305,6 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\App\Inc\PORT_cfg.h</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\App\Inc\queue.h</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\App\Inc\servo.h</name>
@@ -6326,6 +6326,9 @@
             <name>$PROJ_DIR$\..\..\App\dynamic_param.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\App\facility.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\App\main.c</name>
         </file>
         <file>
@@ -6333,9 +6336,6 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\App\motor.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\App\queue.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\App\servo.c</name>

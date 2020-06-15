@@ -1,7 +1,8 @@
 #include "include.h"
 
-float32_t adc_val[6] = {0};
-float32_t adc_bias[3];
+float32_t adc_val[3][6] = {0};
+float32_t adc_bias[3][3] = {0};
+float32_t adc_bias_gradient[3] = {0};
 float32_t adc_slope = ADC_SAMPLING_PARAMETER_SLOPE;
 float32_t adc_height = ADC_SAMPLING_PARAMETER_HEIGHT;
 int32 sampling_f = ADC_SAMPLING_FREQ + 2;
@@ -22,56 +23,76 @@ void adcs_init()
   }
 }
 
+//电感采样
 void adc_sampling()
 {
   static float32_t max = 0;
   static float32_t min = 0;
   static float32_t ad_sum = 0;
+  static float32_t adc_val_tmp[ADC_SAMPLING_FREQ] = {0};
+
+  //构建时间序列
+  for (int8 i = 0; i < 2; i++)
+  {
+    for (int8 j = 0; j < 5; j++)
+    {
+      adc_val[i + 1][j + 1] = adc_val[i][j];
+    }
+    for (int8 j = 0; j < 2; j++)
+    {
+      adc_bias[i + 1][j + 1] = adc_bias[i][j];
+    }
+  }
 
   //采样均值滤波
   for (int8 i = 0; i < 6; i++)
   {
-    max = adc_once(port_adc[i], ADC_SAMPLING_PRECISION);
-    min = adc_once(port_adc[i], ADC_SAMPLING_PRECISION);
-    for (int8 j = 0; j < sampling_f; j++)
-    {
-      adc_val[i] = adc_once(port_adc[i], ADC_SAMPLING_PRECISION);
-      max = (max > adc_val[i]) ? max : adc_val[i];
-      min = (min < adc_val[i]) ? min : adc_val[i];
-      ad_sum += adc_val[i];
-    }
-    ad_sum -= max;
-    ad_sum -= min;
-    adc_val[i] = ad_sum / ADC_SAMPLING_FREQ;
     ad_sum = 0;
+    for (int8 j = 0; j < ADC_SAMPLING_FREQ; j++)
+    {
+      adc_val_tmp[j] = adc_once(port_adc[i], ADC_SAMPLING_PRECISION);
+      ad_sum += adc_val_tmp[j];
+    }
+    //堆排序
+    heap_sort(adc_val_tmp, ADC_SAMPLING_FREQ);
+    //求均值
+    for (int8 j = 0; j < ADC_SAMPLING_DEPRICATE / 2; j++)
+    {
+      ad_sum -= adc_val_tmp[j];
+      ad_sum -= adc_val_tmp[ADC_SAMPLING_FREQ - j - 1];
+    }
+    adc_val[0][i] = ad_sum / (ADC_SAMPLING_FREQ - ADC_SAMPLING_DEPRICATE);
   }
 
+//E=k*h/(x^2+h^2)，E磁感应强度，k比例系数，h电感高度，x电感与中线的偏差
 #ifdef INDUCTOR_CENTER_DISTANCE
   //计算电感和中线的距离-mm
   for (int8 i = 0; i < 6; i++)
   {
     //电感值和中线偏差非线性关系，差比和作偏差不稳定
-    adc_val[i] = solve(adc_val[i]) * 100;
+    adc_val[0][i] = adc_slope * adc_height / adc_val[0][i] - adc_height * adc_height;
   }
 
   //中线偏差-mm
-  adc_bias[0] = (adc_val[5] - adc_val[0]) / 2; //垂直电感
-  adc_bias[1] = (adc_val[4] - adc_val[1]) / 2; //水平电感-边缘
-  adc_bias[2] = (adc_val[3] - adc_val[2]) / 2; //水平电感-中间
-#else
-  //中线偏差-无量纲量
-  adc_bias[0] = (adc_val[5] - adc_val[0]) / (adc_val[5] + adc_val[0]) * 100; //垂直电感
-  adc_bias[1] = (adc_val[4] - adc_val[1]) / (adc_val[4] + adc_val[1]) * 100; //水平电感-边缘
-  adc_bias[2] = (adc_val[3] - adc_val[2]) / (adc_val[3] + adc_val[2]) * 100; //水平电感-中间
+  adc_bias[0][0] = (adc_val[0][5] - adc_val[0][0]) / 2; //垂直电感
+  adc_bias[0][1] = (adc_val[0][4] - adc_val[0][1]) / 2; //水平电感-边缘
+  adc_bias[0][2] = (adc_val[0][3] - adc_val[0][2]) / 2; //水平电感-中间
 #endif
-}
 
-#ifdef INDUCTOR_CENTER_DISTANCE
-//解三次函数实根
-float32_t solve(float32_t adc_val)
-{
-  return adc_height * adc_height / sqrt_3(-27 * adc_val / (2 * adc_slope) + sqrt_(729 * adc_val * adc_val / adc_slope / adc_slope + 108 * adc_height * adc_height * adc_height * adc_height * adc_height * adc_height) / 2) -
-         sqrt_3(-27 * adc_val / (2 * adc_slope) + sqrt_(729 * adc_val * adc_val / adc_slope / adc_slope + 108 * adc_height * adc_height * adc_height * adc_height * adc_height * adc_height) / 2) / 3;
+#ifdef FIT_POLYNOME
+  //拟合多项式计算位置偏差
+  //TO-DO
+#else
+  //中线偏差-差比和-无量纲量，磁感应强度是偏差的（N型）高阶函数，开方修正一部分误差，有论文称开方后磁感应强度是偏差的Sigmoid函数
+  adc_bias[0][0] = (sqrt_(adc_val[0][5]) - sqrt_(adc_val[0][0])) / (adc_val[0][5] + adc_val[0][0]) * 100; //垂直电感
+  adc_bias[0][1] = (sqrt_(adc_val[0][4]) - sqrt_(adc_val[0][1])) / (adc_val[0][4] + adc_val[0][1]) * 100; //水平电感-边缘
+  adc_bias[0][2] = (sqrt_(adc_val[0][3]) - sqrt_(adc_val[0][2])) / (adc_val[0][3] + adc_val[0][2]) * 100; //水平电感-中间
+
+  //中线偏差一阶差分
+  adc_bias_gradient[0] = adc_bias[0][0] - adc_bias[1][0];
+  adc_bias_gradient[1] = adc_bias[0][1] - adc_bias[1][1];
+  adc_bias_gradient[2] = adc_bias[0][2] - adc_bias[1][2];
+#endif
 }
 
 //解平方根
@@ -81,20 +102,3 @@ float32_t sqrt_(float32_t x)
   arm_sqrt_f32(x, &y);
   return y;
 }
-
-//牛顿迭代求三次方根近似值，解范围[-10000,10000]
-float32_t sqrt_3(float32_t x)
-{
-  float64_t l = -10000, r = 10000, mid;
-  //浮点数二分
-  while (r - l > 1e-7)
-  {
-    mid = (l + r) / 2;
-    if ((mid * mid * mid) >= x)
-      r = mid;
-    else
-      l = mid;
-  }
-  return l;
-}
-#endif

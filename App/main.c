@@ -6,12 +6,12 @@ void print()
 
   for (int i = 0; i < 6; i++)
   {
-    Dis_num(COLUMN_1, i, adc_val[i]);
+    Dis_num(COLUMN_1, i, adc_val[0][i]);
   }
 
-  Dis_num(COLUMN_2, 0, adc_bias[0]);
-  Dis_num(COLUMN_2, 1, adc_bias[1]);
-  Dis_num(COLUMN_2, 2, adc_bias[2]);
+  Dis_num(COLUMN_2, 0, adc_bias[0][0]);
+  Dis_num(COLUMN_2, 1, adc_bias[0][1]);
+  Dis_num(COLUMN_2, 2, adc_bias[0][2]);
 
   Dis_num(COLUMN_3, 0, servo_bias[0]);
   Dis_num(COLUMN_3, 1, servo_correct);
@@ -31,6 +31,7 @@ void main(void)
   //屏幕
   LCD_Init();
 
+  //片内闪存
   flash_init();
 
   //LED
@@ -39,13 +40,18 @@ void main(void)
   led_init(LED2);
   led_init(LED3);
 
+#ifdef ENABLE_NRF
+  //无线电
+  nrf_init();
+#endif
+
   //舵机和电机初始化
   ftm_pwm_init(PORT_SERVO, FTM_CH0, 300, SERVO_BASE_POINT); //PTA8舵机
   ftm_pwm_init(PORT_MOTOR, FTM_CH2, 10000, 0);              //正转 PTA5 电机
   ftm_pwm_init(PORT_MOTOR, FTM_CH3, 10000, 0);              //反转 PTA6 电机
 
   //测速模块初始化：正交解码、LPTMR_脉冲计数
-  ftm_quad_init(PORT_ENCODER); //A10和A11
+  ftm_quad_init(PORT_ENCODER);
 
   //中断优先级
   NVIC_SetPriorityGrouping(4);
@@ -73,8 +79,13 @@ void main(void)
   set_vector_handler(PIT2_VECTORn, motor);
   enable_irq(PIT2_IRQn);
 
+#ifdef ENABLE_NRF
+  set_vector_handler(PORTE_VECTORn ,dynamic_param);
+  enable_irq(PORTE_IRQn);
+#endif
+
   gpio_init(PTB22, GPO, 0);
-  // //flash写参数
+  //flash写参数
   if (0x12345678 != flash_read(SECTOR_NO, 0, FLASH_WRITE_TYPE) || FLASH_WRITE_PARAM)
   {
     flash_erase_sector(SECTOR_NO);
@@ -90,7 +101,6 @@ void main(void)
   flash_write(SECTOR_NO, 4, param + 1);
   flash_write(SECTOR_NO, 0, 0x12345678);
   servo_pid_param[0] = param;
-  Dis_num(COLUMN_2,ROW_5,flash_read(SECTOR_NO, 4, FLASH_WRITE_TYPE));
   for (uint8 i = param / 2; i; i--)
   {
     gpio_set(PTB22, 1);
@@ -109,7 +119,5 @@ void main(void)
   {
     adc_sampling();
     servo();
-    // encoder();
-    // motor();
   }
 }

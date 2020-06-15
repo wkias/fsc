@@ -1,3 +1,5 @@
+#include "common.h"
+#include "include.h"
 
 void config1();
 void config2();
