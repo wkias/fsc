@@ -72,33 +72,32 @@ void adc_sampling()
     //电感值和中线偏差非线性关系，差比和作偏差不稳定
     adc_val[0][i] = adc_slope * adc_height / adc_val[0][i] - adc_height * adc_height;
   }
-
   //中线偏差-mm
   adc_bias[0][0] = (adc_val[0][5] - adc_val[0][0]) / 2; //垂直电感
   adc_bias[0][1] = (adc_val[0][4] - adc_val[0][1]) / 2; //水平电感-边缘
   adc_bias[0][2] = (adc_val[0][3] - adc_val[0][2]) / 2; //水平电感-中间
-#endif
-
-#ifdef FIT_POLYNOME
-  //拟合多项式计算位置偏差
-  //TO-DO
 #else
   //中线偏差-差比和-无量纲量，磁感应强度是偏差的（N型）高阶函数，开方修正一部分误差，有论文称开方后磁感应强度是偏差的Sigmoid函数
-  adc_bias[0][0] = (sqrt_(adc_val[0][5]) - sqrt_(adc_val[0][0])) / (adc_val[0][5] + adc_val[0][0]) * 100; //垂直电感
-  adc_bias[0][1] = (sqrt_(adc_val[0][4]) - sqrt_(adc_val[0][1])) / (adc_val[0][4] + adc_val[0][1]) * 100; //水平电感-边缘
-  adc_bias[0][2] = (sqrt_(adc_val[0][3]) - sqrt_(adc_val[0][2])) / (adc_val[0][3] + adc_val[0][2]) * 100; //水平电感-中间
+  adc_bias[0][0] = (carmack_sqrt(adc_val[0][5]) - carmack_sqrt(adc_val[0][0])) / (adc_val[0][5] + adc_val[0][0]) * 2000; //垂直电感
+  adc_bias[0][1] = (carmack_sqrt(adc_val[0][4]) - carmack_sqrt(adc_val[0][1])) / (adc_val[0][4] + adc_val[0][1]) * 2000; //水平电感-边缘
+  adc_bias[0][2] = (carmack_sqrt(adc_val[0][3]) - carmack_sqrt(adc_val[0][2])) / (adc_val[0][3] + adc_val[0][2]) * 2000; //水平电感-中间
+#endif
 
   //中线偏差一阶差分
   adc_bias_gradient[0] = adc_bias[0][0] - adc_bias[1][0];
   adc_bias_gradient[1] = adc_bias[0][1] - adc_bias[1][1];
   adc_bias_gradient[2] = adc_bias[0][2] - adc_bias[1][2];
-#endif
 }
 
-//解平方根
-float32_t sqrt_(float32_t x)
+//平方根
+float32_t carmack_sqrt(float32_t x)
 {
-  float32_t y;
-  arm_sqrt_f32(x, &y);
-  return y;
+  float32_t xhalf = 0.5f * x;
+  int32 i = *(int32 *)&x;         // get bits for floating VALUE
+  i = 0x5f3759df - (i >> 1);      // gives initial guess y0
+  x = *(float32_t *)&i;           // convert bits BACK to float
+  x = x * (1.5f - xhalf * x * x); // Newton step, repeating increases accuracy
+  x = x * (1.5f - xhalf * x * x); // Newton step, repeating increases accuracy
+  x = x * (1.5f - xhalf * x * x); // Newton step, repeating increases accuracy
+  return (1 / x);
 }

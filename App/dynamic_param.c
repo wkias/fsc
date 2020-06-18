@@ -40,12 +40,12 @@ void param_switcher()
     if (gpio_get(PORT_SWITCHER_1) == 0)
     {
         config1();
-        LCD_P6x8Str(COLUMN_3, 7, "S1");
+        LCD_P6x8Str(COLUMN_1, 7, "S1");
     }
     if (gpio_get(PORT_SWITCHER_2) == 0)
     {
         config2();
-        LCD_P6x8Str(COLUMN_3, 7, "S2");
+        LCD_P6x8Str(COLUMN_1, 7, "S2");
     }
     if (gpio_get(PORT_SWITCHER_3) == 0)
     {

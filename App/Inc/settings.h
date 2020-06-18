@@ -2,15 +2,13 @@
 //是否恒速
 #define CONSTENT_VELOCITY
 //是否使用参数切换开关
-#define ENABLE_PARAM_SWITCHER
+// #define ENABLE_PARAM_SWITCHER
 //参数持久化
-#define FLASH_WRITE_PARAM 0
+// #define FLASH_WRITE_PARAM
 //尽量用最后面的扇区，确保安全
 #define SECTOR_NO  (FLASH_SECTOR_NUM-1)
-//按模型解算位置
+//计算中线距离-cm
 // #define INDUCTOR_CENTER_DISTANCE
-//拟合多项式计算位置偏差
-// #define FIT_POLYNOME
 
 //打印-延时
 #define PRINT_DELAY 1000
@@ -40,11 +38,11 @@
 //ADC-采样精度
 #define ADC_SAMPLING_PRECISION ADC_10bit
 //ADC-参数-磁感应强度关于水平距离的方程斜率
-#define ADC_SAMPLING_PARAMETER_SLOPE 20
-//ADC-电感高度-mm
-#define ADC_SAMPLING_PARAMETER_HEIGHT 70
-//ADC-前瞻距离-mm
-#define ADC_SAMPLING_PARAMETER_FORWARD 110
+#define ADC_SAMPLING_PARAMETER_SLOPE 3150
+//ADC-电感高度-cm
+#define ADC_SAMPLING_PARAMETER_HEIGHT 7
+//ADC-前瞻距离-cm
+#define ADC_SAMPLING_PARAMETER_FORWARD 11
 
 //编码器-权值滤波-权值
 #define ENCODER_FILTER_WIGHT_0 0.5  //最近观测值
@@ -63,13 +61,13 @@
 //舵机-PI
 #define PI 3.14159265358979f
 //舵机-偏转角度极限
-#define SERVO_ANGLE_LIMIT 90
+#define SERVO_ANGLE_LIMIT 42.5
 //舵机-误差计算-权值
-#define SERVO_ERRORS_WEIGHT_0 0.5   //权值1，对应电感1、6差值
-#define SERVO_ERRORS_WEIGHT_1 0.3   //权值2，对应电感2、5差值
-#define SERVO_ERRORS_WEIGHT_2 0.2   //权值3，对应电感3、4差值
+#define SERVO_BIAS_WEIGHT_0 0   //权值1，对应电感1、6差值
+#define SERVO_BIAS_WEIGHT_1 0.7   //权值2，对应电感2、5差值
+#define SERVO_BIAS_WEIGHT_2 0.3   //权值3，对应电感3、4差值
 //舵机-PID
-#define SERVO_PID_PARAMETER_P 18
+#define SERVO_PID_PARAMETER_P 1
 #define SERVO_PID_PARAMETER_I 0
 #define SERVO_PID_PARAMETER_D 0
 //舵机-偏转-占空比//4150—4950—5800
