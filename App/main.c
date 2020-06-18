@@ -84,9 +84,10 @@ void main(void)
   enable_irq(PORTE_IRQn);
 #endif
 
+#ifdef FLASH_WRITE_PARAM
   gpio_init(PTB22, GPO, 0);
   //flashÐ´²ÎÊý
-  if (0x12345678 != flash_read(SECTOR_NO, 0, FLASH_WRITE_TYPE) || FLASH_WRITE_PARAM)
+  if (0x12345678 != flash_read(SECTOR_NO, 0, FLASH_WRITE_TYPE))
   {
     flash_erase_sector(SECTOR_NO);
     flash_write(SECTOR_NO, 4, 1);
@@ -108,6 +109,7 @@ void main(void)
     gpio_set(PTB22, 0);
     DELAY_MS(100);
   }
+#endif
 
 #ifdef ENABLE_PARAM_SWITCHER
   param_switcher();
