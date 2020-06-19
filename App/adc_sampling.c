@@ -7,12 +7,12 @@ float32_t adc_slope = ADC_SAMPLING_PARAMETER_SLOPE;
 float32_t adc_height = ADC_SAMPLING_PARAMETER_HEIGHT;
 int32 sampling_f = ADC_SAMPLING_FREQ + 2;
 ADCn_Ch_e port_adc[6] = {
-    ADC0_SE17, //PTE24   1
-    ADC1_SE5a, //PTE1    2
     ADC1_SE4a, //PTE0    3
+    ADC1_SE5a, //PTE1    2
     ADC1_SE6a, //PTE2    4
     ADC1_SE7a, //PTE3    5
-    ADC0_SE18  //PTE25   6
+    ADC0_SE18, //PTE25   6
+    ADC0_SE17, //PTE24   1
 };
 
 void adcs_init()
