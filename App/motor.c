@@ -7,7 +7,7 @@ float32_t filter_wight[3] = {ENCODER_FILTER_WIGHT_0,
 uint16 motor_pulse = 0; //电机观测速度
 
 //PID参数，可在settings.h中更改
-float32_t motor_param[3] = {MOTOR_PID_PARAMETER_P,
+float32_t motor_pid_param[3] = {MOTOR_PID_PARAMETER_P,
                             MOTOR_PID_PARAMETER_I,
                             MOTOR_PID_PARAMETER_D};
 float32_t expected_motor_out = 0; //期望速度
@@ -44,9 +44,9 @@ void motor()
   motor_errors[0] = expected_motor_out - motor_pulse;
 
   //增量PID，速度误差修正
-  motor_out += motor_param[0] * (motor_errors[0] - motor_errors[1]) +
-               motor_param[1] * motor_errors[0] +
-               motor_param[2] * (motor_errors[0] - 2 * motor_errors[1] + motor_errors[2]);
+  motor_out += motor_pid_param[0] * (motor_errors[0] - motor_errors[1]) +
+               motor_pid_param[1] * motor_errors[0] +
+               motor_pid_param[2] * (motor_errors[0] - 2 * motor_errors[1] + motor_errors[2]);
 
   //限速输出
   motor_out = (motor_out > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out;

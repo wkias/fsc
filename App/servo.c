@@ -14,12 +14,12 @@ float32_t ratio = PARAMENTER_SERVO_MOTOR_RATIO;
 
 void servo()
 {
-    #ifdef INDUCTOR_CENTER_DISTANCE
+#ifdef INDUCTOR_CENTER_DISTANCE
     //根据中线距离计算车轮转动角度，然后计算对应的占空比
     servo_bias[0] = (adc_bias[0][1] + adc_bias[0][2]) / 2;
     servo_out = arctan(servo_bias[0] / ADC_SAMPLING_PARAMETER_FORWARD) / SERVO_ANGLE_LIMIT * SERVO_DUTY_INTERVAL_LIMIT + SERVO_BASE_POINT;
-    #else
-    servo_bias[0] = servo_bias_wight[0] * adc_bias[0][0] +
+#else
+    servo_bias[0] = servo_bias_wight[0] * adc_bias[0][0] * adc_bias_gradient[0] +
                     servo_bias_wight[1] * adc_bias[0][1] +
                     servo_bias_wight[2] * adc_bias[0][2];
     i = (servo_bias[0] > 0) ? 1 : -1;
@@ -28,11 +28,11 @@ void servo()
     servo_correct = servo_pid_param[0] * servo_bias[0] * servo_bias[0] * i + //二次动态P，以适应大小环道不同的角度
                     // servo_pid_param[1] * servo_bias[2] + //I参数，不要了
                     servo_pid_param[2] * (servo_bias[0] - servo_bias[1]);
-    servo_correct /=100;
+    servo_correct /= 100;
     servo_bias[1] = servo_bias[0];
     servo_bias[2] += servo_bias[0];
     servo_out = SERVO_BASE_POINT + servo_correct;
-    #endif
+#endif
 
     //限幅输出
     servo_out = (servo_out > SERVO_LEFT_LIMIT) ? servo_out : SERVO_LEFT_LIMIT;
