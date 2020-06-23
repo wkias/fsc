@@ -1,4 +1,3 @@
-//功能开关部分
 //是否恒速
 #define CONSTENT_VELOCITY
 //是否使用参数切换开关
@@ -11,7 +10,7 @@
 // #define INDUCTOR_CENTER_DISTANCE
 
 //打印-延时
-#define PRINT_DELAY 1000
+#define PRINT_DELAY 500
 
 //显示位置
 #define COLUMN_WIDTH 30
@@ -22,14 +21,14 @@
 #define COLUMN_5 COLUMN_1 + COLUMN_WIDTH * 4
 #define COLUMN_6 COLUMN_1 + COLUMN_WIDTH * 5
 #define ROW_HIGHT 8
-#define ROW_1 1
-#define ROW_2 2
-#define ROW_3 3
-#define ROW_4 4
-#define ROW_5 5
-#define ROW_6 6
-#define ROW_7 7
-#define ROW_8 8
+#define ROW_1 0
+#define ROW_2 1
+#define ROW_3 2
+#define ROW_4 3
+#define ROW_5 4
+#define ROW_6 5
+#define ROW_7 6
+#define ROW_8 7
 
 //ADC-采样频数
 #define ADC_SAMPLING_FREQ 20
@@ -67,7 +66,7 @@
 #define SERVO_BIAS_WEIGHT_1 0.7   //权值2，对应电感2、5差值
 #define SERVO_BIAS_WEIGHT_2 0.3   //权值3，对应电感3、4差值
 //舵机-PID
-#define SERVO_PID_PARAMETER_P 1
+#define SERVO_PID_PARAMETER_P 10
 #define SERVO_PID_PARAMETER_I 0
 #define SERVO_PID_PARAMETER_D 0
 //舵机-偏转-占空比//4150—4950—5800

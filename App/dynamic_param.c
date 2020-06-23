@@ -1,8 +1,5 @@
 #include "include.h"
 
-uint8 buff[DATA_PACKET];
-uint8 rxlen;
-
 void config1()
 {
 #ifdef FLASH_WRITE_PARAM
@@ -61,8 +58,13 @@ void param_switcher()
 
 void dynamic_param(void)
 {
-#ifdef ENABLE_NRF
-    rxlen = nrf_rx(buff, DATA_PACKET);
-    if (rxlen != 0){}
-#endif
+    led(LED1, LED_ON);
+    // int8 ch[100];
+    // uart_querystr(VCAN_PORT, ch,sizeof(ch)-1);
+    // LCD_P6x8Str(COLUMN_4,ROW_7,ch);
+    // uart_putstr(VCAN_PORT, ch);
+    // led(LED1, LED_OFF);
+    DELAY_MS(1000);
+    uart_rx_irq_dis(VCAN_PORT);
+    // uart_rx_irq_en(VCAN_PORT);
 }

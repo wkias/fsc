@@ -3,27 +3,45 @@
 void print()
 {
   PIT_Flag_Clear(PIT0);
+  static int8 buff[20];
 
   for (int i = 0; i < 6; i++)
   {
     Dis_num(COLUMN_1, i, adc_val[0][i]);
+    buff[i] = adc_val[0][i];
   }
 
   Dis_num(COLUMN_2, 0, adc_bias[0][0]);
   Dis_num(COLUMN_2, 1, adc_bias[0][1]);
   Dis_num(COLUMN_2, 2, adc_bias[0][2]);
+  buff[6] = adc_bias[0][0];
+  buff[7] = adc_bias[0][1];
+  buff[8] = adc_bias[0][2];
 
   Dis_num(COLUMN_3, 0, servo_bias[0]);
   Dis_num(COLUMN_3, 1, servo_correct);
   Dis_num(COLUMN_3, 2, servo_out);
+  buff[9] = servo_bias[0];
+  buff[10] = servo_correct;
+  buff[11] = servo_out;
 
   Dis_num(COLUMN_3, 4, servo_pid_param[0]);
   Dis_num(COLUMN_3, 5, servo_pid_param[2]);
+  buff[12] = servo_pid_param[0];
+  buff[13] = servo_pid_param[2];
 
   Dis_num(COLUMN_4, 0, motor_errors[0]);
   Dis_num(COLUMN_4, 1, expected_motor_out);
   Dis_num(COLUMN_4, 2, motor_out);
   Dis_num(COLUMN_4, 3, motor_pulse);
+  buff[14] = motor_errors[0];
+  buff[15] = expected_motor_out;
+  buff[16] = motor_out;
+  buff[17] = motor_pulse;
+
+  buff[18] = '\0';
+  buff[19] = '\n';
+  // uart_putbuff(VCAN_PORT, buff, sizeof(buff));
 }
 
 void main(void)
@@ -31,19 +49,11 @@ void main(void)
   //屏幕
   LCD_Init();
 
-  //片内闪存
-  flash_init();
-
   //LED
   led_init(LED0);
   led_init(LED1);
   led_init(LED2);
   led_init(LED3);
-
-#ifdef ENABLE_NRF
-  //无线电
-  nrf_init();
-#endif
 
   //舵机和电机初始化
   ftm_pwm_init(PORT_SERVO, FTM_CH0, 300, SERVO_BASE_POINT); //PTA8舵机
@@ -79,12 +89,15 @@ void main(void)
   set_vector_handler(PIT2_VECTORn, motor);
   enable_irq(PIT2_IRQn);
 
-#ifdef ENABLE_NRF
-  set_vector_handler(PORTE_VECTORn ,dynamic_param);
-  enable_irq(PORTE_IRQn);
-#endif
+  //蓝牙模块
+  uart_init(VCAN_PORT, VCAN_BAUD);
+  set_vector_handler(UART0_RX_TX_VECTORn, dynamic_param);
+  uart_rx_irq_en(VCAN_PORT);
+  LCD_P6x8Str(COLUMN_2, 7, "BLE");
 
 #ifdef FLASH_WRITE_PARAM
+  //片内闪存
+  flash_init();
   gpio_init(PTB22, GPO, 0);
   //flash写参数
   if (0x12345678 != flash_read(SECTOR_NO, 0, FLASH_WRITE_TYPE))
