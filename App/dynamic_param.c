@@ -58,6 +58,7 @@ void param_switcher()
 
 void dynamic_param(void)
 {
+#ifdef UART_BLE
     led(LED1, LED_ON);
     // int8 ch[100];
     // uart_querystr(VCAN_PORT, ch,sizeof(ch)-1);
@@ -67,4 +68,5 @@ void dynamic_param(void)
     DELAY_MS(1000);
     uart_rx_irq_dis(VCAN_PORT);
     // uart_rx_irq_en(VCAN_PORT);
+#endif
 }
