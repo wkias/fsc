@@ -1,5 +1,6 @@
 //是否恒速
 #define CONSTENT_VELOCITY
+// #define UART_BLE
 //是否使用参数切换开关
 // #define ENABLE_PARAM_SWITCHER
 //参数持久化
