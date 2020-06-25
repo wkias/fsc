@@ -1,8 +1,9 @@
 #include "include.h"
 
-float32_t adc_val[3][6] = {0};
-float32_t adc_bias[3][3] = {0};
-float32_t adc_bias_gradient[3] = {0};
+uint8 LOST_IN_FRANXX = 0;             //丢线阈值计数
+float32_t adc_val[3][6] = {0};        //电感值
+float32_t adc_bias[3][3] = {0};       //电感偏差
+float32_t adc_bias_gradient[3] = {0}; //电感偏差一阶差分
 float32_t adc_slope = ADC_SAMPLING_PARAMETER_SLOPE;
 float32_t adc_height = ADC_SAMPLING_PARAMETER_HEIGHT;
 int32 sampling_f = ADC_SAMPLING_FREQ + 2;
@@ -62,6 +63,7 @@ void adc_sampling()
       ad_sum -= adc_val_tmp[ADC_SAMPLING_FREQ - j - 1];
     }
     adc_val[0][i] = ad_sum / (ADC_SAMPLING_FREQ - ADC_SAMPLING_DEPRICATE);
+    LOST_IN_FRANXX += (adc_val[0][i] < LOST_LINE) ? 1 : 0;
   }
 
 //E=k*h/(x^2+h^2)，E磁感应强度，k比例系数，h电感高度，x电感与中线的偏差

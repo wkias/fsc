@@ -4,6 +4,7 @@
 #include "common.h"
 #include "include.h"
 
+extern uint8 LOST_IN_FRANXX;
 extern float32_t adc_val[3][6];
 extern float32_t adc_bias[3][3];
 extern float32_t adc_bias_gradient[3];
