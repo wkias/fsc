@@ -1,9 +1,4 @@
 Prj/IAR/Debug/
 Prj/IAR/Release/
 Prj/*
-.vscode/
-.vscode/BROWSE.DB
-.vscode/BROWSE.DB-shm
-.vscode/BROWSE.DB-wal
-Prj/IAR/vcan_Kinetis.dep
-.vscode/c_cpp_properties.json
+.vscode/*
