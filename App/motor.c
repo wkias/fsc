@@ -8,8 +8,8 @@ uint16 motor_pulse = 0; //电机观测速度
 
 //PID参数，可在settings.h中更改
 float32_t motor_pid_param[3] = {MOTOR_PID_PARAMETER_P,
-                            MOTOR_PID_PARAMETER_I,
-                            MOTOR_PID_PARAMETER_D};
+                                MOTOR_PID_PARAMETER_I,
+                                MOTOR_PID_PARAMETER_D};
 float32_t expected_motor_out = 0; //期望速度
 float32_t motor_errors[3];        //本次速度偏差，上次偏差，前次偏差
 float32_t motor_out = 0;          //输出速度
@@ -53,10 +53,10 @@ void motor()
   motor_out = (motor_out < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : motor_out;
 
 #ifdef CONSTENT_VELOCITY
-  ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 1600);
-#else
-  ftm_pwm_duty(PORT_MOTOR, FTM_CH2, motor_out);
+  motor_out = MOTOR_VELOCITY_BASE_POINT;
 #endif
+
+  ftm_pwm_duty(PORT_MOTOR, FTM_CH2, motor_out);
 
   motor_errors[2] = motor_errors[1];
   motor_errors[1] = motor_errors[0];
