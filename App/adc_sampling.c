@@ -66,24 +66,10 @@ void adc_sampling()
     LOST_IN_FRANXX += (adc_val[0][i] < LOST_LINE) ? 1 : 0;
   }
 
-//E=k*h/(x^2+h^2)，E磁感应强度，k比例系数，h电感高度，x电感与中线的偏差
-#ifdef INDUCTOR_CENTER_DISTANCE
-  //计算电感和中线的距离-mm
-  for (int8 i = 0; i < 6; i++)
-  {
-    //电感值和中线偏差非线性关系，差比和作偏差不稳定
-    adc_val[0][i] = adc_slope * adc_height / adc_val[0][i] - adc_height * adc_height;
-  }
-  //中线偏差-mm
-  adc_bias[0][0] = (adc_val[0][5] - adc_val[0][0]) / 2; //垂直电感
-  adc_bias[0][1] = (adc_val[0][4] - adc_val[0][1]) / 2; //水平电感-边缘
-  adc_bias[0][2] = (adc_val[0][3] - adc_val[0][2]) / 2; //水平电感-中间
-#else
   //中线偏差-差比和-无量纲量，磁感应强度是偏差的（N型）高阶函数，开方修正一部分误差，有论文称开方后磁感应强度是偏差的Sigmoid函数
   adc_bias[0][0] = (carmack_sqrt(adc_val[0][5]) - carmack_sqrt(adc_val[0][0])) / (adc_val[0][5] + adc_val[0][0]) * 2000; //垂直电感
   adc_bias[0][1] = (carmack_sqrt(adc_val[0][4]) - carmack_sqrt(adc_val[0][1])) / (adc_val[0][4] + adc_val[0][1]) * 2000; //水平电感-边缘
   adc_bias[0][2] = (carmack_sqrt(adc_val[0][3]) - carmack_sqrt(adc_val[0][2])) / (adc_val[0][3] + adc_val[0][2]) * 2000; //水平电感-中间
-#endif
 
   //中线偏差一阶差分
   adc_bias_gradient[0] = adc_bias[0][0] - adc_bias[1][0];

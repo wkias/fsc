@@ -69,4 +69,5 @@ void dynamic_param(void)
     uart_rx_irq_dis(VCAN_PORT);
     // uart_rx_irq_en(VCAN_PORT);
 #endif
+disable_irq(PIT2_IRQn);
 }
