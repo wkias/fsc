@@ -12,6 +12,7 @@ void print()
   Dis_num(COLUMN_2, 0, adc_bias[0][0]);
   Dis_num(COLUMN_2, 1, adc_bias[0][1]);
   Dis_num(COLUMN_2, 2, adc_bias[0][2]);
+  Dis_num(COLUMN_2, 3, adc_bias_gradient[0]);
 
   Dis_num(COLUMN_3, 0, servo_bias[0]);
   Dis_num(COLUMN_3, 1, servo_correct);
