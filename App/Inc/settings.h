@@ -1,14 +1,10 @@
-//是否恒速
-// #define CONSTENT_VELOCITY 1800
 // #define UART_BLE
 //是否使用参数切换开关
 // #define ENABLE_PARAM_SWITCHER
 //参数持久化
 // #define FLASH_WRITE_PARAM
 //尽量用最后面的扇区，确保安全
-#define SECTOR_NO (FLASH_SECTOR_NUM - 1)
-//计算中线距离-cm
-// #define INDUCTOR_CENTER_DISTANCE
+// #define SECTOR_NO (FLASH_SECTOR_NUM - 1)
 
 //打印-延时
 #define PRINT_DELAY 1000
@@ -54,8 +50,8 @@
 #define MOTOR_PID_PARAMETER_I 1
 #define MOTOR_PID_PARAMETER_D 1
 //电机-速度限制
-#define MOTOR_VELOCITY_INTERVAL 400                                                       //基点
-#define MOTOR_VELOCITY_BASE_POINT 1900                                                    //基点
+#define MOTOR_VELOCITY_INTERVAL 500                                                       //基点
+#define MOTOR_VELOCITY_BASE_POINT 2000                                                    //基点
 #define MOTOR_VELOCITY_SUPERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT + MOTOR_VELOCITY_INTERVAL //上极限
 #define MOTOR_VELOCITY_INFERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT - MOTOR_VELOCITY_INTERVAL //下极限
 
