@@ -1,17 +1,17 @@
 //是否恒速
-// #define CONSTENT_VELOCITY
+#define CONSTENT_VELOCITY 1800
 // #define UART_BLE
 //是否使用参数切换开关
 // #define ENABLE_PARAM_SWITCHER
 //参数持久化
 // #define FLASH_WRITE_PARAM
 //尽量用最后面的扇区，确保安全
-#define SECTOR_NO  (FLASH_SECTOR_NUM-1)
+#define SECTOR_NO (FLASH_SECTOR_NUM - 1)
 //计算中线距离-cm
 // #define INDUCTOR_CENTER_DISTANCE
 
 //打印-延时
-#define PRINT_DELAY 500
+#define PRINT_DELAY 1000
 
 //显示位置
 #define COLUMN_WIDTH 30
@@ -54,31 +54,29 @@
 #define MOTOR_PID_PARAMETER_I 1
 #define MOTOR_PID_PARAMETER_D 1
 //电机-速度限制
-#define MOTOR_VELOCITY_BASE_POINT 2200     //基点
-#define MOTOR_VELOCITY_SUPERIOR_LIMIT 3000 //上极限
-#define MOTOR_VELOCITY_INFERIOR_LIMIT 2000    //下极限
+#define MOTOR_VELOCITY_INTERVAL 300                                                       //基点
+#define MOTOR_VELOCITY_BASE_POINT 1900                                                    //基点
+#define MOTOR_VELOCITY_SUPERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT + MOTOR_VELOCITY_INTERVAL //上极限
+#define MOTOR_VELOCITY_INFERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT - MOTOR_VELOCITY_INTERVAL //下极限
 
-//舵机-丢线阈值
-#define LOST_LINE 80
 //舵机-PI
 #define PI 3.14159265358979f
 //舵机-偏转角度极限
 #define SERVO_ANGLE_LIMIT 42.5
 //舵机-误差计算-权值
 #define SERVO_BIAS_WEIGHT_0 0   //权值1，对应电感1、6差值
-#define SERVO_BIAS_WEIGHT_1 0.7   //权值2，对应电感2、5差值
-#define SERVO_BIAS_WEIGHT_2 0.3   //权值3，对应电感3、4差值
+#define SERVO_BIAS_WEIGHT_1 1 //权值2，对应电感2、5差值
+#define SERVO_BIAS_WEIGHT_2 1 //权值3，对应电感3、4差值
 //舵机-PID
 #define SERVO_PID_PARAMETER_P 2
 #define SERVO_PID_PARAMETER_I 0
 #define SERVO_PID_PARAMETER_D 1
 //舵机-偏转-占空比//4150—4950—5800
-#define SERVO_BASE_POINT 4950                    //基点
+#define SERVO_BASE_POINT 4950 //基点
 #define SERVO_DUTY_INTERVAL_LIMIT 850
 #define SERVO_LEFT_LIMIT SERVO_BASE_POINT - SERVO_DUTY_INTERVAL_LIMIT  //左极限
 #define SERVO_RIGHT_LIMIT SERVO_BASE_POINT + SERVO_DUTY_INTERVAL_LIMIT //右极限
 //舵机-电机-输出参数比例
-#define PARAMENTER_SERVO_MOTOR_RATIO 0.4//最高0.58
 
 //引脚定义-干簧管
 #define PORT_REED_SWITCHER PTA7
