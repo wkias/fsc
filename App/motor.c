@@ -52,10 +52,6 @@ void motor()
   motor_out = (motor_out > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out;
   motor_out = (motor_out < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : motor_out;
 
-#ifdef CONSTENT_VELOCITY
-  motor_out = CONSTENT_VELOCITY;
-#endif
-
   ftm_pwm_duty(PORT_MOTOR, FTM_CH2, motor_out);
 
   motor_errors[2] = motor_errors[1];
