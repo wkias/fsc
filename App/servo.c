@@ -11,18 +11,20 @@ float32_t servo_bias[3] = {0}; //本次中线误差，上次中线误差，累�
 float32_t servo_correct = 0;   //舵机误差增量修正值
 float32_t servo_out = 0;       //舵机PWM占空比
 float32_t ratio = ((float32_t)MOTOR_VELOCITY_INTERVAL / SERVO_DUTY_INTERVAL_LIMIT);
-int8 LOST_IN_FRANXX = 0; //丢线
+int8 LOST_IN_FRANXX = 0; //丢线标记
 
 void servo()
 {
     //丢线
-    if (adc_val[0][1] < 100 && adc_val[0][2] < 100 && adc_val[0][3] < 100 && adc_val[0][4] > 100)
+    if (adc_val[0][1] < 100 && adc_val[0][2] < 100 && adc_val[0][3] < 100 && (adc_val[0][4] > 100 || LOST_IN_FRANXX == 1))
     {
         servo_out = SERVO_RIGHT_LIMIT;
+        LOST_IN_FRANXX = 1;
     }
-    else if (adc_val[0][1] > 100 && adc_val[0][2] < 100 && adc_val[0][3] < 100 && adc_val[0][4] < 100)
+    else if ((adc_val[0][1] > 100 || LOST_IN_FRANXX == -1) && adc_val[0][2] < 100 && adc_val[0][3] < 100 && adc_val[0][4] < 100)
     {
         servo_out = SERVO_LEFT_LIMIT;
+        LOST_IN_FRANXX = -1;
     } //环岛
     else if (adc_bias_gradient[0] < -200)
     {
@@ -34,6 +36,7 @@ void servo()
     }
     else
     {
+        LOST_IN_FRANXX = 0;
         //加权偏差
         servo_bias[0] = servo_bias_wight[0] * adc_bias[0][0] * adc_bias_gradient[0] +
                         servo_bias_wight[1] * adc_bias[0][1] +
@@ -43,7 +46,7 @@ void servo()
         direction = (servo_bias[0] > 0) ? 1 : -1;
         servo_correct = servo_pid_param[0] * servo_bias[0] * servo_bias[0] * direction + //二次动态P，以适应大小环道不同的角度
                         servo_pid_param[2] * (servo_bias[0] - servo_bias[1]) * (servo_bias[0] - servo_bias[1]);
-        servo_correct /= 15;
+        servo_correct /= 30;
         servo_bias[1] = servo_bias[0];
         servo_out = SERVO_BASE_POINT + servo_correct;
     }

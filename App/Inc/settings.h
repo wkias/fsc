@@ -1,5 +1,5 @@
 //是否恒速
-#define CONSTENT_VELOCITY 1800
+// #define CONSTENT_VELOCITY 1800
 // #define UART_BLE
 //是否使用参数切换开关
 // #define ENABLE_PARAM_SWITCHER
@@ -54,7 +54,7 @@
 #define MOTOR_PID_PARAMETER_I 1
 #define MOTOR_PID_PARAMETER_D 1
 //电机-速度限制
-#define MOTOR_VELOCITY_INTERVAL 300                                                       //基点
+#define MOTOR_VELOCITY_INTERVAL 400                                                       //基点
 #define MOTOR_VELOCITY_BASE_POINT 1900                                                    //基点
 #define MOTOR_VELOCITY_SUPERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT + MOTOR_VELOCITY_INTERVAL //上极限
 #define MOTOR_VELOCITY_INFERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT - MOTOR_VELOCITY_INTERVAL //下极限
@@ -68,7 +68,7 @@
 #define SERVO_BIAS_WEIGHT_1 1 //权值2，对应电感2、5差值
 #define SERVO_BIAS_WEIGHT_2 1 //权值3，对应电感3、4差值
 //舵机-PID
-#define SERVO_PID_PARAMETER_P 2
+#define SERVO_PID_PARAMETER_P 1
 #define SERVO_PID_PARAMETER_I 0
 #define SERVO_PID_PARAMETER_D 1
 //舵机-偏转-占空比//4150—4950—5800
