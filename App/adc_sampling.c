@@ -1,6 +1,5 @@
 #include "include.h"
 
-uint8 LOST_IN_FRANXX = 0;             //丢线阈值计数
 float32_t adc_val[3][6] = {0};        //电感值
 float32_t adc_bias[3][3] = {0};       //电感偏差
 float32_t adc_bias_gradient[3] = {0}; //电感偏差一阶差分
@@ -27,8 +26,6 @@ void adcs_init()
 //电感采样
 void adc_sampling()
 {
-  static float32_t max = 0;
-  static float32_t min = 0;
   static float32_t ad_sum = 0;
   static float32_t adc_val_tmp[ADC_SAMPLING_FREQ] = {0};
 
@@ -63,7 +60,6 @@ void adc_sampling()
       ad_sum -= adc_val_tmp[ADC_SAMPLING_FREQ - j - 1];
     }
     adc_val[0][i] = ad_sum / (ADC_SAMPLING_FREQ - ADC_SAMPLING_DEPRICATE);
-    LOST_IN_FRANXX += (adc_val[0][i] < LOST_LINE) ? 1 : 0;
   }
 
   //中线偏差-差比和-无量纲量，磁感应强度是偏差的（N型）高阶函数，开方修正一部分误差，有论文称开方后磁感应强度是偏差的Sigmoid函数

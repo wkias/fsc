@@ -10,21 +10,43 @@ float32_t servo_bias_wight[3] = {SERVO_BIAS_WEIGHT_0,
 float32_t servo_bias[3] = {0}; //本次中线误差，上次中线误差，累计误差和
 float32_t servo_correct = 0;   //舵机误差增量修正值
 float32_t servo_out = 0;       //舵机PWM占空比
-float32_t ratio = PARAMENTER_SERVO_MOTOR_RATIO;
+float32_t ratio = ((float32_t)MOTOR_VELOCITY_INTERVAL / SERVO_DUTY_INTERVAL_LIMIT);
+int8 LOST_IN_FRANXX = 0; //丢线
 
 void servo()
 {
-    servo_bias[0] = servo_bias_wight[0] * adc_bias[0][0] * adc_bias_gradient[0] +
-                    servo_bias_wight[1] * adc_bias[0][1] +
-                    servo_bias_wight[2] * adc_bias[0][2];
+    //丢线
+    if (adc_val[0][1] < 100 && adc_val[0][2] < 100 && adc_val[0][3] < 100 && adc_val[0][4] > 100)
+    {
+        servo_out = SERVO_RIGHT_LIMIT;
+    }
+    else if (adc_val[0][1] > 100 && adc_val[0][2] < 100 && adc_val[0][3] < 100 && adc_val[0][4] < 100)
+    {
+        servo_out = SERVO_LEFT_LIMIT;
+    } //环岛
+    else if (adc_bias_gradient[0] < -200)
+    {
+        servo_out = SERVO_RIGHT_LIMIT;
+    }
+    else if (adc_bias_gradient[0] > 200)
+    {
+        servo_out = SERVO_LEFT_LIMIT;
+    }
+    else
+    {
+        //加权偏差
+        servo_bias[0] = servo_bias_wight[0] * adc_bias[0][0] * adc_bias_gradient[0] +
+                        servo_bias_wight[1] * adc_bias[0][1] +
+                        servo_bias_wight[2] * adc_bias[0][2];
 
-    //位置PID，中线误差修正
-    direction = (servo_bias[0] > 0) ? 1 : -1;
-    servo_correct = servo_pid_param[0] * servo_bias[0] * servo_bias[0] * direction + //二次动态P，以适应大小环道不同的角度
-                    servo_pid_param[2] * (servo_bias[0] - servo_bias[1]) * (servo_bias[0] - servo_bias[1]);
-    servo_correct /= 10;
-    servo_bias[1] = servo_bias[0];
-    servo_out = SERVO_BASE_POINT + servo_correct;
+        //位置PID，中线误差修正
+        direction = (servo_bias[0] > 0) ? 1 : -1;
+        servo_correct = servo_pid_param[0] * servo_bias[0] * servo_bias[0] * direction + //二次动态P，以适应大小环道不同的角度
+                        servo_pid_param[2] * (servo_bias[0] - servo_bias[1]) * (servo_bias[0] - servo_bias[1]);
+        servo_correct /= 15;
+        servo_bias[1] = servo_bias[0];
+        servo_out = SERVO_BASE_POINT + servo_correct;
+    }
 
     //限幅输出
     servo_out = (servo_out > SERVO_LEFT_LIMIT) ? servo_out : SERVO_LEFT_LIMIT;
