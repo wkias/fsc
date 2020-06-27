@@ -1,21 +1,15 @@
 #include "include.h"
 
-int carport_flag;
+//中断服务函数
 void carport(void)
 {
-    #if ENABLE_LED
-    led(LED_CARPORT, LED_ON);
-    #endif
+    //清标志位，运行回调函数
+    PORT_FUNC(A, 25, go_home);
+}
 
-    uint8 n = 6;               //引脚号PTA6
-    if (PORTA_ISFR & (1 << n)) //PTA6触发中断
-    {
-        PORTA_ISFR = (1 << n); //写1清中断标志位
-        ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_LEFT_LIMIT);
-        systick_delay_ms(200);
-    }
-    
-    #if ENABLE_LED
-    led(LED_CARPORT, LED_OFF);
-    #endif
+//进出车库
+void go_home()
+{
+    ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_LEFT_LIMIT);
+    DELAY_MS(1000);
 }
