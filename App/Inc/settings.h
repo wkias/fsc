@@ -51,7 +51,7 @@
 #define MOTOR_PID_PARAMETER_D 1
 //电机-速度限制
 #define MOTOR_VELOCITY_INTERVAL 800                                                       //区间半径
-#define MOTOR_VELOCITY_BASE_POINT 2200                                                    //基点
+#define MOTOR_VELOCITY_BASE_POINT 2500                                                    //基点
 #define MOTOR_VELOCITY_SUPERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT + MOTOR_VELOCITY_INTERVAL //上极限
 #define MOTOR_VELOCITY_INFERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT - MOTOR_VELOCITY_INTERVAL //下极限
 
@@ -60,7 +60,7 @@
 //舵机-偏转角度极限
 #define SERVO_ANGLE_LIMIT 42.5
 //舵机-误差计算-权值
-#define SERVO_BIAS_WEIGHT_0 0   //权值1，对应电感1、6差值
+#define SERVO_BIAS_WEIGHT_0 1   //权值1，对应电感1、6差值
 #define SERVO_BIAS_WEIGHT_1 1 //权值2，对应电感2、5差值
 #define SERVO_BIAS_WEIGHT_2 1 //权值3，对应电感3、4差值
 //舵机-PID
