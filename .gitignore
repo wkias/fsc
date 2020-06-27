@@ -2,3 +2,5 @@ Prj/IAR/Debug/
 Prj/IAR/Release/
 Prj/*
 .vscode/*
+.vscode/BROWSE.DB
+.vscode/BROWSE.DB-wal

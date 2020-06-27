@@ -43,12 +43,15 @@ void servo()
     //     }
     //     rotary_road += 1;
     // }
-    else if(adc_val[0][3]>700&&adc_val[0][4]>700){
-        if(adc_val[0][0]>adc_val[0][5]){
+    else if (adc_val[0][3] > 700 && adc_val[0][4] > 700)
+    {
+        if (adc_val[0][0] > adc_val[0][5])
+        {
             servo_out = SERVO_LEFT_LIMIT;
             DELAY_MS(100);
         }
-        else{
+        else
+        {
             servo_out = SERVO_RIGHT_LIMIT;
             DELAY_MS(100);
         }

@@ -50,8 +50,8 @@
 #define MOTOR_PID_PARAMETER_I 1
 #define MOTOR_PID_PARAMETER_D 1
 //电机-速度限制
-#define MOTOR_VELOCITY_INTERVAL 500                                                       //区间半径
-#define MOTOR_VELOCITY_BASE_POINT 2100                                                    //基点
+#define MOTOR_VELOCITY_INTERVAL 800                                                       //区间半径
+#define MOTOR_VELOCITY_BASE_POINT 2200                                                    //基点
 #define MOTOR_VELOCITY_SUPERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT + MOTOR_VELOCITY_INTERVAL //上极限
 #define MOTOR_VELOCITY_INFERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT - MOTOR_VELOCITY_INTERVAL //下极限
 
@@ -74,8 +74,8 @@
 #define SERVO_RIGHT_LIMIT SERVO_BASE_POINT + SERVO_DUTY_INTERVAL_LIMIT //右极限
 //舵机-电机-输出参数比例
 
-//引脚定义-干簧管
-#define PORT_REED_SWITCHER PTA7
+//引脚定义-干簧管-和车库检查回调函数联动-不可单独改动
+#define PORT_REED_SWITCHER PTA25
 //引脚定义-拨码开关
 #define PORT_SWITCHER_1 PTC1
 #define PORT_SWITCHER_2 PTC2
