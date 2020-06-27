@@ -1,4 +1,4 @@
 #include "include.h"
 
 void carport();
-void go_home()
+void go_home();
