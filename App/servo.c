@@ -12,6 +12,7 @@ float32_t servo_correct = 0;   //舵机误差增量修正值
 float32_t servo_out = 0;       //舵机PWM占空比
 float32_t ratio = ((float32_t)MOTOR_VELOCITY_INTERVAL / SERVO_DUTY_INTERVAL_LIMIT);
 int8 LOST_IN_FRANXX = 0; //丢线标记
+int8 rotary_road = 0;    //环岛标记
 
 void servo()
 {
@@ -25,18 +26,37 @@ void servo()
     {
         servo_out = SERVO_LEFT_LIMIT;
         LOST_IN_FRANXX = -1;
-    } //环岛
-    else if (adc_bias_gradient[0] < -200)
-    {
-        servo_out = SERVO_RIGHT_LIMIT;
     }
-    else if (adc_bias_gradient[0] > 200)
-    {
-        servo_out = SERVO_LEFT_LIMIT;
+    // else if (adc_bias[0][0] > 100)
+    // {
+    //     if (rotary_road != 0 && rotary_road % 2 != 0)
+    //     {
+    //         servo_out = SERVO_LEFT_LIMIT;
+    //     }
+    //     rotary_road -= 1;
+    // }
+    // else if (adc_bias[0][0] < -100)
+    // {
+    //     if (rotary_road != 0 && rotary_road % 2 != 0)
+    //     {
+    //         servo_out = SERVO_RIGHT_LIMIT;
+    //     }
+    //     rotary_road += 1;
+    // }
+    else if(adc_val[0][3]>700&&adc_val[0][4]>700){
+        if(adc_val[0][0]>adc_val[0][5]){
+            servo_out = SERVO_LEFT_LIMIT;
+            DELAY_MS(100);
+        }
+        else{
+            servo_out = SERVO_RIGHT_LIMIT;
+            DELAY_MS(100);
+        }
     }
     else
     {
         LOST_IN_FRANXX = 0;
+        rotary_road = 0;
         //加权偏差
         servo_bias[0] = servo_bias_wight[0] * adc_bias[0][0] * adc_bias_gradient[0] +
                         servo_bias_wight[1] * adc_bias[0][1] +
