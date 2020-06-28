@@ -17,35 +17,35 @@ int8 rotary_road = 0;    //环岛标记
 void servo()
 {
     //丢线
-    // if (adc_val[0][1] < 100 && adc_val[0][2] < 100 && adc_val[0][3] < 100 && (adc_val[0][4] > 100 || LOST_IN_FRANXX == 1))
-    // {
-    //     servo_out = SERVO_RIGHT_LIMIT;
-    //     LOST_IN_FRANXX = 1;
-    // }
-    // else if ((adc_val[0][1] > 100 || LOST_IN_FRANXX == -1) && adc_val[0][2] < 100 && adc_val[0][3] < 100 && adc_val[0][4] < 100)
-    // {
-    //     servo_out = SERVO_LEFT_LIMIT;
-    //     LOST_IN_FRANXX = -1;
-    // }
-    if (adc_val[0][2] > 500 && adc_val[0][3] > 500 && (adc_val[0][1] > 500 || adc_val[0][4] > 500) || rotary_road)
+    if (adc_val[0][1] < 100 && adc_val[0][2] < 100 && adc_val[0][3] < 100 && (adc_val[0][4] > 100 || LOST_IN_FRANXX == 1))
     {
-        led(LED0, LED_ON);
-        pit_init_ms(PIT3, 1000);
-        set_vector_handler(PIT3_VECTORn, clear);
-        enable_irq(PIT3_IRQn);
-        rotary_road = 1;
-
-        if (adc_val[0][1] > adc_val[0][4])
-        {
-            servo_out = SERVO_LEFT_LIMIT;
-        }
-        else
-        {
-            servo_out = SERVO_RIGHT_LIMIT;
-        }
-        ftm_pwm_duty(PORT_SERVO, FTM_CH0, servo_out);
-        DELAY_MS(100);
+        servo_out = SERVO_RIGHT_LIMIT;
+        LOST_IN_FRANXX = 1;
     }
+    else if ((adc_val[0][1] > 100 || LOST_IN_FRANXX == -1) && adc_val[0][2] < 100 && adc_val[0][3] < 100 && adc_val[0][4] < 100)
+    {
+        servo_out = SERVO_LEFT_LIMIT;
+        LOST_IN_FRANXX = -1;
+    }
+    // if (adc_val[0][2] > 500 && adc_val[0][3] > 500 && (adc_val[0][1] > 500 || adc_val[0][4] > 500) || rotary_road)
+    // {
+    //     led(LED0, LED_ON);
+    //     pit_init_ms(PIT3, 1000);
+    //     set_vector_handler(PIT3_VECTORn, clear);
+    //     enable_irq(PIT3_IRQn);
+    //     rotary_road = 1;
+
+    //     if (adc_val[0][1] > adc_val[0][4])
+    //     {
+    //         servo_out = SERVO_LEFT_LIMIT;
+    //     }
+    //     else
+    //     {
+    //         servo_out = SERVO_RIGHT_LIMIT;
+    //     }
+    //     ftm_pwm_duty(PORT_SERVO, FTM_CH0, servo_out);
+    //     DELAY_MS(100);
+    // }
     else
     {
         LOST_IN_FRANXX = 0;

@@ -33,12 +33,6 @@
 #define ADC_SAMPLING_DEPRICATE 6
 //ADC-采样精度
 #define ADC_SAMPLING_PRECISION ADC_10bit
-//ADC-参数-磁感应强度关于水平距离的方程斜率
-#define ADC_SAMPLING_PARAMETER_SLOPE 3150
-//ADC-电感高度-cm
-#define ADC_SAMPLING_PARAMETER_HEIGHT 7
-//ADC-前瞻距离-cm
-#define ADC_SAMPLING_PARAMETER_FORWARD 11
 
 //编码器-权值滤波-权值
 #define ENCODER_FILTER_WIGHT_0 0.5  //最近观测值
@@ -51,7 +45,7 @@
 #define MOTOR_PID_PARAMETER_D 1
 //电机-速度限制
 #define MOTOR_VELOCITY_INTERVAL 800                                                       //区间半径
-#define MOTOR_VELOCITY_BASE_POINT 2500                                                    //基点
+#define MOTOR_VELOCITY_BASE_POINT 1500                                                    //基点
 #define MOTOR_VELOCITY_SUPERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT + MOTOR_VELOCITY_INTERVAL //上极限
 #define MOTOR_VELOCITY_INFERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT - MOTOR_VELOCITY_INTERVAL //下极限
 
@@ -64,7 +58,7 @@
 #define SERVO_BIAS_WEIGHT_1 1 //权值2，对应电感2、5差值
 #define SERVO_BIAS_WEIGHT_2 1 //权值3，对应电感3、4差值
 //舵机-PID
-#define SERVO_PID_PARAMETER_P 0.8
+#define SERVO_PID_PARAMETER_P 0.6
 #define SERVO_PID_PARAMETER_I 0
 #define SERVO_PID_PARAMETER_D 1
 //舵机-偏转-占空比//4150—4950—5800
