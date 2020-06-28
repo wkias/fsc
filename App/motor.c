@@ -59,6 +59,10 @@ void motor()
   // else
   // {
   //   ftm_pwm_duty(PORT_MOTOR, FTM_CH2, motor_out);
+  // } 
+  // if(LOST_IN_FRANXX){
+  //   ftm_pwm_duty(PORT_MOTOR, FTM_CH3, motor_out);
+  //   DELAY_MS(10);
   // }
   ftm_pwm_duty(PORT_MOTOR, FTM_CH2, motor_out);
 
