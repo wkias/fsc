@@ -1,6 +1,6 @@
 #include "include.h"
 
-int8 direction = 0; //舵机偏差正负号标记-方向标记
+int8 direction = 0; //舵机偏差方向标记
 float32_t servo_pid_param[3] = {SERVO_PID_PARAMETER_P,
                                 SERVO_PID_PARAMETER_I,
                                 SERVO_PID_PARAMETER_D};
@@ -16,6 +16,17 @@ int8 rotary_road = 0;    //环岛标记
 
 void servo()
 {
+    //环道
+    if ((adc_val[0][0] > 500 && adc_val[0][5] < 300) || rotary_road == -1) //环道
+    {
+        rotary_road = -1; //左
+        enable_irq(PIT3_IRQn);
+    }
+    else if ((adc_val[0][0] < 300 && adc_val[0][5] > 500) || rotary_road == 1)
+    {
+        rotary_road = 1; //右
+        enable_irq(PIT3_IRQn);
+    }
     //丢线
     if (adc_val[0][1] < 100 && adc_val[0][2] < 100 && adc_val[0][3] < 100 && (adc_val[0][4] > 100 || LOST_IN_FRANXX == 1))
     {
@@ -27,25 +38,6 @@ void servo()
         servo_out = SERVO_LEFT_LIMIT;
         LOST_IN_FRANXX = -1;
     }
-    // if (adc_val[0][2] > 500 && adc_val[0][3] > 500 && (adc_val[0][1] > 500 || adc_val[0][4] > 500) || rotary_road)
-    // {
-    //     led(LED0, LED_ON);
-    //     pit_init_ms(PIT3, 1000);
-    //     set_vector_handler(PIT3_VECTORn, clear);
-    //     enable_irq(PIT3_IRQn);
-    //     rotary_road = 1;
-
-    //     if (adc_val[0][1] > adc_val[0][4])
-    //     {
-    //         servo_out = SERVO_LEFT_LIMIT;
-    //     }
-    //     else
-    //     {
-    //         servo_out = SERVO_RIGHT_LIMIT;
-    //     }
-    //     ftm_pwm_duty(PORT_SERVO, FTM_CH0, servo_out);
-    //     DELAY_MS(100);
-    // }
     else
     {
         LOST_IN_FRANXX = 0;
@@ -56,9 +48,10 @@ void servo()
 
         //位置PID，中线误差修正
         direction = (servo_bias[0] > 0) ? 1 : -1;
+        direction = rotary_road ? rotary_road : direction;
         servo_correct = servo_pid_param[0] * servo_bias[0] * servo_bias[0] * direction + //二次动态P，以适应大小环道不同的角度
                         servo_pid_param[2] * (servo_bias[0] - servo_bias[1]) * (servo_bias[0] - servo_bias[1]);
-        servo_correct /= 60;
+        servo_correct /= 50;
         servo_bias[1] = servo_bias[0];
         servo_out = SERVO_BASE_POINT + servo_correct;
     }
@@ -79,37 +72,5 @@ void servo()
 void clear()
 {
     rotary_road = 0;
+    disable_irq(PIT3_IRQn);
 }
-
-#ifdef INDUCTOR_CENTER_DISTANCE
-float64_t arctan(float64_t x)
-{
-    float64_t mult, sum, xx;
-    sum = 0;
-    if (x == 1)
-    {
-        return PI / 4;
-    }
-    if (x == -1)
-    {
-        return -PI / 4;
-    }
-
-    mult = ((x > 1 || x < -1) ? 1 / x : x);
-    xx = mult * mult;
-
-    for (int i = 1; i < 200; i += 2)
-    {
-        sum += mult * ((i + 1) % 4 == 0 ? -1 : 1) / i;
-        mult *= xx;
-    }
-    if (x > 1 || x < -1)
-    {
-        return PI / 2 - sum;
-    }
-    else
-    {
-        return sum;
-    }
-}
-#endif

@@ -11,4 +11,3 @@ extern int8 rotary_road;
 
 void servo();
 void clear();
-float64_t arctan();

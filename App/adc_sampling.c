@@ -61,13 +61,13 @@ void adc_sampling()
   }
 
   //中线偏差-差比和-无量纲量，磁感应强度是偏差的（N型）高阶函数，开方修正一部分误差，有论文称开方后磁感应强度是偏差的Sigmoid函数
-  // adc_bias[0][0] = (carmack_sqrt(adc_val[0][5]) - carmack_sqrt(adc_val[0][0])) / (adc_val[0][5] + adc_val[0][0]) * 2000; //垂直电感
-  adc_bias[0][0] = (adc_val[0][5] - adc_val[0][0]) / (adc_val[0][5] + adc_val[0][0]) * 200; //垂直电感
+  adc_bias[0][0] = (carmack_sqrt(adc_val[0][5]) - carmack_sqrt(adc_val[0][0])) / (adc_val[0][5] + adc_val[0][0]) * 2000; //垂直电感
+  // adc_bias[0][0] = (adc_val[0][5] - adc_val[0][0]) / (adc_val[0][5] + adc_val[0][0]) * 200; //垂直电感
   adc_bias[0][1] = (carmack_sqrt(adc_val[0][4]) - carmack_sqrt(adc_val[0][1])) / (adc_val[0][4] + adc_val[0][1]) * 2000; //水平电感-边缘
   adc_bias[0][2] = (carmack_sqrt(adc_val[0][3]) - carmack_sqrt(adc_val[0][2])) / (adc_val[0][3] + adc_val[0][2]) * 2000; //水平电感-中间
 
   //中线偏差一阶差分
-  adc_bias_gradient[0] = (adc_bias[0][0] - adc_bias[1][0]) * 1000;
+  adc_bias_gradient[0] = (adc_bias[0][0] - adc_bias[1][0]) * 100;
   adc_bias_gradient[1] = (adc_bias[0][1] - adc_bias[1][1]) * 100;
   adc_bias_gradient[2] = (adc_bias[0][2] - adc_bias[1][2]) * 100;
 }

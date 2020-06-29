@@ -5,13 +5,13 @@ float32_t filter_wight[3] = {ENCODER_FILTER_WIGHT_0,
                              ENCODER_FILTER_WIGHT_1,
                              ENCODER_FILTER_WIGHT_2};
 uint16 motor_pulse = 0; //电机观测速度
-//PID参数，可在settings.h中更改
+//PID参数，可在settings.h中更改，构建数组可动态调参
 float32_t motor_pid_param[3] = {MOTOR_PID_PARAMETER_P,
                                 MOTOR_PID_PARAMETER_I,
                                 MOTOR_PID_PARAMETER_D};
-float32_t expected_motor_out = 0;                //期望速度
-float32_t motor_errors[3];                       //本次速度偏差，上次偏差，前次偏差
-float32_t motor_out = MOTOR_VELOCITY_BASE_POINT; //输出速度
+float32_t expected_motor_out = 0;                        //期望速度
+float32_t motor_errors[3];                               //本次速度偏差，上次偏差，前次偏差
+float32_t motor_out[2] = {MOTOR_VELOCITY_BASE_POINT, 0}; //输出速度
 
 //编码器测速
 void encoder(void)
@@ -44,28 +44,31 @@ void motor()
   motor_errors[0] = expected_motor_out - motor_pulse;
 
   //增量PID，速度误差修正
-  motor_out += motor_pid_param[0] * (motor_errors[0] - motor_errors[1]) +
-               motor_pid_param[1] * motor_errors[0] +
-               motor_pid_param[2] * (motor_errors[0] - 2 * motor_errors[1] + motor_errors[2]);
+  motor_out[0] += motor_pid_param[0] * (motor_errors[0] - motor_errors[1]) +
+                  motor_pid_param[1] * motor_errors[0] +
+                  motor_pid_param[2] * (motor_errors[0] - 2 * motor_errors[1] + motor_errors[2]);
 
   // 限速输出
-  motor_out = (motor_out > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out;
-  motor_out = (motor_out < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : motor_out;
+  motor_out[0] = (motor_out[0] > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out[0];
+  motor_out[0] = (motor_out[0] < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : motor_out[0];
 
-  // if (motor_pulse > MOTOR_VELOCITY_SUPERIOR_LIMIT)
-  // {
-  //   ftm_pwm_duty(PORT_MOTOR, FTM_CH3, motor_out); //刹车
-  // }
-  // else
-  // {
-  //   ftm_pwm_duty(PORT_MOTOR, FTM_CH2, motor_out);
-  // } 
-  // if(LOST_IN_FRANXX){
-  //   ftm_pwm_duty(PORT_MOTOR, FTM_CH3, motor_out);
-  //   DELAY_MS(10);
-  // }
-  ftm_pwm_duty(PORT_MOTOR, FTM_CH2, motor_out);
+  if (motor_out[0] < motor_out[1])
+  {
+    decelerate();
+  }
+  ftm_pwm_duty(PORT_MOTOR, FTM_CH2, motor_out[0]);
 
+  motor_out[1] = motor_out[0];
   motor_errors[2] = motor_errors[1];
   motor_errors[1] = motor_errors[0];
+}
+
+void decelerate()
+{
+  // ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
+  // DELAY_MS(DECELERATE_TIME);
+  // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, motor_out[1]);
+  // DELAY_MS(DECELERATE_TIME);
+  // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, 0);
+  // DELAY_MS(DECELERATE_TIME);
 }
