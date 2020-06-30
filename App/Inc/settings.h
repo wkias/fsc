@@ -40,12 +40,12 @@
 #define ENCODER_FILTER_WIGHT_2 0.15 //前次观测值
 
 //电机-PID
-#define MOTOR_PID_PARAMETER_P 1 //1
+#define MOTOR_PID_PARAMETER_P 3 //1
 #define MOTOR_PID_PARAMETER_I 1 //1
 #define MOTOR_PID_PARAMETER_D 1 //1
 //电机-速度限制
-#define MOTOR_VELOCITY_INTERVAL 600                                                       //区间半径
-#define MOTOR_VELOCITY_BASE_POINT 1500                                                     //基点
+#define MOTOR_VELOCITY_INTERVAL 1100                                                       //区间半径
+#define MOTOR_VELOCITY_BASE_POINT 1700                                                     //基点
 #define MOTOR_VELOCITY_SUPERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT + MOTOR_VELOCITY_INTERVAL //上极限
 #define MOTOR_VELOCITY_INFERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT - MOTOR_VELOCITY_INTERVAL //下极限
 //电机-减速等待时间

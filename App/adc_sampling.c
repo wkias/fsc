@@ -32,7 +32,7 @@ void adc_sampling()
   {
     for (int8 j = 0; j < 5; j++)
     {
-      adc_val[i + 1][j + 1] = adc_val[i][j];
+      adc_val[i + 1][j] = adc_val[i][j];
     }
     for (int8 j = 0; j < 2; j++)
     {

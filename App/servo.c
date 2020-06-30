@@ -17,15 +17,29 @@ int8 rotary_road = 0;    //环岛标记
 void servo()
 {
     //环道
-    if ((adc_val[0][0] > 500 && adc_val[0][5] < 300) || rotary_road == -1) //环道
+    if ((adc_val[0][0] > 400 && adc_val[0][5] < 100) || rotary_road == -1) //环道
     {
         rotary_road = -1; //左
-        enable_irq(PIT3_IRQn);
+        if (adc_val[1][2] + adc_val[1][3] > 1600 && adc_val[0][2] + adc_val[0][3] < 1600)
+        {
+            servo_out = SERVO_LEFT_LIMIT;
+            ftm_pwm_duty(PORT_SERVO, FTM_CH0, servo_out);
+            led(LED0, LED_ON);
+            DELAY_MS(1000);
+            led(LED0, LED_ON);
+        }
     }
-    else if ((adc_val[0][0] < 300 && adc_val[0][5] > 500) || rotary_road == 1)
+    else if ((adc_val[0][0] < 100 && adc_val[0][5] > 400) || rotary_road == 1)
     {
         rotary_road = 1; //右
-        enable_irq(PIT3_IRQn);
+        if (adc_val[1][2] + adc_val[1][3] > 1600 && adc_val[0][2] + adc_val[0][3] < 1600)
+        {
+            servo_out = SERVO_RIGHT_LIMIT;
+            led(LED0, LED_ON);
+            ftm_pwm_duty(PORT_SERVO, FTM_CH0, servo_out);
+            DELAY_MS(1000);
+            led(LED0, LED_ON);
+        }
     }
     //丢线
     if (adc_val[0][1] < 100 && adc_val[0][2] < 100 && adc_val[0][3] < 100 && (adc_val[0][4] > 100 || LOST_IN_FRANXX == 1))
