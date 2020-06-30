@@ -3,6 +3,7 @@
 void print()
 {
   PIT_Flag_Clear(PIT0);
+  LCD_CLS();
 
   for (int i = 0; i < 6; i++)
   {
@@ -17,10 +18,6 @@ void print()
   {
     LCD_P6x8Str(COLUMN_2, 7, " LIF");
   }
-  else
-  {
-    LCD_P6x8Str(COLUMN_2, 4, "    ");
-  }
 
   Dis_num(COLUMN_3, 0, servo_bias[0]);
   Dis_num(COLUMN_3, 1, servo_correct);
@@ -34,10 +31,6 @@ void print()
   else if (rotary_road == -1)
   {
     LCD_P6x8Str(COLUMN_3, 7, "  L");
-  }
-  else
-  {
-    LCD_P6x8Str(COLUMN_3, 7, "   ");
   }
 
   Dis_num(COLUMN_4, 0, motor_errors[0]);
