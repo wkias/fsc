@@ -2,29 +2,14 @@
 
 void config1()
 {
-#ifdef FLASH_WRITE_PARAM
-    flash_erase_sector(SECTOR_NO);
-    flash_write(SECTOR_NO, 4, flash_read(SECTOR_NO, 4, FLASH_WRITE_TYPE) - 1);
-    flash_write(SECTOR_NO, 0, 0x12345678);
-#endif
 }
 
 void config2()
 {
-#ifdef FLASH_WRITE_PARAM
-    flash_erase_sector(SECTOR_NO);
-    flash_write(SECTOR_NO, 4, flash_read(SECTOR_NO, 4, FLASH_WRITE_TYPE) + 1);
-    flash_write(SECTOR_NO, 0, 0x12345678);
-#endif
 }
 
 void config3()
 {
-#ifdef FLASH_WRITE_PARAM
-    flash_erase_sector(SECTOR_NO);
-    flash_write(SECTOR_NO, 4, 1);
-    flash_write(SECTOR_NO, 0, 0x12345678);
-#endif
 }
 
 void param_switcher()
@@ -58,16 +43,4 @@ void param_switcher()
 
 void dynamic_param(void)
 {
-#ifdef UART_BLE
-    led(LED1, LED_ON);
-    // int8 ch[100];
-    // uart_querystr(VCAN_PORT, ch,sizeof(ch)-1);
-    // LCD_P6x8Str(COLUMN_4,ROW_7,ch);
-    // uart_putstr(VCAN_PORT, ch);
-    // led(LED1, LED_OFF);
-    DELAY_MS(1000);
-    uart_rx_irq_dis(VCAN_PORT);
-    // uart_rx_irq_en(VCAN_PORT);
-#endif
-disable_irq(PIT2_IRQn);
 }

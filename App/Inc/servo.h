@@ -10,4 +10,3 @@ extern int8 LOST_IN_FRANXX;
 extern int8 rotary_road;
 
 void servo();
-void clear();
