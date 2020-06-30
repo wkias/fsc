@@ -52,6 +52,9 @@ void main(void)
   led_init(LED2);
   led_init(LED3);
 
+  // 蜂鸣器
+  gpio_init(PORT_BEEPER, GPO, 0);
+
   // 舵机和电机初始化
   ftm_pwm_init(PORT_SERVO, FTM_CH0, 300, SERVO_BASE_POINT); // PTA8 舵机
   ftm_pwm_init(PORT_MOTOR, FTM_CH2, 10000, 0);              // 正转 PTA5 电机

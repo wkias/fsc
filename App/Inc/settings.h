@@ -38,8 +38,8 @@
 #define MOTOR_PID_PARAMETER_I 1 // 1
 #define MOTOR_PID_PARAMETER_D 1 // 1
 // 电机-速度限制
-#define MOTOR_VELOCITY_INTERVAL 900                                                       // 区间半径
-#define MOTOR_VELOCITY_BASE_POINT 1500                                                     // 基点
+#define MOTOR_VELOCITY_INTERVAL 800                                                       // 区间半径
+#define MOTOR_VELOCITY_BASE_POINT 1600                                                     // 基点
 #define MOTOR_VELOCITY_SUPERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT + MOTOR_VELOCITY_INTERVAL // 上极限
 #define MOTOR_VELOCITY_INFERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT - MOTOR_VELOCITY_INTERVAL // 下极限
 // 电机-减速等待时间
@@ -68,6 +68,8 @@
 
 // 引脚定义-干簧管-和车库检查回调函数联动-不可单独改动
 #define PORT_REED_SWITCHER PTA25
+//引脚定义-蜂鸣器
+#define PORT_BEEPER PTB22
 // 引脚定义-拨码开关
 #define PORT_SWITCHER_1 PTC1
 #define PORT_SWITCHER_2 PTC2
