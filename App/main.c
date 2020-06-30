@@ -13,13 +13,32 @@ void print()
   Dis_num(COLUMN_2, 1, adc_bias[0][1]);
   Dis_num(COLUMN_2, 2, adc_bias[0][2]);
   Dis_num(COLUMN_2, 3, adc_bias_gradient[0]);
-  Dis_num(COLUMN_2, 4, rotary_road);
+  if (LOST_IN_FRANXX)
+  {
+    LCD_P6x8Str(COLUMN_2, 7, " LIF");
+  }
+  else
+  {
+    LCD_P6x8Str(COLUMN_2, 4, "    ");
+  }
 
   Dis_num(COLUMN_3, 0, servo_bias[0]);
   Dis_num(COLUMN_3, 1, servo_correct);
   Dis_num(COLUMN_3, 2, servo_out);
   Dis_num(COLUMN_3, 4, servo_pid_param[0]);
   Dis_num(COLUMN_3, 5, servo_pid_param[2]);
+  if (rotary_road == 1)
+  {
+    LCD_P6x8Str(COLUMN_3, 7, "  R");
+  }
+  else if (rotary_road == -1)
+  {
+    LCD_P6x8Str(COLUMN_3, 7, "  L");
+  }
+  else
+  {
+    LCD_P6x8Str(COLUMN_3, 7, "   ");
+  }
 
   Dis_num(COLUMN_4, 0, motor_errors[0]);
   Dis_num(COLUMN_4, 1, expected_motor_out);
@@ -99,9 +118,9 @@ void main(void)
   set_vector_handler(PIT2_VECTORn, motor);
   enable_irq(PIT2_IRQn);
 
-  pit_init_ms(PIT3, 1000);
-  set_vector_handler(PIT3_VECTORn, clear);
-  disable_irq(PIT3_IRQn);
+  // pit_init_ms(PIT3, 10000);
+  // set_vector_handler(PIT3_VECTORn, clear);
+  // disable_irq(PIT3_IRQn);
 
 #ifdef UART_BLE
   //À¶ÑÀÄ£¿é
