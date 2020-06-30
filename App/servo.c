@@ -22,8 +22,9 @@ void servo()
         if ((adc_val[0][0] > VERTICAL_INDUCTOR_THRESHOLD_MIN && adc_val[0][5] < VERTICAL_INDUCTOR_THRESHOLD_MAX) && rotary_road == 0) // 环道
         {
             rotary_road = -1; // 左
+            gpio_set(PORT_BEEPER, 1);
             {
-                DELAY_MS(200);
+                DELAY_MS(150);
                 ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_LEFT_LIMIT);
                 DELAY_MS(200);
             }
@@ -31,30 +32,29 @@ void servo()
         else if ((adc_val[0][0] < VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][5] > VERTICAL_INDUCTOR_THRESHOLD_MIN) && rotary_road == 0)
         {
             rotary_road = 1; // 右
+            gpio_set(PORT_BEEPER, 1);
             {
-                DELAY_MS(200);
+                DELAY_MS(150);
                 ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_RIGHT_LIMIT);
                 DELAY_MS(200);
             }
         }
+        gpio_set(PORT_BEEPER, 0);
     }
     // 丢线
     if (adc_val[0][1] < 100 && adc_val[0][2] < 100 && adc_val[0][3] < 100 && (adc_val[0][4] > 100 || LOST_IN_FRANXX == 1) || rotary_road == 1)
     {
         servo_out = SERVO_RIGHT_LIMIT;
         LOST_IN_FRANXX = 1;
-        rotary_road = 0;
     }
     else if ((adc_val[0][1] > 100 || LOST_IN_FRANXX == -1) && adc_val[0][2] < 100 && adc_val[0][3] < 100 && adc_val[0][4] < 100 || rotary_road == 1)
     {
         servo_out = SERVO_LEFT_LIMIT;
         LOST_IN_FRANXX = -1;
-        rotary_road = 0;
     }
     else
     {
         LOST_IN_FRANXX = 0;
-        rotary_road = 0;
         // 加权偏差
         servo_bias[0] = servo_bias_wight[0] * adc_bias[0][0] +
                         servo_bias_wight[1] * adc_bias[0][1] +
@@ -69,6 +69,7 @@ void servo()
         servo_bias[1] = servo_bias[0];
         servo_out = SERVO_BASE_POINT + servo_correct;
     }
+    rotary_road = 0;
 
     // 限幅输出
     servo_out = (servo_out > SERVO_LEFT_LIMIT) ? servo_out : SERVO_LEFT_LIMIT;
@@ -81,5 +82,4 @@ void servo()
     expected_motor_out = MOTOR_VELOCITY_BASE_POINT - expected_motor_out * ratio;
     expected_motor_out = (expected_motor_out > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : expected_motor_out;
     expected_motor_out = (expected_motor_out < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : expected_motor_out;
-    expected_motor_out = (rotary_road) ? 0 : expected_motor_out;
 }
