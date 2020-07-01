@@ -72,8 +72,8 @@ void main(void)
 
   // 车库检查-中断
   port_init(PORT_REED_SWITCHER, ALT0 | IRQ_FALLING | PULLUP); //GPIO，下降沿触发中断，上拉电阻
-  set_vector_handler(PORTD_VECTORn, carport);
-  enable_irq(PORTD_IRQn);
+  set_vector_handler(PORTA_VECTORn, carport);
+  enable_irq(PORTA_IRQn);
 
   // 打印-定时器中断
   pit_init_ms(PIT0, PRINT_DELAY);

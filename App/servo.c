@@ -22,7 +22,7 @@ void servo()
         if ((adc_val[0][0] > VERTICAL_INDUCTOR_THRESHOLD_MIN && adc_val[0][5] < VERTICAL_INDUCTOR_THRESHOLD_MAX) && rotary_road == 0) // 环道
         {
             rotary_road = -1; // 左
-            gpio_set(PORT_BEEPER, 1);
+            // gpio_set(PORT_BEEPER, 1);
             {
                 DELAY_MS(150);
                 ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_LEFT_LIMIT);
@@ -32,7 +32,7 @@ void servo()
         else if ((adc_val[0][0] < VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][5] > VERTICAL_INDUCTOR_THRESHOLD_MIN) && rotary_road == 0)
         {
             rotary_road = 1; // 右
-            gpio_set(PORT_BEEPER, 1);
+            // gpio_set(PORT_BEEPER, 1);
             {
                 DELAY_MS(150);
                 ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_RIGHT_LIMIT);
