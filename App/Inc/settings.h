@@ -1,6 +1,3 @@
-// 拨码开关
- #define ENABLE_PARAM_SWITCHER
-
 // 打印-延时-毫秒
 #define PRINT_DELAY 1000
 
@@ -74,10 +71,10 @@
 //引脚定义-蜂鸣器
 #define PORT_BEEPER PTB22
 // 引脚定义-拨码开关
-#define PORT_SWITCHER_1 PTC4
-#define PORT_SWITCHER_2 PTC3
-#define PORT_SWITCHER_3 PTC2
-#define PORT_SWITCHER_4 PTC1
+#define PORT_SWITCHER_1 PTC1
+#define PORT_SWITCHER_2 PTC2
+#define PORT_SWITCHER_3 PTC3
+#define PORT_SWITCHER_4 PTC4
 // 引脚定义-电机
 #define PORT_MOTOR FTM0
 // 引脚定义-舵机

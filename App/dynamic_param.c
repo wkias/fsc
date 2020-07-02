@@ -1,6 +1,6 @@
 #include "include.h"
 
-int8 switch_ch[5] = "S    ";
+int8 switch_ch[] = "S    ";
 
 void config1()
 {
@@ -17,10 +17,10 @@ void config3()
 
 void param_switcher()
 {
-    gpio_init(PORT_SWITCHER_1, GPO, 0);
-    gpio_init(PORT_SWITCHER_2, GPO, 0);
-    gpio_init(PORT_SWITCHER_3, GPO, 0);
-    gpio_init(PORT_SWITCHER_4, GPO, 0);
+    gpio_init(PORT_SWITCHER_1, GPI, 0);
+    gpio_init(PORT_SWITCHER_2, GPI, 0);
+    gpio_init(PORT_SWITCHER_3, GPI, 0);
+    gpio_init(PORT_SWITCHER_4, GPI, 0);
 
     if (gpio_get(PORT_SWITCHER_1) == 0)
     {
