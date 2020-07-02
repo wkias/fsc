@@ -51,13 +51,13 @@ void motor()
     {
       motor_out_of_order = 1;
       ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
-      int8 i = 5;
+      int8 i = 3;
       while (i--)
       {
         gpio_set(PORT_BEEPER, 1);
-        DELAY_MS(200);
+        DELAY_MS(100);
         gpio_set(PORT_BEEPER, 0);
-        DELAY_MS(200);
+        DELAY_MS(100);
       }
       return;
     }
@@ -84,8 +84,8 @@ void decelerate()
 {
   ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
   DELAY_MS(DECELERATE_TIME);
-  // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, motor_out[1]);
-  // DELAY_MS(DECELERATE_TIME);
-  // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, 0);
-  // DELAY_MS(DECELERATE_TIME);
+  ftm_pwm_duty(PORT_MOTOR, FTM_CH3, MOTOR_VELOCITY_BASE_POINT);
+  DELAY_MS(DECELERATE_TIME);
+  ftm_pwm_duty(PORT_MOTOR, FTM_CH3, 0);
+  DELAY_MS(DECELERATE_TIME);
 }
