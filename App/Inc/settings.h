@@ -34,23 +34,23 @@
 #define ENCODER_FILTER_WIGHT_2 0.15 // 前次观测值
 
 // 电机-PID
-#define MOTOR_PID_PARAMETER_P 3 // 1
+#define MOTOR_PID_PARAMETER_P 8 // 1
 #define MOTOR_PID_PARAMETER_I 1 // 1
-#define MOTOR_PID_PARAMETER_D 1 // 1
+#define MOTOR_PID_PARAMETER_D 2 // 1
 // 电机-速度限制
-#define MOTOR_VELOCITY_INTERVAL 800                                                       // 区间半径
-#define MOTOR_VELOCITY_BASE_POINT 1600                                                     // 基点
+#define MOTOR_VELOCITY_INTERVAL 900                                                       // 区间半径
+#define MOTOR_VELOCITY_BASE_POINT 1500                                                     // 基点
 #define MOTOR_VELOCITY_SUPERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT + MOTOR_VELOCITY_INTERVAL // 上极限
 #define MOTOR_VELOCITY_INFERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT - MOTOR_VELOCITY_INTERVAL // 下极限
 // 电机-减速等待时间
-#define DECELERATE_TIME 100
+#define DECELERATE_TIME 200
 
 // 环岛检测-水平电感溢出阈值
 #define AD_BRUST_THRESHOLD 800
 // 环岛检测-垂直电感阈值1
-#define VERTICAL_INDUCTOR_THRESHOLD_MAX 100
+#define VERTICAL_INDUCTOR_THRESHOLD_MAX 300
 // 环岛检测-垂直电感阈值2
-#define VERTICAL_INDUCTOR_THRESHOLD_MIN 100
+#define VERTICAL_INDUCTOR_THRESHOLD_MIN 300
 // 舵机-误差计算-权值
 #define SERVO_BIAS_WEIGHT_0 0 // 权值1，对应电感1、6差值 1
 #define SERVO_BIAS_WEIGHT_1 1 // 权值2，对应电感2、5差值 1

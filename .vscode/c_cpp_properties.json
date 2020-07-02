@@ -372,7 +372,7 @@
                 "__EDG_CPP11_IL_EXTENSIONS_SUPPORTED =1",
                 "__EDG_FLOAT80_ENABLING_POSSIBLE =0",
                 "__EDG_FLOAT128_ENABLING_POSSIBLE =0",
-                "DEBUG =1",
+                "NDEBUG =1",
                 "ARM_MATH_CM4 =1",
                 "MK60DZ10 =1",
                 "_DLIB_CONFIG_FILE_HEADER_NAME =\"C:\\\\Program Files (x86)\\\\IAR Systems\\\\Embedded Workbench\\\\arm\\\\inc\\\\c\\\\DLib_Config_Full.h\"",

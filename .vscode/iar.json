@@ -2,5 +2,5 @@
     "version": 1,
     "path": "C:\\Program Files (x86)\\IAR Systems\\Embedded Workbench\\",
     "project": "E:\\fsc\\Prj\\IAR\\vcan_Kinetis.ewp",
-    "config": "DZ10_Debug"
+    "config": "DZ10_Release"
 }
