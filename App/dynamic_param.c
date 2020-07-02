@@ -15,6 +15,10 @@ void config3()
 {
 }
 
+void config4()
+{
+}
+
 void param_switcher()
 {
     gpio_init(PORT_SWITCHER_1, GPI, 0);
@@ -39,7 +43,7 @@ void param_switcher()
     }
     if (gpio_get(PORT_SWITCHER_4) == 0)
     {
-        config3();
+        config4();
         switch_ch[4] = '4';
     }
 }
