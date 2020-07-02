@@ -1,5 +1,5 @@
-// 是否使用参数切换开关
-//  #define ENABLE_PARAM_SWITCHER
+// 拨码开关
+ #define ENABLE_PARAM_SWITCHER
 
 // 打印-延时-毫秒
 #define PRINT_DELAY 1000
@@ -33,6 +33,8 @@
 #define ENCODER_FILTER_WIGHT_1 0.35 // 上次观测值
 #define ENCODER_FILTER_WIGHT_2 0.15 // 前次观测值
 
+//电机-保护-防短路
+#define MOTOR_PROTECTION
 // 电机-PID
 #define MOTOR_PID_PARAMETER_P 3 // 1
 #define MOTOR_PID_PARAMETER_I 1 // 1
@@ -40,7 +42,8 @@
 // 电机-速度限制
 #define MOTOR_VELOCITY_INTERVAL 800                                                       // 区间半径
 #define MOTOR_VELOCITY_BASE_POINT 1600                                                     // 基点
-#define MOTOR_VELOCITY_SUPERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT + MOTOR_VELOCITY_INTERVAL // 上极限
+// #define MOTOR_VELOCITY_SUPERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT + MOTOR_VELOCITY_INTERVAL // 上极限
+#define MOTOR_VELOCITY_SUPERIOR_LIMIT 2000 // 上极限
 #define MOTOR_VELOCITY_INFERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT - MOTOR_VELOCITY_INTERVAL // 下极限
 // 电机-减速等待时间
 #define DECELERATE_TIME 200
@@ -67,14 +70,14 @@
 // 舵机-电机-输出参数比例
 
 // 引脚定义-干簧管-和车库检查回调函数联动-不可单独改动
-#define PORT_REED_SWITCHER PTA25
+#define PORT_REED_SWITCHER PTB0
 //引脚定义-蜂鸣器
 #define PORT_BEEPER PTB22
 // 引脚定义-拨码开关
-#define PORT_SWITCHER_1 PTC1
-#define PORT_SWITCHER_2 PTC2
-#define PORT_SWITCHER_3 PTC3
-#define PORT_SWITCHER_4 PTC4
+#define PORT_SWITCHER_1 PTC4
+#define PORT_SWITCHER_2 PTC3
+#define PORT_SWITCHER_3 PTC2
+#define PORT_SWITCHER_4 PTC1
 // 引脚定义-电机
 #define PORT_MOTOR FTM0
 // 引脚定义-舵机

@@ -3,4 +3,4 @@
 extern int8 ON_ROAD;
 
 void carport();
-void go_from_home();
+void go_home();
