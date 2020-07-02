@@ -5,6 +5,8 @@ float32_t filter_wight[3] = {ENCODER_FILTER_WIGHT_0,
                              ENCODER_FILTER_WIGHT_1,
                              ENCODER_FILTER_WIGHT_2};
 uint16 motor_pulse = 0; // 电机观测速度
+
+int8 motor_out_of_order = 0; //电机故障标记
 // PID参数，可在settings.h中更改，构建数组可动态调参
 float32_t motor_pid_param[3] = {MOTOR_PID_PARAMETER_P,
                                 MOTOR_PID_PARAMETER_I,
@@ -40,9 +42,29 @@ void motor()
 {
   PIT_Flag_Clear(PIT2);
 
+  // ⚠电机故障
+  if (!motor_pulse && motor_out[0])
+  {
+    disable_irq(PIT2_IRQn); // 不再定时调速
+    DELAY_MS(1000);
+    if (!motor_pulse && motor_out[0])
+    {
+      motor_out_of_order = 1;
+      ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
+      int8 i = 5;
+      while (i--)
+      {
+        gpio_set(PORT_BEEPER, 1);
+        DELAY_MS(200);
+        gpio_set(PORT_BEEPER, 0);
+        DELAY_MS(200);
+      }
+      return;
+    }
+  }
+
   // 速度误差
   motor_errors[0] = expected_motor_out - motor_pulse;
-
   // 增量PID，速度误差修正
   motor_out[0] += motor_pid_param[0] * (motor_errors[0] - motor_errors[1]) +
                   motor_pid_param[1] * motor_errors[0] +
@@ -51,11 +73,6 @@ void motor()
   //  限速输出
   motor_out[0] = (motor_out[0] > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out[0];
   motor_out[0] = (motor_out[0] < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : motor_out[0];
-
-  if (motor_out[0] < motor_out[1])
-  {
-    decelerate();
-  }
   ftm_pwm_duty(PORT_MOTOR, FTM_CH2, motor_out[0]);
 
   motor_out[1] = motor_out[0];
@@ -65,8 +82,8 @@ void motor()
 
 void decelerate()
 {
-  // ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
-  // DELAY_MS(DECELERATE_TIME);
+  ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
+  DELAY_MS(DECELERATE_TIME);
   // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, motor_out[1]);
   // DELAY_MS(DECELERATE_TIME);
   // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, 0);

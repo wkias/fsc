@@ -21,25 +21,12 @@ void servo()
     {
         if ((adc_val[0][0] > VERTICAL_INDUCTOR_THRESHOLD_MIN && adc_val[0][5] < VERTICAL_INDUCTOR_THRESHOLD_MAX) && rotary_road == 0) // 环道
         {
-            rotary_road = -1; // 左
-            // gpio_set(PORT_BEEPER, 1);
-            {
-                DELAY_MS(150);
-                ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_LEFT_LIMIT);
-                DELAY_MS(200);
-            }
+            round_in_circle(-1);//左
         }
         else if ((adc_val[0][0] < VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][5] > VERTICAL_INDUCTOR_THRESHOLD_MIN) && rotary_road == 0)
         {
-            rotary_road = 1; // 右
-            // gpio_set(PORT_BEEPER, 1);
-            {
-                DELAY_MS(150);
-                ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_RIGHT_LIMIT);
-                DELAY_MS(200);
-            }
+            round_in_circle(1);//右
         }
-        gpio_set(PORT_BEEPER, 0);
     }
     // 丢线
     if (adc_val[0][1] < 100 && adc_val[0][2] < 100 && adc_val[0][3] < 100 && (adc_val[0][4] > 100 || LOST_IN_FRANXX == 1) || rotary_road == 1)
@@ -82,4 +69,20 @@ void servo()
     expected_motor_out = MOTOR_VELOCITY_BASE_POINT - expected_motor_out * ratio;
     expected_motor_out = (expected_motor_out > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : expected_motor_out;
     expected_motor_out = (expected_motor_out < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : expected_motor_out;
+}
+
+void round_in_circle(int8 i)
+{
+    if (!rotary_road)
+    {
+        decelerate();
+    }
+    rotary_road = i;
+    gpio_set(PORT_BEEPER, 1);
+    {
+        DELAY_MS(motor_pulse / 7);
+        ftm_pwm_duty(PORT_SERVO, FTM_CH0, (i == 1) ? SERVO_RIGHT_LIMIT : SERVO_LEFT_LIMIT);
+        DELAY_MS(motor_pulse / 6);
+    }
+    gpio_set(PORT_BEEPER, 0);
 }
