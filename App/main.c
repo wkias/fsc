@@ -9,6 +9,7 @@ void print()
   {
     Dis_num(COLUMN_1, i, adc_val[0][i]);
   }
+  LCD_P6x8Str(COLUMN_1, 7, switch_ch);
 
   Dis_num(COLUMN_2, 0, adc_bias[0][0]);
   Dis_num(COLUMN_2, 1, adc_bias[0][1]);
@@ -36,10 +37,8 @@ void print()
   Dis_num(COLUMN_4, 1, expected_motor_out);
   Dis_num(COLUMN_4, 2, motor_out[0]);
   Dis_num(COLUMN_4, 3, motor_pulse);
-  // Dis_num(COLUMN_4, 4, motor_pid_param[0]);
-  // Dis_num(COLUMN_4, 5, motor_pid_param[1]);
-  // Dis_num(COLUMN_4, 6, motor_pid_param[2]);
-  if(motor_out_of_order){
+  if (motor_out_of_order)
+  {
     LCD_P6x8Str(COLUMN_4, 7, " MOOO");
   }
 }
@@ -74,11 +73,11 @@ void main(void)
   NVIC_SetPriority(PIT0_IRQn, 3);
 
   // 车库检查-中断
-  // port_init(PORT_REED_SWITCHER, ALT0 | IRQ_ZERO | PULLUP); // GPIO，下降沿触发中断，上拉电阻
-  // set_vector_handler(PORTA_VECTORn, carport);
-  // enable_irq(PORTA_IRQn);
-  port_init(PORT_REED_SWITCHER, PULLUP);
-  gpio_init(PORT_REED_SWITCHER, GPI, 0);
+  // port_init(PORT_REED_SWITCHER, ALT0 | IRQ_FALLING | PULLUP); // GPIO
+  // set_vector_handler(PORTB_VECTORn, carport);
+  // enable_irq(PORTB_IRQn);
+  port_init(PORT_REED_SWITCHER, PULLDOWN);
+  gpio_init(PORT_REED_SWITCHER, GPO, 0);
 
   // 打印-定时器中断
   pit_init_ms(PIT0, PRINT_DELAY);
@@ -103,11 +102,10 @@ void main(void)
 
   while (1)
   {
-    // if (gpio_get(PORT_REED_SWITCHER) == 0)
-    // {
-    //   go_from_home();
-    // }
-    led(LED0, LED_ON);
+    if (gpio_get(PORT_REED_SWITCHER) == 1)
+    {
+      go_home();
+    }
     adc_sampling();
     servo();
   }
