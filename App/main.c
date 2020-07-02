@@ -94,10 +94,7 @@ void main(void)
   set_vector_handler(PIT2_VECTORn, motor);
   enable_irq(PIT2_IRQn);
 
-#ifdef ENABLE_PARAM_SWITCHER
   param_switcher();
-#endif
-
   adcs_init();
 
   while (1)
