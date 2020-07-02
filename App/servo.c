@@ -52,7 +52,7 @@ void servo()
         direction = rotary_road ? rotary_road : direction;
         servo_correct = servo_pid_param[0] * servo_bias[0] * servo_bias[0] * direction + // 二次动态P，以适应大小环道不同的角度
                         servo_pid_param[2] * (servo_bias[0] - servo_bias[1]) * (servo_bias[0] - servo_bias[1]) * direction;
-        servo_correct /= 50;
+        servo_correct /= 60;
         servo_bias[1] = servo_bias[0];
         servo_out = SERVO_BASE_POINT + servo_correct;
     }
@@ -73,16 +73,12 @@ void servo()
 
 void round_in_circle(int8 i)
 {
-    if (!rotary_road)
-    {
-        decelerate();
-    }
     rotary_road = i;
     gpio_set(PORT_BEEPER, 1);
     {
-        DELAY_MS(motor_pulse / 7);
+        DELAY_MS(motor_pulse / 8);
         ftm_pwm_duty(PORT_SERVO, FTM_CH0, (i == 1) ? SERVO_RIGHT_LIMIT : SERVO_LEFT_LIMIT);
-        DELAY_MS(motor_pulse / 6);
+        DELAY_MS(motor_pulse / 4);
     }
     gpio_set(PORT_BEEPER, 0);
 }
