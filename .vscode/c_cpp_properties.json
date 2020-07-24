@@ -3,24 +3,24 @@
     "configurations": [
         {
             "name": "IAR",
-            "intelliSenseMode": "clang-x64",
+            "intelliSenseMode": "gcc-x64",
             "compilerPath": "",
             "browse": {
                 "path": [
-                    "E:\\fsc\\App\\Inc\\",
-                    "E:\\fsc\\App\\",
-                    "E:\\fsc\\Board\\src\\",
-                    "E:\\fsc\\Chip\\inc\\",
-                    "E:\\fsc\\Chip\\src\\",
-                    "E:\\fsc\\Chip\\src\\IAR\\",
-                    "E:\\fsc\\Lib\\FatFs\\",
-                    "E:\\fsc\\Lib\\USB\\",
+                    "D:\\fsc\\App\\Inc\\",
+                    "D:\\fsc\\App\\",
+                    "D:\\fsc\\Board\\src\\",
+                    "D:\\fsc\\Chip\\inc\\",
+                    "D:\\fsc\\Chip\\src\\",
+                    "D:\\fsc\\Chip\\src\\IAR\\",
+                    "D:\\fsc\\Lib\\FatFs\\",
+                    "D:\\fsc\\Lib\\USB\\",
                     "C:\\Program Files (x86)\\IAR Systems\\Embedded Workbench\\arm\\inc\\c",
                     "C:\\Program Files (x86)\\IAR Systems\\Embedded Workbench\\arm\\inc",
-                    "E:\\fsc\\Lib\\CMSIS\\Inc\\",
-                    "E:\\fsc\\Chip\\inc\\kinetis\\",
-                    "E:\\fsc\\Chip\\inc\\IAR\\",
-                    "E:\\fsc\\Board\\Inc\\"
+                    "D:\\fsc\\Lib\\CMSIS\\Inc\\",
+                    "D:\\fsc\\Chip\\inc\\kinetis\\",
+                    "D:\\fsc\\Chip\\inc\\IAR\\",
+                    "D:\\fsc\\Board\\Inc\\"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ".vscode/browse.db"
@@ -28,15 +28,15 @@
             "includePath": [
                 "C:\\Program Files (x86)\\IAR Systems\\Embedded Workbench\\arm\\inc\\c",
                 "C:\\Program Files (x86)\\IAR Systems\\Embedded Workbench\\arm\\inc",
-                "E:\\fsc\\Lib\\USB\\",
-                "E:\\fsc\\Lib\\FatFs\\",
-                "E:\\fsc\\Lib\\CMSIS\\Inc\\",
-                "E:\\fsc\\Chip\\inc\\kinetis\\",
-                "E:\\fsc\\Chip\\inc\\IAR\\",
-                "E:\\fsc\\Chip\\inc\\",
-                "E:\\fsc\\Board\\Inc\\",
-                "E:\\fsc\\App\\Inc\\",
-                "E:\\fsc\\App\\"
+                "D:\\fsc\\Lib\\USB\\",
+                "D:\\fsc\\Lib\\FatFs\\",
+                "D:\\fsc\\Lib\\CMSIS\\Inc\\",
+                "D:\\fsc\\Chip\\inc\\kinetis\\",
+                "D:\\fsc\\Chip\\inc\\IAR\\",
+                "D:\\fsc\\Chip\\inc\\",
+                "D:\\fsc\\Board\\Inc\\",
+                "D:\\fsc\\App\\Inc\\",
+                "D:\\fsc\\App\\"
             ],
             "defines": [
                 "_Pragma(x) =",

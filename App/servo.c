@@ -21,11 +21,11 @@ void servo()
     {
         if ((adc_val[0][0] > VERTICAL_INDUCTOR_THRESHOLD_MIN && adc_val[0][5] < VERTICAL_INDUCTOR_THRESHOLD_MAX) && rotary_road == 0) // 环道
         {
-            round_in_circle(-1);//左
+            round_in_circle(-1); //左
         }
         else if ((adc_val[0][0] < VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][5] > VERTICAL_INDUCTOR_THRESHOLD_MIN) && rotary_road == 0)
         {
-            round_in_circle(1);//右
+            round_in_circle(1); //右
         }
     }
     // 丢线
@@ -66,7 +66,12 @@ void servo()
     // 根据舵机偏转幅度计算电机期望速度
     expected_motor_out = SERVO_BASE_POINT - servo_out; // 期望输出暂时作中间变量
     expected_motor_out = (expected_motor_out > 0) ? expected_motor_out : -expected_motor_out;
+#ifdef SIGMOID
+    expected_motor_out = (SERVO_DUTY_INTERVAL_LIMIT - expected_motor_out) / SERVO_DUTY_INTERVAL_LIMIT * 10 - 5;
+    expected_motor_out = (MOTOR_VELOCITY_SUPERIOR_LIMIT - MOTOR_VELOCITY_INFERIOR_LIMIT) / (1 + expl(-expected_motor_out)) + MOTOR_VELOCITY_INFERIOR_LIMIT;
+#else
     expected_motor_out = MOTOR_VELOCITY_BASE_POINT - expected_motor_out * ratio;
+#endif
     expected_motor_out = (expected_motor_out > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : expected_motor_out;
     expected_motor_out = (expected_motor_out < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : expected_motor_out;
 }
