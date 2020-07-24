@@ -1,3 +1,4 @@
+#define SIGMOID
 // 打印-延时-毫秒
 #define PRINT_DELAY 1000
 
