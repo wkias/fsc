@@ -18,13 +18,13 @@ void servo()
 {
     // 环岛
 #ifdef THE_SECONDARY
-    if (adc_val[0][5] > VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][3] > AD_BRUST_THRESHOLD1 && adc_val[0][2] > AD_BRUST_THRESHOLD2) //为了与上坡区分
+    if (adc_val[0][5] > VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][3] > AD_BRUST_THRESHOLD_1 && adc_val[0][2] > AD_BRUST_THRESHOLD_2) //为了与上坡区分
     {
         round_in_circle(1); //右
     }
-    if (adc_val[0][0] > VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][2] > AD_BRUST_THRESHOLD1 && adc_val[0][3] > AD_BRUST_THRESHOLD2)
+    if (adc_val[0][0] > VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][2] > AD_BRUST_THRESHOLD_1 && adc_val[0][3] > AD_BRUST_THRESHOLD_2)
     {
-        round_in_circle(-1); //右
+        round_in_circle(-1); //左
     }
 #else
     if (adc_val[0][1] > AD_BRUST_THRESHOLD || adc_val[0][2] > AD_BRUST_THRESHOLD || adc_val[0][3] > AD_BRUST_THRESHOLD || adc_val[0][4] > AD_BRUST_THRESHOLD)
