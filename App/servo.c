@@ -32,11 +32,19 @@ void servo()
     if (adc_val[0][1] < 100 && adc_val[0][2] < 100 && adc_val[0][3] < 100 && (adc_val[0][4] > 100 || LOST_IN_FRANXX == 1) || rotary_road == 1)
     {
         servo_out = SERVO_RIGHT_LIMIT;
+        if (!LOST_IN_FRANXX && !rotary_road)
+        {
+            decelerate();
+        }
         LOST_IN_FRANXX = 1;
     }
     else if ((adc_val[0][1] > 100 || LOST_IN_FRANXX == -1) && adc_val[0][2] < 100 && adc_val[0][3] < 100 && adc_val[0][4] < 100 || rotary_road == 1)
     {
         servo_out = SERVO_LEFT_LIMIT;
+        if (!LOST_IN_FRANXX && !rotary_road)
+        {
+            decelerate();
+        }
         LOST_IN_FRANXX = -1;
     }
     else
