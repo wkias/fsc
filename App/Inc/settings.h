@@ -1,4 +1,5 @@
 #define SIGMOID
+#define THE_SECONDARY
 // 打印-延时-毫秒
 #define PRINT_DELAY 1000
 
@@ -34,32 +35,38 @@
 //电机-保护-防短路
 #define MOTOR_PROTECTION
 // 电机-PID
-#define MOTOR_PID_PARAMETER_P 3 // 1
-#define MOTOR_PID_PARAMETER_I 1 // 1
-#define MOTOR_PID_PARAMETER_D 2 // 1
+#define MOTOR_PID_PARAMETER_P 5
+#define MOTOR_PID_PARAMETER_I 1
+#define MOTOR_PID_PARAMETER_D 2
 // 电机-速度限制
-#define MOTOR_VELOCITY_INTERVAL 900                                                       // 区间半径
-#define MOTOR_VELOCITY_BASE_POINT 1800                                                     // 基点
+#define MOTOR_VELOCITY_INTERVAL 900    // 区间半径
+#define MOTOR_VELOCITY_BASE_POINT 1900 // 基点
 // #define MOTOR_VELOCITY_SUPERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT + MOTOR_VELOCITY_INTERVAL // 上极限
-#define MOTOR_VELOCITY_SUPERIOR_LIMIT 2100 // 上极限
+#define MOTOR_VELOCITY_SUPERIOR_LIMIT 2100                                                // 上极限
 #define MOTOR_VELOCITY_INFERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT - MOTOR_VELOCITY_INTERVAL // 下极限
 // 电机-减速等待时间
 #define DECELERATE_TIME 200
 
 // 环岛检测-水平电感溢出阈值
-#define AD_BRUST_THRESHOLD 900
+#ifdef THE_SECONDARY
+#define AD_BRUST_THRESHOLD_MAX 150
+#define AD_BRUST_THRESHOLD_1 400
+#define AD_BRUST_THRESHOLD_2 200
+#else
+#define AD_BRUST_THRESHOLD 400
+#endif
 // 环岛检测-垂直电感阈值1
 #define VERTICAL_INDUCTOR_THRESHOLD_MAX 200
 // 环岛检测-垂直电感阈值2
-#define VERTICAL_INDUCTOR_THRESHOLD_MIN 200
+#define VERTICAL_INDUCTOR_THRESHOLD_MIN 150
 // 舵机-误差计算-权值
 #define SERVO_BIAS_WEIGHT_0 0 // 权值1，对应电感1、6差值 1
 #define SERVO_BIAS_WEIGHT_1 1 // 权值2，对应电感2、5差值 1
 #define SERVO_BIAS_WEIGHT_2 1 // 权值3，对应电感3、4差值 1
 // 舵机-PID
-#define SERVO_PID_PARAMETER_P 0.5
+#define SERVO_PID_PARAMETER_P 0.1
 #define SERVO_PID_PARAMETER_I 0
-#define SERVO_PID_PARAMETER_D 1
+#define SERVO_PID_PARAMETER_D 0.23
 // 舵机-偏转-占空比// 4150—4950—5800
 #define SERVO_BASE_POINT 4950 // 基点
 #define SERVO_DUTY_INTERVAL_LIMIT 850
