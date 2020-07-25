@@ -1,7 +1,7 @@
 Prj/IAR/Debug/
 Prj/IAR/Release/
-Prj/*
-.vscode/*
+Prj/
+.vscode/
 .vscode/BROWSE.DB
 .vscode/BROWSE.DB-wal
 .vscode/BROWSE.DB-shm
