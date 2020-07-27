@@ -14,3 +14,4 @@ extern float32_t motor_out[2];
 void encoder();
 void motor();
 void decelerate();
+void velocity_shift();

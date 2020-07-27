@@ -18,13 +18,21 @@ void servo()
 {
     // 环岛
 #ifdef THE_SECONDARY
-    if (adc_val[0][5] > VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][3] > AD_BRUST_THRESHOLD_1 && adc_val[0][2] > AD_BRUST_THRESHOLD_2) //为了与上坡区分
-    {
-        round_in_circle(1); //右
-    }
-    if (adc_val[0][0] > VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][2] > AD_BRUST_THRESHOLD_1 && adc_val[0][3] > AD_BRUST_THRESHOLD_2)
+    // if (adc_val[0][5] > VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][3] > AD_BRUST_THRESHOLD_1 && adc_val[0][2] > AD_BRUST_THRESHOLD_2) //为了与上坡区分
+    // {
+    //     round_in_circle(1); //右
+    // }
+    // if (adc_val[0][0] > VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][2] > AD_BRUST_THRESHOLD_1 && adc_val[0][3] > AD_BRUST_THRESHOLD_2)
+    // {
+    //     round_in_circle(-1); //左
+    // }
+    if (adc_val[0][0] > 250 && adc_val[0][2] > 600 && adc_val[0][2] < 900 && adc_val[0][5] < 100)
     {
         round_in_circle(-1); //左
+    }
+    if (adc_val[0][5] > 250 && adc_val[0][3] > 600 && adc_val[0][3] < 900 && adc_val[0][0] < 100)
+    {
+        round_in_circle(1); //右
     }
 #else
     if (adc_val[0][1] > AD_BRUST_THRESHOLD || adc_val[0][2] > AD_BRUST_THRESHOLD || adc_val[0][3] > AD_BRUST_THRESHOLD || adc_val[0][4] > AD_BRUST_THRESHOLD)
@@ -74,6 +82,7 @@ void servo()
         servo_correct /= 60;
         servo_bias[1] = servo_bias[0];
         servo_out = SERVO_BASE_POINT + servo_correct;
+        // gpio_set(PORT_BEEPER, 0);
     }
     rotary_road = 0;
 
@@ -100,9 +109,9 @@ void round_in_circle(int8 i)
     rotary_road = i;
     gpio_set(PORT_BEEPER, 1);
     {
-        DELAY_MS(motor_pulse / 6);
+        DELAY_MS(motor_pulse / 3);
         ftm_pwm_duty(PORT_SERVO, FTM_CH0, (i == 1) ? SERVO_RIGHT_LIMIT : SERVO_LEFT_LIMIT);
-        DELAY_MS(motor_pulse / 4);
+        DELAY_MS(motor_pulse / 3);
     }
     gpio_set(PORT_BEEPER, 0);
 }

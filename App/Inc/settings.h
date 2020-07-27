@@ -1,4 +1,4 @@
-#define SIGMOID
+// #define SIGMOID
 #define THE_SECONDARY
 // 打印-延时-毫秒
 #define PRINT_DELAY 1000
@@ -40,12 +40,13 @@
 #define MOTOR_PID_PARAMETER_D 2
 // 电机-速度限制
 #define MOTOR_VELOCITY_INTERVAL 900    // 区间半径
+// #define MOTOR_VELOCITY_BASE_POINT 2200 // 基点
 #define MOTOR_VELOCITY_BASE_POINT 1900 // 基点
 // #define MOTOR_VELOCITY_SUPERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT + MOTOR_VELOCITY_INTERVAL // 上极限
-#define MOTOR_VELOCITY_SUPERIOR_LIMIT 2100                                                // 上极限
+#define MOTOR_VELOCITY_SUPERIOR_LIMIT 2000                                                // 上极限
 #define MOTOR_VELOCITY_INFERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT - MOTOR_VELOCITY_INTERVAL // 下极限
 // 电机-减速等待时间
-#define DECELERATE_TIME 200
+#define DECELERATE_TIME 100
 
 // 环岛检测-水平电感溢出阈值
 #ifdef THE_SECONDARY
@@ -64,7 +65,7 @@
 #define SERVO_BIAS_WEIGHT_1 1 // 权值2，对应电感2、5差值 1
 #define SERVO_BIAS_WEIGHT_2 1 // 权值3，对应电感3、4差值 1
 // 舵机-PID
-#define SERVO_PID_PARAMETER_P 0.1
+#define SERVO_PID_PARAMETER_P 0.3
 #define SERVO_PID_PARAMETER_I 0
 #define SERVO_PID_PARAMETER_D 0.23
 // 舵机-偏转-占空比// 4150—4950—5800

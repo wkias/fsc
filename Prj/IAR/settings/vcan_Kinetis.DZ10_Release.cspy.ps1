@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench\common\bin\cspybat" -f "E:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.general.xcl" --backend -f "E:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.driver.xcl" 
+& "E:\iar\common\bin\cspybat" -f "E:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.general.xcl" --backend -f "E:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench\common\bin\cspybat" -f "E:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.general.xcl" --debug_file=$debugfile --backend -f "E:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.driver.xcl" 
+& "E:\iar\common\bin\cspybat" -f "E:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.general.xcl" --debug_file=$debugfile --backend -f "E:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.driver.xcl" 
 }
