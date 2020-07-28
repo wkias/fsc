@@ -35,7 +35,8 @@
 //电机-保护-防短路
 #define MOTOR_PROTECTION
 // 电机-PID
-#define MOTOR_PID_PARAMETER_P 5
+// #define MOTOR_PID_PARAMETER_P 5
+#define MOTOR_PID_PARAMETER_P 8
 #define MOTOR_PID_PARAMETER_I 1
 #define MOTOR_PID_PARAMETER_D 2
 // 电机-速度限制

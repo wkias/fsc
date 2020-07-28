@@ -56,9 +56,9 @@ void motor()
       int8 i = 3;
       while (i--)
       {
-        gpio_set(PORT_BEEPER, 1);
+       gpio_set(PORT_BEEPER, 1);
         DELAY_MS(100);
-        gpio_set(PORT_BEEPER, 0);
+       gpio_set(PORT_BEEPER, 0);
         DELAY_MS(100);
       }
       return;
@@ -93,21 +93,22 @@ void decelerate()
   //gpio_set(PORT_BEEPER, 1);
 
   ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
+  DELAY_MS(DECELERATE_TIME);
   // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, MOTOR_VELOCITY_INFERIOR_LIMIT); //以最低速度倒转，
-  disable_irq(PIT2_IRQn);
-  pit_init_ms(PIT2, DECELERATE_TIME);
-  set_vector_handler(PIT2_VECTORn, velocity_shift);
-  enable_irq(PIT2_IRQn);
+  // disable_irq(PIT2_IRQn);
+  // pit_init_ms(PIT2, DECELERATE_TIME);
+  // set_vector_handler(PIT2_VECTORn, velocity_shift);
+  // enable_irq(PIT2_IRQn);
   // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, MOTOR_VELOCITY_BASE_POINT);
-  // DELAY_MS(DECELERATE_TIME);
+  
   // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, 0);
   // DELAY_MS(DECELERATE_TIME);
 }
 
-void velocity_shift()
-{
-  pit_init_ms(PIT2, 10);
-  set_vector_handler(PIT2_VECTORn, motor);
-  enable_irq(PIT2_IRQn);
-  // gpio_set(PORT_BEEPER, 0);
-}
+// void velocity_shift()
+// {
+//   pit_init_ms(PIT2, 10);
+//   set_vector_handler(PIT2_VECTORn, motor);
+//   enable_irq(PIT2_IRQn);
+//   // gpio_set(PORT_BEEPER, 0);
+// }

@@ -26,11 +26,11 @@ void servo()
     // {
     //     round_in_circle(-1); //左
     // }
-    if (adc_val[0][0] > 250 && adc_val[0][2] > 600 && adc_val[0][2] < 900 && adc_val[0][5] < 100)
+    if (adc_val[0][0] > 250 && adc_val[0][2] > 600 && adc_val[0][2] < 900 &&  adc_val[0][3] >300 && adc_val[0][5] < 100)
     {
         round_in_circle(-1); //左
     }
-    if (adc_val[0][5] > 250 && adc_val[0][3] > 600 && adc_val[0][3] < 900 && adc_val[0][0] < 100)
+    if (adc_val[0][5] > 250 && adc_val[0][3] > 600 && adc_val[0][3] < 900 && adc_val[0][2]>300 && adc_val[0][0] < 100)
     {
         round_in_circle(1); //右
     }
@@ -70,7 +70,7 @@ void servo()
     {
         LOST_IN_FRANXX = 0;
         // 加权偏差
-        servo_bias[0] = servo_bias_wight[0] * adc_bias[0][0] +
+        servo_bias[0] = servo_bias_wight[0] * adc_bias[0][0] +//1,6电感权值为零
                         servo_bias_wight[1] * adc_bias[0][1] +
                         servo_bias_wight[2] * adc_bias[0][2];
 
