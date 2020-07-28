@@ -13,6 +13,7 @@ float32_t servo_out = 0;       // 舵机PWM占空比
 float32_t ratio = ((float32_t)MOTOR_VELOCITY_INTERVAL / SERVO_DUTY_INTERVAL_LIMIT);
 int8 LOST_IN_FRANXX = 0; // 丢线标记
 int8 rotary_road = 0;    // 环岛标记
+int8 in_rotary_road = 0;
 
 void servo()
 {
@@ -26,11 +27,11 @@ void servo()
     // {
     //     round_in_circle(-1); //左
     // }
-    if (adc_val[0][0] > 250 && adc_val[0][2] > 600 && adc_val[0][2] < 900 &&  adc_val[0][3] >300 && adc_val[0][5] < 100)
+    if (adc_val[0][0] > 250 && adc_val[0][2] > 600 && adc_val[0][2] < 900 && adc_val[0][3] > 300 && adc_val[0][5] < 100)
     {
         round_in_circle(-1); //左
     }
-    if (adc_val[0][5] > 250 && adc_val[0][3] > 600 && adc_val[0][3] < 900 && adc_val[0][2]>300 && adc_val[0][0] < 100)
+    if (adc_val[0][5] > 250 && adc_val[0][3] > 600 && adc_val[0][3] < 900 && adc_val[0][2] > 300 && adc_val[0][0] < 100)
     {
         round_in_circle(1); //右
     }
@@ -50,7 +51,7 @@ void servo()
     // 丢线
     if (adc_val[0][1] < 100 && adc_val[0][2] < 100 && adc_val[0][3] < 100 && (adc_val[0][4] > 100 || LOST_IN_FRANXX == 1) || rotary_road == 1)
     {
-        servo_out = SERVO_RIGHT_LIMIT;
+        servo_out = in_rotary_road ? ROTARY_VELOCITY : SERVO_RIGHT_LIMIT;
         if (!LOST_IN_FRANXX && !rotary_road)
         {
             decelerate();
@@ -69,8 +70,9 @@ void servo()
     else
     {
         LOST_IN_FRANXX = 0;
+        in_rotary_road = 0;
         // 加权偏差
-        servo_bias[0] = servo_bias_wight[0] * adc_bias[0][0] +//1,6电感权值为零
+        servo_bias[0] = servo_bias_wight[0] * adc_bias[0][0] + //1,6电感权值为零
                         servo_bias_wight[1] * adc_bias[0][1] +
                         servo_bias_wight[2] * adc_bias[0][2];
 
@@ -82,7 +84,6 @@ void servo()
         servo_correct /= 60;
         servo_bias[1] = servo_bias[0];
         servo_out = SERVO_BASE_POINT + servo_correct;
-        // gpio_set(PORT_BEEPER, 0);
     }
     rotary_road = 0;
 
@@ -107,6 +108,7 @@ void servo()
 void round_in_circle(int8 i)
 {
     rotary_road = i;
+    in_rotary_road = 1;
     gpio_set(PORT_BEEPER, 1);
     {
         DELAY_MS(motor_pulse / 3);

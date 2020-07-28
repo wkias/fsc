@@ -49,6 +49,8 @@
 // 电机-减速等待时间
 #define DECELERATE_TIME 100
 
+// 环岛速度
+#define ROTARY_VELOCITY 1400
 // 环岛检测-水平电感溢出阈值
 #ifdef THE_SECONDARY
 #define AD_BRUST_THRESHOLD_MAX 150
