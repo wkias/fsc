@@ -78,7 +78,9 @@ void main(void)
   // enable_irq(PORTB_IRQn);
   port_init(PORT_REED_SWITCHER, PULLDOWN);
   gpio_init(PORT_REED_SWITCHER, GPO, 0);
-
+  //光电开关引脚初始化
+  port_init(PORT_LIGHT_SWITCHER, PULLUP);
+  gpio_init(PORT_LIGHT_SWITCHER, GPO, 1);//输出，高电平
   // 打印-定时器中断
   pit_init_ms(PIT0, PRINT_DELAY);
   set_vector_handler(PIT0_VECTORn, print);
@@ -99,10 +101,14 @@ void main(void)
 
   while (1)
   {
-    if (gpio_get(PORT_REED_SWITCHER) == 1)
+    if(gpio_get(PORT_LIGHT_SWITCHER) == 0)
     {
-      go_home();
+      rampway();
     }
+    // if (gpio_get(PORT_REED_SWITCHER) == 1)
+    // {
+    //   go_home();
+    // }
     adc_sampling();
     servo();
   }

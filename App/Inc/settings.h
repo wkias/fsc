@@ -78,6 +78,8 @@
 
 // 引脚定义-干簧管-和车库检查回调函数联动-不可单独改动
 #define PORT_REED_SWITCHER PTB0
+//定义光电开关引脚
+#define PORT_LIGHT_SWITCHER PTA25
 //引脚定义-蜂鸣器
 #define PORT_BEEPER PTB22
 // 引脚定义-拨码开关
