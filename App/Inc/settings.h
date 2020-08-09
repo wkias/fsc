@@ -1,4 +1,4 @@
-#define SIGMOID
+// #define SIGMOID
 // 打印-延时-毫秒
 #define PRINT_DELAY 1000
 
@@ -38,10 +38,10 @@
 #define MOTOR_PID_PARAMETER_I 1 // 1
 #define MOTOR_PID_PARAMETER_D 2 // 1
 // 电机-速度限制
-#define MOTOR_VELOCITY_INTERVAL 900                                                       // 区间半径
-#define MOTOR_VELOCITY_BASE_POINT 1800                                                     // 基点
+#define MOTOR_VELOCITY_INTERVAL 500    // 区间半径
+#define MOTOR_VELOCITY_BASE_POINT 2100 // 基点
 // #define MOTOR_VELOCITY_SUPERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT + MOTOR_VELOCITY_INTERVAL // 上极限
-#define MOTOR_VELOCITY_SUPERIOR_LIMIT 2100 // 上极限
+#define MOTOR_VELOCITY_SUPERIOR_LIMIT 2100                                                // 上极限
 #define MOTOR_VELOCITY_INFERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT - MOTOR_VELOCITY_INTERVAL // 下极限
 // 电机-减速等待时间
 #define DECELERATE_TIME 200
@@ -61,14 +61,16 @@
 #define SERVO_PID_PARAMETER_I 0
 #define SERVO_PID_PARAMETER_D 1
 // 舵机-偏转-占空比// 4150—4950—5800
-#define SERVO_BASE_POINT 4950 // 基点
-#define SERVO_DUTY_INTERVAL_LIMIT 850
+#define SERVO_BASE_POINT 810 // 基点
+#define SERVO_DUTY_INTERVAL_LIMIT 110
 #define SERVO_LEFT_LIMIT SERVO_BASE_POINT - SERVO_DUTY_INTERVAL_LIMIT  // 左极限
 #define SERVO_RIGHT_LIMIT SERVO_BASE_POINT + SERVO_DUTY_INTERVAL_LIMIT // 右极限
 // 舵机-电机-输出参数比例
 
 // 引脚定义-干簧管-和车库检查回调函数联动-不可单独改动
 #define PORT_REED_SWITCHER PTB0
+// 引脚定义-光电开关
+#define PORT_LIGHT_SWITCHER PTA25
 //引脚定义-蜂鸣器
 #define PORT_BEEPER PTB22
 // 引脚定义-拨码开关

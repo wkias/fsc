@@ -58,9 +58,9 @@ void main(void)
   gpio_init(PORT_BEEPER, GPO, 0);
 
   // 舵机和电机初始化
-  ftm_pwm_init(PORT_SERVO, FTM_CH0, 300, SERVO_BASE_POINT); // PTA8 舵机
-  ftm_pwm_init(PORT_MOTOR, FTM_CH2, 10000, 0);              // 正转 PTA5 电机
-  ftm_pwm_init(PORT_MOTOR, FTM_CH3, 10000, 0);              // 反转 PTA6 电机
+  ftm_pwm_init(PORT_SERVO, FTM_CH0, 50, SERVO_BASE_POINT); // PTA8 舵机
+  ftm_pwm_init(PORT_MOTOR, FTM_CH2, 13000, 0);              // 正转 PTA5 电机
+  ftm_pwm_init(PORT_MOTOR, FTM_CH3, 13000, 0);              // 反转 PTA6 电机
 
   // 测速模块初始化：正交解码、LPTMR脉冲计数
   ftm_quad_init(PORT_ENCODER);
@@ -78,6 +78,10 @@ void main(void)
   // enable_irq(PORTB_IRQn);
   port_init(PORT_REED_SWITCHER, PULLDOWN);
   gpio_init(PORT_REED_SWITCHER, GPO, 0);
+
+  // 光电开关
+  port_init(PORT_LIGHT_SWITCHER, PULLDOWN);
+  gpio_init(PORT_LIGHT_SWITCHER, GPO, 1);
 
   // 打印-定时器中断
   pit_init_ms(PIT0, PRINT_DELAY);
@@ -99,9 +103,13 @@ void main(void)
 
   while (1)
   {
-    if (gpio_get(PORT_REED_SWITCHER) == 1)
+    // if (gpio_get(PORT_REED_SWITCHER) == 1)
+    // {
+    //   go_home();
+    // }
+    if (gpio_get(PORT_LIGHT_SWITCHER) == 0)
     {
-      go_home();
+      rampway();
     }
     adc_sampling();
     servo();
