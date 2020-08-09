@@ -2,7 +2,7 @@
 
 extern float32_t ftm_quad_values[3];
 extern float32_t filter_wight[3];
-extern uint16 motor_pulse;
+extern int32 motor_pulse;
 
 extern int8 motor_protection_switcher;
 extern int8 motor_out_of_order;
