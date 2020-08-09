@@ -38,26 +38,28 @@
 #define MOTOR_PID_PARAMETER_I 1 // 1
 #define MOTOR_PID_PARAMETER_D 2 // 1
 // 电机-速度限制
-#define MOTOR_VELOCITY_INTERVAL 500    // 区间半径
-#define MOTOR_VELOCITY_BASE_POINT 2100 // 基点
+#define MOTOR_VELOCITY_INTERVAL 600    // 区间半径
+#define MOTOR_VELOCITY_BASE_POINT 2000 // 基点
 // #define MOTOR_VELOCITY_SUPERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT + MOTOR_VELOCITY_INTERVAL // 上极限
-#define MOTOR_VELOCITY_SUPERIOR_LIMIT 2100                                                // 上极限
+#define MOTOR_VELOCITY_SUPERIOR_LIMIT 2000                                                // 上极限
 #define MOTOR_VELOCITY_INFERIOR_LIMIT MOTOR_VELOCITY_BASE_POINT - MOTOR_VELOCITY_INTERVAL // 下极限
 // 电机-减速等待时间
 #define DECELERATE_TIME 200
 
 // 环岛检测-水平电感溢出阈值
 #define AD_BRUST_THRESHOLD 900
-// 环岛检测-垂直电感阈值1
-#define VERTICAL_INDUCTOR_THRESHOLD_MAX 200
-// 环岛检测-垂直电感阈值2
-#define VERTICAL_INDUCTOR_THRESHOLD_MIN 200
+// 环岛检测-垂直电感阈值
+#define VERTICAL_INDUCTOR_THRESHOLD_MAX 300
+#define VERTICAL_INDUCTOR_THRESHOLD_MIN 100
+// 丢线-水平电感阈值
+#define LOST_IN_FRANXX_THRESHOLD_MAX 150
+#define LOST_IN_FRANXX_THRESHOLD_MIN 150
 // 舵机-误差计算-权值
 #define SERVO_BIAS_WEIGHT_0 0 // 权值1，对应电感1、6差值 1
 #define SERVO_BIAS_WEIGHT_1 1 // 权值2，对应电感2、5差值 1
 #define SERVO_BIAS_WEIGHT_2 1 // 权值3，对应电感3、4差值 1
 // 舵机-PID
-#define SERVO_PID_PARAMETER_P 0.5
+#define SERVO_PID_PARAMETER_P 0.2
 #define SERVO_PID_PARAMETER_I 0
 #define SERVO_PID_PARAMETER_D 1
 // 舵机-偏转-占空比// 4150—4950—5800

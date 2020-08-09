@@ -19,32 +19,24 @@ void servo()
     // 环岛
     if (adc_val[0][1] > AD_BRUST_THRESHOLD || adc_val[0][2] > AD_BRUST_THRESHOLD || adc_val[0][3] > AD_BRUST_THRESHOLD || adc_val[0][4] > AD_BRUST_THRESHOLD)
     {
-        if ((adc_val[0][0] > VERTICAL_INDUCTOR_THRESHOLD_MIN && adc_val[0][5] < VERTICAL_INDUCTOR_THRESHOLD_MAX) && rotary_road == 0) // 环道
+        if ((adc_val[0][0] > VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][5] < VERTICAL_INDUCTOR_THRESHOLD_MIN) && rotary_road == 0) // 环道
         {
-            // round_in_circle(-1); //左
+            round_in_circle(-1); //左
         }
-        else if ((adc_val[0][0] < VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][5] > VERTICAL_INDUCTOR_THRESHOLD_MIN) && rotary_road == 0)
+        else if ((adc_val[0][0] < VERTICAL_INDUCTOR_THRESHOLD_MIN && adc_val[0][5] > VERTICAL_INDUCTOR_THRESHOLD_MAX) && rotary_road == 0)
         {
-            // round_in_circle(1); //右
+            round_in_circle(1); //右
         }
     }
     // 丢线
-    if (adc_val[0][1] < 150 && adc_val[0][2] < 150 && adc_val[0][3] < 150 && (adc_val[0][4] > 150 || LOST_IN_FRANXX == 1) || rotary_road == 1)
+    if (adc_val[0][1] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][2] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][3] < LOST_IN_FRANXX_THRESHOLD_MIN && (adc_val[0][4] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == 1) || rotary_road)
     {
         servo_out = SERVO_RIGHT_LIMIT;
-        if (!LOST_IN_FRANXX && !rotary_road)
-        {
-            decelerate();
-        }
         LOST_IN_FRANXX = 1;
     }
-    else if ((adc_val[0][1] > 150 || LOST_IN_FRANXX == -1) && adc_val[0][2] < 150 && adc_val[0][3] < 150 && adc_val[0][4] < 150 || rotary_road == 1)
+    else if ((adc_val[0][1] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == -1) && adc_val[0][2] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][3] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][4] < LOST_IN_FRANXX_THRESHOLD_MIN || rotary_road)
     {
         servo_out = SERVO_LEFT_LIMIT;
-        if (!LOST_IN_FRANXX && !rotary_road)
-        {
-            decelerate();
-        }
         LOST_IN_FRANXX = -1;
     }
     else
@@ -60,7 +52,7 @@ void servo()
         direction = rotary_road ? rotary_road : direction;
         servo_correct = servo_pid_param[0] * servo_bias[0] * servo_bias[0] * direction + // 二次动态P，以适应大小环道不同的角度
                         servo_pid_param[2] * (servo_bias[0] - servo_bias[1]) * (servo_bias[0] - servo_bias[1]) * direction;
-        servo_correct /= 100; 
+        servo_correct /= 100;
         servo_bias[1] = servo_bias[0];
         servo_out = SERVO_BASE_POINT + servo_correct;
     }
@@ -87,11 +79,11 @@ void servo()
 void round_in_circle(int8 i)
 {
     rotary_road = i;
-    gpio_set(PORT_BEEPER, 1);
+    // gpio_set(PORT_BEEPER, 1);
     {
-        DELAY_MS(motor_pulse / 8);
-        ftm_pwm_duty(PORT_SERVO, FTM_CH0, (i == 1) ? SERVO_RIGHT_LIMIT : SERVO_LEFT_LIMIT);
         DELAY_MS(motor_pulse / 4);
+        ftm_pwm_duty(PORT_SERVO, FTM_CH0, (i == 1) ? SERVO_RIGHT_LIMIT : SERVO_LEFT_LIMIT);
+        DELAY_MS(motor_pulse / 2);
     }
-    gpio_set(PORT_BEEPER, 0);
+    // gpio_set(PORT_BEEPER, 0);
 }

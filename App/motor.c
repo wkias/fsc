@@ -7,7 +7,7 @@ float32_t filter_wight[3] = {ENCODER_FILTER_WIGHT_0,
 uint16 motor_pulse = 0; // 电机观测速度
 
 int8 motor_protection_switcher = 1; // 电机保护拨码开关标记
-int8 motor_out_of_order = 0;  // 电机故障标记
+uint8 motor_out_of_order = 0;        // 电机故障标记
 // PID参数，可在settings.h中更改，构建数组可动态调参
 float32_t motor_pid_param[3] = {MOTOR_PID_PARAMETER_P,
                                 MOTOR_PID_PARAMETER_I,
@@ -35,7 +35,10 @@ void encoder(void)
   motor_pulse = (int16)(ftm_quad_values[0] * filter_wight[0] +
                         ftm_quad_values[1] * filter_wight[1] +
                         ftm_quad_values[2] * filter_wight[2]);
-  motor_pulse *= 15;
+  // 编码器值与电机输出速度大致呈线性关系
+  motor_pulse *= 10;
+  // motor_pulse = 20 / 3 * motor_pulse + 1400 / 3;
+  // motor_pulse = (motor_pulse < 1400 / 3 + 1) ? 0 : motor_pulse;
 }
 
 // 电机调速
@@ -47,22 +50,10 @@ void motor()
 #ifdef MOTOR_PROTECTION
   if (!motor_pulse && motor_out[0] && motor_protection_switcher)
   {
-    disable_irq(PIT2_IRQn); // 不再定时调速
-    DELAY_MS(1000);
-    if (!motor_pulse && motor_out[0])
-    {
-      motor_out_of_order = 1;
-      ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
-      int8 i = 3;
-      while (i--)
-      {
-        gpio_set(PORT_BEEPER, 1);
-        DELAY_MS(100);
-        gpio_set(PORT_BEEPER, 0);
-        DELAY_MS(100);
-      }
-      return;
-    }
+    disable_irq(PIT2_IRQn); // 不再定时调
+    motor_out_of_order = 1;
+    ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
+    return;
   }
 #endif
 
@@ -74,9 +65,22 @@ void motor()
                   motor_pid_param[2] * (motor_errors[0] - 2 * motor_errors[1] + motor_errors[2]);
 
   //  限速输出
-  motor_out[0] = (motor_out[0] > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out[0];
-  motor_out[0] = (motor_out[0] < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : motor_out[0];
-  ftm_pwm_duty(PORT_MOTOR, FTM_CH2, motor_out[0]);
+  // motor_out[0] = (motor_out[0] > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out[0];
+  // motor_out[0] = (motor_out[0] < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : motor_out[0];
+  // ftm_pwm_duty(PORT_MOTOR, FTM_CH2, motor_out[0]);
+
+  //  限速输出
+  if (motor_errors[0] >= 0)
+  {
+    motor_out[0] = ((motor_out[0] > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out[0]);
+    ftm_pwm_duty(PORT_MOTOR, FTM_CH2, (int)motor_out[0]);
+  }
+  else
+  {
+    // motor_out[0] = ((motor_out[0] < -MOTOR_VELOCITY_SUPERIOR_LIMIT) ? -MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out[0]);
+    // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, (int)(-motor_out[0]));
+    ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
+  }
 
   motor_out[1] = motor_out[0];
   motor_errors[2] = motor_errors[1];
@@ -87,8 +91,4 @@ void decelerate()
 {
   ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
   DELAY_MS(DECELERATE_TIME);
-  // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, MOTOR_VELOCITY_BASE_POINT);
-  // DELAY_MS(DECELERATE_TIME);
-  // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, 0);
-  // DELAY_MS(DECELERATE_TIME);
 }
