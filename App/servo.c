@@ -41,6 +41,7 @@ void servo()
     }
     else
     {
+        gpio_set(PORT_BEEPER, 0);
         LOST_IN_FRANXX = 0;
         // 加权偏差
         servo_bias[0] = servo_bias_wight[0] * adc_bias[0][0] +
@@ -82,7 +83,6 @@ void round_in_circle(int8 i)
     rotary_road = i;
     gpio_set(PORT_BEEPER, 1);
     {
-        // DELAY_MS(motor_pulse / 6);
         ftm_pwm_duty(PORT_SERVO, FTM_CH0, (i == 1) ? SERVO_RIGHT_LIMIT : SERVO_LEFT_LIMIT);
         DELAY_MS(motor_pulse / 2);
     }

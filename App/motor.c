@@ -65,22 +65,14 @@ void motor()
                   motor_pid_param[2] * (motor_errors[0] - 2 * motor_errors[1] + motor_errors[2]);
 
   //  限速输出
-  // motor_out[0] = (motor_out[0] > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out[0];
-  // motor_out[0] = (motor_out[0] < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : motor_out[0];
-  // ftm_pwm_duty(PORT_MOTOR, FTM_CH2, motor_out[0]);
-  // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, MOTOR_VELOCITY_INFERIOR_LIMIT);
-
-  //  限速输出
   if (motor_errors[0] >= 0)
   {
     motor_out[0] = ((motor_out[0] > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out[0]);
     ftm_pwm_duty(PORT_MOTOR, FTM_CH2, (int)motor_out[0]);
-    // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, 0);
   }
   else
   {
     motor_out[0] = ((motor_out[0] < -MOTOR_VELOCITY_SUPERIOR_LIMIT) ? -MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out[0]);
-    // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, (int)(-motor_out[0]));
     ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
   }
 

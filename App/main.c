@@ -103,10 +103,6 @@ void main(void)
 
   while (1)
   {
-    // if (gpio_get(PORT_REED_SWITCHER) == 1)
-    // {
-    //   go_home();
-    // }
     if (gpio_get(PORT_LIGHT_SWITCHER) == 0)
     {
       rampway();
