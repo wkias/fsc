@@ -29,12 +29,12 @@ void servo()
         }
     }
     // 丢线
-    if (adc_val[0][1] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][2] < LOST_IN_FRANXX_THRESHOLD_MIN && (adc_val[0][4] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == 1) || rotary_road)
+    if (adc_val[0][1] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][2] < LOST_IN_FRANXX_THRESHOLD_MIN && (adc_val[0][4] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == 1) || rotary_road == 1)
     {
         servo_out = SERVO_RIGHT_LIMIT;
         LOST_IN_FRANXX = 1;
     }
-    else if ((adc_val[0][1] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == -1) && adc_val[0][3] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][4] < LOST_IN_FRANXX_THRESHOLD_MIN || rotary_road)
+    else if ((adc_val[0][1] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == -1) && adc_val[0][3] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][4] < LOST_IN_FRANXX_THRESHOLD_MIN || rotary_road == -1)
     {
         servo_out = SERVO_LEFT_LIMIT;
         LOST_IN_FRANXX = -1;
