@@ -7,7 +7,7 @@ float32_t filter_wight[3] = {ENCODER_FILTER_WIGHT_0,
 uint16 motor_pulse = 0; // 电机观测速度
 
 int8 motor_protection_switcher = 1; // 电机保护拨码开关标记
-uint8 motor_out_of_order = 0;        // 电机故障标记
+int8 motor_out_of_order = 0;        // 电机故障标记
 // PID参数，可在settings.h中更改，构建数组可动态调参
 float32_t motor_pid_param[3] = {MOTOR_PID_PARAMETER_P,
                                 MOTOR_PID_PARAMETER_I,
@@ -36,7 +36,7 @@ void encoder(void)
                         ftm_quad_values[1] * filter_wight[1] +
                         ftm_quad_values[2] * filter_wight[2]);
   // 编码器值与电机输出速度大致呈线性关系
-  motor_pulse *= 10;
+  motor_pulse *= 15;
   // motor_pulse = 20 / 3 * motor_pulse + 1400 / 3;
   // motor_pulse = (motor_pulse < 1400 / 3 + 1) ? 0 : motor_pulse;
 }

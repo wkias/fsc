@@ -29,12 +29,12 @@ void servo()
         }
     }
     // 丢线
-    if (adc_val[0][1] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][2] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][3] < LOST_IN_FRANXX_THRESHOLD_MIN && (adc_val[0][4] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == 1) || rotary_road)
+    if (adc_val[0][1] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][2] < LOST_IN_FRANXX_THRESHOLD_MIN && (adc_val[0][4] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == 1) || rotary_road)
     {
         servo_out = SERVO_RIGHT_LIMIT;
         LOST_IN_FRANXX = 1;
     }
-    else if ((adc_val[0][1] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == -1) && adc_val[0][2] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][3] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][4] < LOST_IN_FRANXX_THRESHOLD_MIN || rotary_road)
+    else if ((adc_val[0][1] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == -1) && adc_val[0][3] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][4] < LOST_IN_FRANXX_THRESHOLD_MIN || rotary_road)
     {
         servo_out = SERVO_LEFT_LIMIT;
         LOST_IN_FRANXX = -1;
@@ -72,6 +72,7 @@ void servo()
 #else
     expected_motor_out = MOTOR_VELOCITY_BASE_POINT - expected_motor_out * ratio;
 #endif
+    expected_motor_out = (SERVO_BASE_POINT - servo_out < SERVO_DUTY_INTERVAL_LIMIT / 2) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : expected_motor_out;
     expected_motor_out = (expected_motor_out > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : expected_motor_out;
     expected_motor_out = (expected_motor_out < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : expected_motor_out;
 }
@@ -79,11 +80,11 @@ void servo()
 void round_in_circle(int8 i)
 {
     rotary_road = i;
-    // gpio_set(PORT_BEEPER, 1);
+    gpio_set(PORT_BEEPER, 1);
     {
-        DELAY_MS(motor_pulse / 4);
+        // DELAY_MS(motor_pulse / 6);
         ftm_pwm_duty(PORT_SERVO, FTM_CH0, (i == 1) ? SERVO_RIGHT_LIMIT : SERVO_LEFT_LIMIT);
         DELAY_MS(motor_pulse / 2);
     }
-    // gpio_set(PORT_BEEPER, 0);
+    gpio_set(PORT_BEEPER, 0);
 }
