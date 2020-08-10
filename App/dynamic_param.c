@@ -9,6 +9,7 @@ void config1()
 
 void config2()
 {
+    light_switcher = 0;
 }
 
 void config3()

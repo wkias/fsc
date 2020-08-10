@@ -1,4 +1,5 @@
 #include "include.h"
+int8 light_switcher = 1;
 
 // 中断服务函数
 void carport(void)
@@ -26,7 +27,7 @@ void rampway()
 {
     disable_irq(PIT1_IRQn);
     disable_irq(PIT2_IRQn); //其他定时器关闭
-    // gpio_set(PORT_BEEPER, 1);
+    gpio_set(PORT_BEEPER, 1);
     ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_BASE_POINT);              //中线打死
     ftm_pwm_duty(PORT_MOTOR, FTM_CH2, MOTOR_VELOCITY_SUPERIOR_LIMIT); //速度最大
     DELAY_MS(1100);                                                   //上坡时检测到下坡时减速   800

@@ -21,10 +21,12 @@ void servo()
     {
         if ((adc_val[0][0] > VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][5] < VERTICAL_INDUCTOR_THRESHOLD_MIN) && rotary_road == 0) // 环道
         {
+            gpio_set(PORT_BEEPER, 1);
             round_in_circle(-1); //左
         }
         else if ((adc_val[0][0] < VERTICAL_INDUCTOR_THRESHOLD_MIN && adc_val[0][5] > VERTICAL_INDUCTOR_THRESHOLD_MAX) && rotary_road == 0)
         {
+            gpio_set(PORT_BEEPER, 1);
             round_in_circle(1); //右
         }
     }
