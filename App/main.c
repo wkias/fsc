@@ -76,11 +76,11 @@ void main(void)
   // port_init(PORT_REED_SWITCHER, ALT0 | IRQ_FALLING | PULLUP); // GPIO
   // set_vector_handler(PORTB_VECTORn, carport);
   // enable_irq(PORTB_IRQn);
-  port_init(PORT_LIGHT_SWITCHER, PULLDOWN);
-  gpio_init(PORT_LIGHT_SWITCHER, GPO, 1);
+  // port_init(PORT_LIGHT_SWITCHER, PULLDOWN);
+  // gpio_init(PORT_LIGHT_SWITCHER, GPO, 1);
 
   // 光电开关
-  port_init(PORT_LIGHT_SWITCHER, PULLDOWN);
+  port_init(PORT_LIGHT_SWITCHER, PULLUP);
   gpio_init(PORT_LIGHT_SWITCHER, GPO, 1);
 
   // 打印-定时器中断

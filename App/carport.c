@@ -25,7 +25,10 @@ void go_home()
 void rampway()
 {
     gpio_set(PORT_BEEPER, 1);
-    DELAY_MS(800);//上坡时检测到下坡时减速
+    ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_BASE_POINT);//中线打死
+    ftm_pwm_duty(PORT_MOTOR, FTM_CH2, MOTOR_VELOCITY_SUPERIOR_LIMIT);//速度最大
+
+    DELAY_MS(1000);//上坡时检测到下坡时减速   800
     ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);//速度为零
     ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_RIGHT_LIMIT);//向右打死
     DELAY_MS(800);

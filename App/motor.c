@@ -1,10 +1,10 @@
 #include "include.h"
 
-float32_t ftm_quad_values[3] = {0};
+int16 ftm_quad_values[3] = {0};
 float32_t filter_wight[3] = {ENCODER_FILTER_WIGHT_0,
                              ENCODER_FILTER_WIGHT_1,
                              ENCODER_FILTER_WIGHT_2};
-uint16 motor_pulse = 0; // 电机观测速度
+int16 motor_pulse = 0; // 电机观测速度
 
 int8 motor_protection_switcher = 1; // 电机保护拨码开关标记
 int8 motor_out_of_order = 0;        // 电机故障标记
@@ -35,8 +35,8 @@ void encoder(void)
   motor_pulse = (int16)(ftm_quad_values[0] * filter_wight[0] +
                         ftm_quad_values[1] * filter_wight[1] +
                         ftm_quad_values[2] * filter_wight[2]);
-  // 编码器值与电机输出速度大致呈线性关系
   motor_pulse *= 15;
+  // 编码器值与电机输出速度大致呈线性关系
   // motor_pulse = 20 / 3 * motor_pulse + 1400 / 3;
   // motor_pulse = (motor_pulse < 1400 / 3 + 1) ? 0 : motor_pulse;
 }
@@ -68,16 +68,18 @@ void motor()
   // motor_out[0] = (motor_out[0] > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out[0];
   // motor_out[0] = (motor_out[0] < MOTOR_VELOCITY_INFERIOR_LIMIT) ? MOTOR_VELOCITY_INFERIOR_LIMIT : motor_out[0];
   // ftm_pwm_duty(PORT_MOTOR, FTM_CH2, motor_out[0]);
+  // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, MOTOR_VELOCITY_INFERIOR_LIMIT);
 
   //  限速输出
   if (motor_errors[0] >= 0)
   {
     motor_out[0] = ((motor_out[0] > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out[0]);
     ftm_pwm_duty(PORT_MOTOR, FTM_CH2, (int)motor_out[0]);
+    // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, 0);
   }
   else
   {
-    // motor_out[0] = ((motor_out[0] < -MOTOR_VELOCITY_SUPERIOR_LIMIT) ? -MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out[0]);
+    motor_out[0] = ((motor_out[0] < -MOTOR_VELOCITY_SUPERIOR_LIMIT) ? -MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out[0]);
     // ftm_pwm_duty(PORT_MOTOR, FTM_CH3, (int)(-motor_out[0]));
     ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
   }
