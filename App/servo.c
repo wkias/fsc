@@ -13,24 +13,27 @@ float32_t servo_out = 0;       // 舵机PWM占空比
 float32_t ratio = ((float32_t)MOTOR_VELOCITY_INTERVAL / SERVO_DUTY_INTERVAL_LIMIT);
 int8 LOST_IN_FRANXX = 0; // 丢线标记
 int8 rotary_road = 0;    // 环岛标记
+int8 rotary_road_switcher = 1;
 
 void servo()
 {
     // 环岛
-    if (adc_val[0][1] > AD_BRUST_THRESHOLD || adc_val[0][2] > AD_BRUST_THRESHOLD || adc_val[0][3] > AD_BRUST_THRESHOLD || adc_val[0][4] > AD_BRUST_THRESHOLD)
+    if (rotary_road_switcher)
     {
-        if ((adc_val[0][0] > VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][5] < VERTICAL_INDUCTOR_THRESHOLD_MIN) && rotary_road == 0) // 环道
+        if (adc_val[0][1] > AD_BRUST_THRESHOLD || adc_val[0][2] > AD_BRUST_THRESHOLD || adc_val[0][3] > AD_BRUST_THRESHOLD || adc_val[0][4] > AD_BRUST_THRESHOLD)
         {
-            gpio_set(PORT_BEEPER, 1);
-            round_in_circle(-1); //左
-        }
-        else if ((adc_val[0][0] < VERTICAL_INDUCTOR_THRESHOLD_MIN && adc_val[0][5] > VERTICAL_INDUCTOR_THRESHOLD_MAX) && rotary_road == 0)
-        {
-            gpio_set(PORT_BEEPER, 1);
-            round_in_circle(1); //右
+            if ((adc_val[0][0] > VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][5] < VERTICAL_INDUCTOR_THRESHOLD_MIN) && rotary_road == 0) // 环道
+            {
+                gpio_set(PORT_BEEPER, 1);
+                round_in_circle(-1); //左
+            }
+            else if ((adc_val[0][0] < VERTICAL_INDUCTOR_THRESHOLD_MIN && adc_val[0][5] > VERTICAL_INDUCTOR_THRESHOLD_MAX) && rotary_road == 0)
+            {
+                gpio_set(PORT_BEEPER, 1);
+                round_in_circle(1); //右
+            }
         }
     }
-    // 丢线
     if (adc_val[0][1] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][2] < LOST_IN_FRANXX_THRESHOLD_MIN && (adc_val[0][4] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == 1) || rotary_road == 1)
     {
         servo_out = SERVO_RIGHT_LIMIT;

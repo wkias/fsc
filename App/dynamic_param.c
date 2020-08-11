@@ -14,6 +14,7 @@ void config2()
 
 void config3()
 {
+    rotary_road_switcher = 0;
 }
 
 void config4()
