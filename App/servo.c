@@ -20,6 +20,7 @@ void servo()
     // 环岛
     if (rotary_road_switcher)
     {
+#ifdef ROTARY_SIMPLIFIED
         if (adc_val[0][1] > AD_BRUST_THRESHOLD || adc_val[0][2] > AD_BRUST_THRESHOLD || adc_val[0][3] > AD_BRUST_THRESHOLD || adc_val[0][4] > AD_BRUST_THRESHOLD)
         {
             if ((adc_val[0][0] > VERTICAL_INDUCTOR_THRESHOLD_MAX && adc_val[0][5] < VERTICAL_INDUCTOR_THRESHOLD_MIN) && rotary_road == 0) // 环道
@@ -33,6 +34,12 @@ void servo()
                 round_in_circle(1); //右
             }
         }
+#else
+        if (adc_val[0][1] > AD_BRUST_THRESHOLD && adc_val[0][2] > AD_BRUST_THRESHOLD)
+        {
+            round_in_circle(-1);
+        }
+#endif
     }
     if (adc_val[0][1] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][2] < LOST_IN_FRANXX_THRESHOLD_MIN && (adc_val[0][4] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == 1) || rotary_road == 1)
     {
@@ -45,7 +52,7 @@ void servo()
         LOST_IN_FRANXX = -1;
     }
     else
-    {
+    { 
         gpio_set(PORT_BEEPER, 0);
         LOST_IN_FRANXX = 0;
         // 加权偏差

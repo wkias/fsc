@@ -59,8 +59,8 @@ void main(void)
 
   // 舵机和电机初始化
   ftm_pwm_init(PORT_SERVO, FTM_CH0, 50, SERVO_BASE_POINT); // PTA8 舵机
-  ftm_pwm_init(PORT_MOTOR, FTM_CH2, 13000, 0);              // 正转 PTA5 电机
-  ftm_pwm_init(PORT_MOTOR, FTM_CH3, 13000, 0);              // 反转 PTA6 电机
+  ftm_pwm_init(PORT_MOTOR, FTM_CH2, 13000, 0);             // 正转 PTA5 电机
+  ftm_pwm_init(PORT_MOTOR, FTM_CH3, 13000, 0);             // 反转 PTA6 电机
 
   // 测速模块初始化：正交解码、LPTMR脉冲计数
   ftm_quad_init(PORT_ENCODER);
