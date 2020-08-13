@@ -10,5 +10,6 @@ extern int8 LOST_IN_FRANXX;
 extern int8 rotary_road;
 extern int8 rotary_road_switcher;
 
+
 void servo();
 void round_in_circle(int8 i);

@@ -105,7 +105,7 @@ void main(void)
   {
     if (light_switcher && gpio_get(PORT_LIGHT_SWITCHER) == 0)
     {
-      rampway();
+      // rampway();
     }
     adc_sampling();
     servo();

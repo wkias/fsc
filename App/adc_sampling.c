@@ -3,21 +3,13 @@
 float32_t adc_val[3][6] = {0};  //  电感值
 float32_t adc_bias[3][3] = {0}; //  电感偏差
 int32 sampling_f = ADC_SAMPLING_FREQ + 2;
-// ADCn_Ch_e port_adc[6] = {
-//     ADC0_SE17, // PTE24   1
-//     ADC0_SE18, // PTE25   6
-//     ADC1_SE7a, // PTE3    5
-//     ADC1_SE6a, // PTE2    4
-//     ADC1_SE5a, // PTE1    2
-//     ADC1_SE4a, // PTE0    3
-// };
 ADCn_Ch_e port_adc[6] = {
-    ADC1_SE4a, // PTE0    3
-    ADC1_SE5a, // PTE1    2
-    ADC1_SE6a, // PTE2    4
-    ADC1_SE7a, // PTE3    5
-    ADC0_SE18, // PTE25   6
     ADC0_SE17, // PTE24   1
+    ADC0_SE18, // PTE25   6
+    ADC1_SE7a, // PTE3    5
+    ADC1_SE6a, // PTE2    4
+    ADC1_SE5a, // PTE1    2
+    ADC1_SE4a, // PTE0    3
 };
 
 void adcs_init()
