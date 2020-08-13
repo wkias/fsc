@@ -1,24 +1,29 @@
 #include "include.h"
 
 int8 switch_ch[] = "S    ";
+int rotary_road_time = 0;
 
 void config1()
 {
-    motor_protection_switcher = 0;
+    // motor_protection_switcher = 0;
+    rotary_road_time += 50;
 }
 
 void config2()
 {
     light_switcher = 0;
+    rotary_road_time += 100;
 }
 
 void config3()
 {
-    rotary_road_switcher = 0;
+    // rotary_road_switcher = 0;
+    rotary_road_time += 200;
 }
 
 void config4()
 {
+    rotary_road_time += 400;
 }
 
 void param_switcher()

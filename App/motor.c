@@ -6,7 +6,7 @@ float32_t filter_wight[3] = {ENCODER_FILTER_WIGHT_0,
                              ENCODER_FILTER_WIGHT_2};
 int16 motor_pulse = 0; // 电机观测速度
 
-int8 motor_protection_switcher = 0; // 电机保护拨码开关标记
+int8 motor_protection_switcher = 1; // 电机保护拨码开关标记
 int8 motor_out_of_order = 0;        // 电机故障标记
 // PID参数，可在settings.h中更改，构建数组可动态调参
 float32_t motor_pid_param[3] = {MOTOR_PID_PARAMETER_P,

@@ -86,7 +86,7 @@ void round_in_circle(int8 i)
 {
     rotary_road = i;
     gpio_set(PORT_BEEPER, 1);
-    // DELAY_MS(100);
+    DELAY_MS(rotary_road_time);
     rotary_road_switcher = 0;
     ftm_pwm_duty(PORT_SERVO, FTM_CH0, (i == 1) ? SERVO_RIGHT_LIMIT : SERVO_LEFT_LIMIT);
     DELAY_MS(500);

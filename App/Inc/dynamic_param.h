@@ -2,6 +2,7 @@
 #include "include.h"
 
 extern int8 switch_ch[];
+extern int rotary_road_time; 
 
 void config1();
 void config2();

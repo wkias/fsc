@@ -98,7 +98,6 @@ void main(void)
 
   param_switcher();
   adcs_init();
-  motor_protection_switcher = 1;
 
   while (1)
   {
