@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench\common\bin\cspybat" -f "E:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.general.xcl" --backend -f "E:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench\common\bin\cspybat" -f "D:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.general.xcl" --backend -f "D:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench\common\bin\cspybat" -f "E:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.general.xcl" "--debug_file=%~1" --backend -f "E:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench\common\bin\cspybat" -f "D:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.general.xcl" "--debug_file=%~1" --backend -f "D:\fsc\Prj\IAR\settings\vcan_Kinetis.DZ10_Release.driver.xcl" 
 
 @echo off 
 :end

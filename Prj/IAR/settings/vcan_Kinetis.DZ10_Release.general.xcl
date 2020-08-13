@@ -2,7 +2,7 @@
 
 "C:\Program Files (x86)\IAR Systems\Embedded Workbench\arm\bin\armjlink2.dll" 
 
-"E:\fsc\Prj\IAR\Release\Exe\vcan_Kinetis.out" 
+"D:\fsc\Prj\IAR\Release\Exe\vcan_Kinetis.out" 
 
 --plugin="C:\Program Files (x86)\IAR Systems\Embedded Workbench\arm\bin\armbat.dll" 
 
