@@ -38,7 +38,6 @@ void rampway()
     gpio_set(PORT_BEEPER, 1);
     ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_BASE_POINT);                    //中线打死
     ftm_pwm_duty(PORT_MOTOR, FTM_CH2, MOTOR_VELOCITY_SUPERIOR_LIMIT + 500); //速度最大
-    // DELAY_MS(1000);
     gpio_set(PORT_BEEPER, 0);
     while (1)
     {

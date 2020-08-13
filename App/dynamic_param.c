@@ -11,7 +11,7 @@ void config1()
 
 void config2()
 {
-    light_switcher = 0;
+    // light_switcher = 0;
     rotary_road_time += 100;
 }
 

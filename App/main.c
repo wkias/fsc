@@ -24,6 +24,7 @@ void print()
   Dis_num(COLUMN_3, 2, servo_out);
   Dis_num(COLUMN_3, 4, servo_pid_param[0]);
   Dis_num(COLUMN_3, 5, servo_pid_param[2]);
+  Dis_num(COLUMN_3, 6, rotary_road_time);
   if (rotary_road == 1)
   {
     LCD_P6x8Str(COLUMN_3, 7, "  R"); // ”“ª∑
