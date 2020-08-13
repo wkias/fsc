@@ -8,19 +8,27 @@ void carport(void)
     PORT_FUNC(B, 0, go_home);
 }
 
+void go_out()
+{
+    ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_RIGHT_LIMIT);
+    DELAY_MS(100);
+    ftm_pwm_duty(PORT_MOTOR, FTM_CH2, MOTOR_VELOCITY_BASE_POINT);
+    DELAY_MS(1000);
+}
+
 // 进入车库
 void go_home()
 {
-    gpio_set(PORT_BEEPER, 1);
-    disable_irq(PIT1_IRQn);
-    disable_irq(PIT2_IRQn);
     ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
-    DELAY_MS(1000);
-    ftm_pwm_duty(PORT_MOTOR, FTM_CH3, MOTOR_VELOCITY_BASE_POINT);
-    ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_LEFT_LIMIT);
-    gpio_set(PORT_BEEPER, 0);
-    DELAY_MS(3000);
+    ftm_pwm_duty(PORT_MOTOR, FTM_CH3, 1000);                   //倒转减速
+    ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_RIGHT_LIMIT - 30); //向右
+    DELAY_MS(300);
+    ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
     ftm_pwm_duty(PORT_MOTOR, FTM_CH3, 0);
+    DELAY_MS(5000);
+    gpio_set(PORT_BEEPER, 0);
+    while (1)
+        ;
 }
 
 void rampway()
@@ -28,11 +36,15 @@ void rampway()
     disable_irq(PIT1_IRQn);
     disable_irq(PIT2_IRQn); //其他定时器关闭
     gpio_set(PORT_BEEPER, 1);
-    ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_BASE_POINT);              //中线打死
-    ftm_pwm_duty(PORT_MOTOR, FTM_CH2, MOTOR_VELOCITY_SUPERIOR_LIMIT); //速度最大
-    DELAY_MS(1100);                                                   //上坡时检测到下坡时减速   800
-    ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);                             //速度为零
-    ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_RIGHT_LIMIT);             //向右打死
-    DELAY_MS(800);
+    ftm_pwm_duty(PORT_SERVO, FTM_CH0, SERVO_BASE_POINT);                    //中线打死
+    ftm_pwm_duty(PORT_MOTOR, FTM_CH2, MOTOR_VELOCITY_SUPERIOR_LIMIT + 500); //速度最大
+    // DELAY_MS(1000);
     gpio_set(PORT_BEEPER, 0);
+    while (1)
+    {
+        if (gpio_get(PORT_REED_SWITCHER) == 1) //干簧管入库
+        {
+            go_home();
+        }
+    }
 }

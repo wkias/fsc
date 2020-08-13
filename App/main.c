@@ -72,12 +72,8 @@ void main(void)
   NVIC_SetPriority(PIT1_IRQn, 2);
   NVIC_SetPriority(PIT0_IRQn, 3);
 
-  // 车库检查-中断
-  // port_init(PORT_REED_SWITCHER, ALT0 | IRQ_FALLING | PULLUP); // GPIO
-  // set_vector_handler(PORTB_VECTORn, carport);
-  // enable_irq(PORTB_IRQn);
-  // port_init(PORT_LIGHT_SWITCHER, PULLDOWN);
-  // gpio_init(PORT_LIGHT_SWITCHER, GPO, 1);
+  port_init(PORT_REED_SWITCHER, PULLDOWN);
+  gpio_init(PORT_REED_SWITCHER, GPO, 0);
 
   // 光电开关
   port_init(PORT_LIGHT_SWITCHER, PULLUP);
@@ -87,6 +83,8 @@ void main(void)
   pit_init_ms(PIT0, PRINT_DELAY);
   set_vector_handler(PIT0_VECTORn, print);
   enable_irq(PIT0_IRQn);
+
+  go_out();
 
   // 测速-定时器中断
   pit_init_ms(PIT1, 5);
@@ -100,12 +98,13 @@ void main(void)
 
   param_switcher();
   adcs_init();
+  motor_protection_switcher = 1;
 
   while (1)
   {
     if (light_switcher && gpio_get(PORT_LIGHT_SWITCHER) == 0)
     {
-      // rampway();
+      rampway();
     }
     adc_sampling();
     servo();

@@ -6,7 +6,7 @@ float32_t filter_wight[3] = {ENCODER_FILTER_WIGHT_0,
                              ENCODER_FILTER_WIGHT_2};
 int16 motor_pulse = 0; // 电机观测速度
 
-int8 motor_protection_switcher = 1; // 电机保护拨码开关标记
+int8 motor_protection_switcher = 0; // 电机保护拨码开关标记
 int8 motor_out_of_order = 0;        // 电机故障标记
 // PID参数，可在settings.h中更改，构建数组可动态调参
 float32_t motor_pid_param[3] = {MOTOR_PID_PARAMETER_P,
@@ -15,6 +15,8 @@ float32_t motor_pid_param[3] = {MOTOR_PID_PARAMETER_P,
 float32_t expected_motor_out = 0;                        // 期望速度
 float32_t motor_errors[3];                               // 本次速度偏差，上次偏差，前次偏差
 float32_t motor_out[2] = {MOTOR_VELOCITY_BASE_POINT, 0}; // 输出速度
+float32_t motor_velocity_sup = MOTOR_VELOCITY_SUPERIOR_LIMIT;
+float32_t motor_velocity_base = MOTOR_VELOCITY_BASE_POINT;
 
 // 编码器测速
 void encoder(void)
@@ -36,9 +38,6 @@ void encoder(void)
                         ftm_quad_values[1] * filter_wight[1] +
                         ftm_quad_values[2] * filter_wight[2]);
   motor_pulse *= 15;
-  // 编码器值与电机输出速度大致呈线性关系
-  // motor_pulse = 20 / 3 * motor_pulse + 1400 / 3;
-  // motor_pulse = (motor_pulse < 1400 / 3 + 1) ? 0 : motor_pulse;
 }
 
 // 电机调速
@@ -67,22 +66,16 @@ void motor()
   //  限速输出
   if (motor_out[0] >= 0)
   {
-    motor_out[0] = ((motor_out[0] > MOTOR_VELOCITY_SUPERIOR_LIMIT) ? MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out[0]);
+    motor_out[0] = ((motor_out[0] > motor_velocity_sup) ? motor_velocity_sup : motor_out[0]);
     ftm_pwm_duty(PORT_MOTOR, FTM_CH2, (int)motor_out[0]);
   }
   else
   {
-    motor_out[0] = ((motor_out[0] < -MOTOR_VELOCITY_SUPERIOR_LIMIT) ? -MOTOR_VELOCITY_SUPERIOR_LIMIT : motor_out[0]);
+    motor_out[0] = ((motor_out[0] < -motor_velocity_sup) ? -motor_velocity_sup : motor_out[0]);
     ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
   }
 
   motor_out[1] = motor_out[0];
   motor_errors[2] = motor_errors[1];
   motor_errors[1] = motor_errors[0];
-}
-
-void decelerate()
-{
-  ftm_pwm_duty(PORT_MOTOR, FTM_CH2, 0);
-  DELAY_MS(DECELERATE_TIME);
 }
