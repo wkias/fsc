@@ -33,12 +33,12 @@ void servo()
         }
     }
     // 丢线
-    if (adc_val[0][1] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][2] < LOST_IN_FRANXX_THRESHOLD_MIN && (adc_val[0][4] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == 1) || rotary_road == 2)
+    if (adc_val[0][1] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][2] < LOST_IN_FRANXX_THRESHOLD_MIN && (adc_val[0][4] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == 1) || rotary_road == 1)
     {
         servo_out = SERVO_RIGHT_LIMIT;
         LOST_IN_FRANXX = 1;
     }
-    else if ((adc_val[0][1] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == -1) && adc_val[0][3] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][4] < LOST_IN_FRANXX_THRESHOLD_MIN || rotary_road == -2)
+    else if ((adc_val[0][1] > LOST_IN_FRANXX_THRESHOLD_MAX || LOST_IN_FRANXX == -1) && adc_val[0][3] < LOST_IN_FRANXX_THRESHOLD_MIN && adc_val[0][4] < LOST_IN_FRANXX_THRESHOLD_MIN || rotary_road == -1)
     {
         servo_out = SERVO_LEFT_LIMIT;
         LOST_IN_FRANXX = -1;
@@ -84,12 +84,9 @@ void servo()
 
 void round_in_circle(int8 i)
 {
-    rotary_road += i;
+    rotary_road = i;
     gpio_set(PORT_BEEPER, 1);
-    if(rotary_road == 1 || rotary_road == -1){
-        // DELAY_MS(100);
-        return;
-    }
+    // DELAY_MS(100);
     rotary_road_switcher = 0;
     ftm_pwm_duty(PORT_SERVO, FTM_CH0, (i == 1) ? SERVO_RIGHT_LIMIT : SERVO_LEFT_LIMIT);
     DELAY_MS(500);
